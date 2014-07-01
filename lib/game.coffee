@@ -1,0 +1,154 @@
+window.Game =
+  display: null
+  map: {}
+  engine: null
+  player: null
+  pedro: null
+  ananas: null
+  init: ->
+    @display = new ROT.Display spacing: 1.1
+    document.body.appendChild @display.getContainer()
+    @_generateMap()
+    scheduler = new ROT.Scheduler.Simple()
+    scheduler.add @player, true
+    scheduler.add @pedro, true
+    @engine = new ROT.Engine scheduler
+    @engine.start()
+
+  _generateMap: ->
+    digger = new ROT.Map.Digger()
+    freeCells = []
+    digCallback = (x, y, value) ->
+      return  if value
+      key = Coordinates.create(x, y)
+      @map[key] = "."
+      freeCells.push key
+
+    digger.create digCallback.bind(@)
+    @_generateBoxes freeCells
+    @_drawWholeMap()
+    @player = @_createBeing(Player, freeCells)
+    @pedro = @_createBeing(Pedro, freeCells)
+
+  _createBeing: (what, freeCells) ->
+    [x, y] = Coordinates.selectRandom(freeCells)
+    new what(x, y)
+
+  _generateBoxes: (freeCells) ->
+    i = 0
+
+    while i < 10
+      #[x, y] = Coordinates.selectRandom(freeCells)
+      #key = Coordinates.create(x, y)
+      key = Util.pickRandom(freeCells)
+      @map[key] = "*"
+      @ananas = key  unless i # first box contains an ananas
+      i++
+
+  _drawWholeMap: ->
+    for key of @map
+      [x, y] = Coordinates.parse(key)
+      @display.draw x, y, @map[key]
+
+Player = (x, y) ->
+  @_x = x
+  @_y = y
+  @_draw()
+
+Player::getSpeed = ->  100
+Player::getX = ->  @_x
+Player::getY = ->  @_y
+
+Player::act = ->
+  Game.engine.lock()
+  window.addEventListener "keydown", this
+
+Player::handleEvent = (e) ->
+  code = e.keyCode
+  # 13=space, 32=enter
+  if code is 13 or code is 32
+    @_checkBox()
+    return
+  keyMap = {}
+  # Up arrow
+  keyMap[38] = 0
+  # Up key
+  keyMap[33] = 1
+  # Right Arrow
+  keyMap[39] = 2
+  # Page down
+  keyMap[34] = 3
+  # Down Arrow
+  keyMap[40] = 4
+  keyMap[35] = 5
+  keyMap[37] = 6
+  keyMap[36] = 7
+  
+  # one of numpad directions? 
+  return  unless code of keyMap
+  
+  # is there a free space? 
+  dir = ROT.DIRS[8][keyMap[code]]
+  newX = @_x + dir[0]
+  newY = @_y + dir[1]
+  newKey = Coordinates.create(newX, newY)
+  return  unless newKey of Game.map
+  Game.display.draw @_x, @_y, Game.map[Coordinates.create(@_x , @_y)]
+  @_x = newX
+  @_y = newY
+  @_draw()
+  window.removeEventListener "keydown", this
+  Game.engine.unlock()
+
+Player::_draw = ->
+  Game.display.draw @_x, @_y, "@", "#ff0"
+
+Player::_checkBox = ->
+  key = Coordinates.create(@_x, @_y)
+  unless Game.map[key] is "*"
+    console.log "There is no box here!"
+  else if key is Game.ananas
+    console.log "Hooray! You found an ananas and won this game."
+    Game.engine.lock()
+    window.removeEventListener "keydown", this
+  else
+    console.log "This box is empty :-("
+
+Pedro = (x, y) ->
+  @_x = x
+  @_y = y
+  @_draw()
+
+Pedro::getSpeed = ->  100
+
+Pedro::act = ->
+  x = Game.player.getX()
+  y = Game.player.getY()
+  passableCallback = (x, y) ->
+    x + "," + y of Game.map
+
+  astar = new ROT.Path.AStar(x, y, passableCallback,
+    topology: 4
+  )
+  path = []
+  pathCallback = (x, y) ->
+    path.push [x,y]
+
+  astar.compute @_x, @_y, pathCallback
+  path.shift()
+  console.log "path length is #{path.length}"
+  if path.length < 2
+    Game.engine.lock()
+    alert "Game over - you were captured by Pedro!"
+  else
+    x = path[0][0]
+    y = path[0][1]
+    Game.display.draw @_x, @_y, Game.map[Coordinates.create(@_x, @_y)]
+    @_x = x
+    @_y = y
+    @_draw()
+
+Pedro::_draw = ->
+  Game.display.draw @_x, @_y, "P", "red"
+
+Game.init()
