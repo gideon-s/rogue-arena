@@ -1,17 +1,20 @@
 window.Game =
   display: null
-  map: {}
+  map: {} #// new Map()
   engine: null
   player: null
-  pedro: null
+  dragon: null
   ananas: null
   init: ->
     @display = new ROT.Display spacing: 1.1
+    console.log @display
     document.body.appendChild @display.getContainer()
     @_generateMap()
+    console.log "Map:"
+    console.log  @map
     scheduler = new ROT.Scheduler.Simple()
     scheduler.add @player, true
-    scheduler.add @pedro, true
+    scheduler.add @dragon, true
     @engine = new ROT.Engine scheduler
     @engine.start()
 
@@ -28,7 +31,7 @@ window.Game =
     @_generateBoxes freeCells
     @_drawWholeMap()
     @player = @_createBeing(Player, freeCells)
-    @pedro = @_createBeing(Pedro, freeCells)
+    @dragon = @_createBeing(dragon, freeCells)
 
   _createBeing: (what, freeCells) ->
     [x, y] = Coordinates.selectRandom(freeCells)
@@ -42,7 +45,7 @@ window.Game =
       #key = Coordinates.create(x, y)
       key = Util.pickRandom(freeCells)
       @map[key] = "*"
-      @ananas = key  unless i # first box contains an ananas
+      @ananas = key  unless i # first box contains the prize
       i++
 
   _drawWholeMap: ->
@@ -108,24 +111,24 @@ Player::_checkBox = ->
   unless Game.map[key] is "*"
     console.log "There is no box here!"
   else if key is Game.ananas
-    console.log "Hooray! You found an ananas and won this game."
+    console.log "Hooray! You found the gem of success and won this game."
     Game.engine.lock()
     window.removeEventListener "keydown", this
   else
     console.log "This box is empty :-("
 
-Pedro = (x, y) ->
+dragon = (x, y) ->
   @_x = x
   @_y = y
   @_draw()
 
-Pedro::getSpeed = ->  100
+dragon::getSpeed = ->  100
 
-Pedro::act = ->
+dragon::act = ->
   x = Game.player.getX()
   y = Game.player.getY()
   passableCallback = (x, y) ->
-    x + "," + y of Game.map
+    x + "," + y of Game.map # // ToDO use Coordinates
 
   astar = new ROT.Path.AStar(x, y, passableCallback,
     topology: 4
@@ -139,7 +142,7 @@ Pedro::act = ->
   console.log "path length is #{path.length}"
   if path.length < 2
     Game.engine.lock()
-    alert "Game over - you were captured by Pedro!"
+    alert "Game over - you were eaten by the dragon!"
   else
     x = path[0][0]
     y = path[0][1]
@@ -148,7 +151,7 @@ Pedro::act = ->
     @_y = y
     @_draw()
 
-Pedro::_draw = ->
-  Game.display.draw @_x, @_y, "P", "red"
+dragon::_draw = ->
+  Game.display.draw @_x, @_y, "&", "red"
 
 Game.init()
