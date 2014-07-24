@@ -4,7 +4,7 @@
 
   window.Game = {
     display: null,
-    map: {},
+    oldMap: {},
     engine: null,
     player: null,
     dragon: null,
@@ -18,7 +18,7 @@
       document.body.appendChild(this.display.getContainer());
       this._generateMap();
       console.log("Map:");
-      console.log(this.map);
+      console.log(this.oldMap);
       scheduler = new ROT.Scheduler.Simple();
       scheduler.add(this.player, true);
       scheduler.add(this.dragon, true);
@@ -35,7 +35,7 @@
           return;
         }
         key = Coordinates.create(x, y);
-        this.map[key] = ".";
+        this.oldMap[key] = ".";
         return freeCells.push(key);
       };
       digger.create(digCallback.bind(this));
@@ -55,7 +55,7 @@
       _results = [];
       while (i < 10) {
         key = Util.pickRandom(freeCells);
-        this.map[key] = "*";
+        this.oldMap[key] = "*";
         if (!i) {
           this.ananas = key;
         }
@@ -66,9 +66,9 @@
     _drawWholeMap: function() {
       var key, x, y, _ref, _results;
       _results = [];
-      for (key in this.map) {
+      for (key in this.oldMap) {
         _ref = Coordinates.parse(key), x = _ref[0], y = _ref[1];
-        _results.push(this.display.draw(x, y, this.map[key]));
+        _results.push(this.display.draw(x, y, this.oldMap[key]));
       }
       return _results;
     }
@@ -120,10 +120,10 @@
     newX = this._x + dir[0];
     newY = this._y + dir[1];
     newKey = Coordinates.create(newX, newY);
-    if (!(newKey in Game.map)) {
+    if (!(newKey in Game.oldMap)) {
       return;
     }
-    Game.display.draw(this._x, this._y, Game.map[Coordinates.create(this._x, this._y)]);
+    Game.display.draw(this._x, this._y, Game.oldMap[Coordinates.create(this._x, this._y)]);
     this._x = newX;
     this._y = newY;
     this._draw();
@@ -138,7 +138,7 @@
   Player.prototype._checkBox = function() {
     var key;
     key = Coordinates.create(this._x, this._y);
-    if (Game.map[key] !== "*") {
+    if (Game.oldMap[key] !== "*") {
       return console.log("There is no box here!");
     } else if (key === Game.ananas) {
       console.log("Hooray! You found the gem of success and won this game.");
@@ -164,7 +164,7 @@
     x = Game.player.getX();
     y = Game.player.getY();
     passableCallback = function(x, y) {
-      return x + "," + y in Game.map;
+      return x + "," + y in Game.oldMap;
     };
     astar = new ROT.Path.AStar(x, y, passableCallback, {
       topology: 4
@@ -182,7 +182,7 @@
     } else {
       x = path[0][0];
       y = path[0][1];
-      Game.display.draw(this._x, this._y, Game.map[Coordinates.create(this._x, this._y)]);
+      Game.display.draw(this._x, this._y, Game.oldMap[Coordinates.create(this._x, this._y)]);
       this._x = x;
       this._y = y;
       return this._draw();

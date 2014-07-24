@@ -1,6 +1,6 @@
 window.Game =
   display: null
-  map: {} #// new Map()
+  oldMap: {} #// new Map()
   engine: null
   player: null
   dragon: null
@@ -11,7 +11,7 @@ window.Game =
     document.body.appendChild @display.getContainer()
     @_generateMap()
     console.log "Map:"
-    console.log  @map
+    console.log  @oldMap
     scheduler = new ROT.Scheduler.Simple()
     scheduler.add @player, true
     scheduler.add @dragon, true
@@ -24,7 +24,7 @@ window.Game =
     digCallback = (x, y, value) ->
       return  if value
       key = Coordinates.create(x, y)
-      @map[key] = "."
+      @oldMap[key] = "."
       freeCells.push key
 
     digger.create digCallback.bind(@)
@@ -44,14 +44,14 @@ window.Game =
       #[x, y] = Coordinates.selectRandom(freeCells)
       #key = Coordinates.create(x, y)
       key = Util.pickRandom(freeCells)
-      @map[key] = "*"
+      @oldMap[key] = "*"
       @ananas = key  unless i # first box contains the prize
       i++
 
   _drawWholeMap: ->
-    for key of @map
+    for key of @oldMap
       [x, y] = Coordinates.parse(key)
-      @display.draw x, y, @map[key]
+      @display.draw x, y, @oldMap[key]
 
 Player = (x, y) ->
   @_x = x
@@ -95,8 +95,8 @@ Player::handleEvent = (e) ->
   newX = @_x + dir[0]
   newY = @_y + dir[1]
   newKey = Coordinates.create(newX, newY)
-  return  unless newKey of Game.map
-  Game.display.draw @_x, @_y, Game.map[Coordinates.create(@_x , @_y)]
+  return  unless newKey of Game.oldMap
+  Game.display.draw @_x, @_y, Game.oldMap[Coordinates.create(@_x , @_y)]
   @_x = newX
   @_y = newY
   @_draw()
@@ -108,7 +108,7 @@ Player::_draw = ->
 
 Player::_checkBox = ->
   key = Coordinates.create(@_x, @_y)
-  unless Game.map[key] is "*"
+  unless Game.oldMap[key] is "*"
     console.log "There is no box here!"
   else if key is Game.ananas
     console.log "Hooray! You found the gem of success and won this game."
@@ -128,7 +128,7 @@ dragon::act = ->
   x = Game.player.getX()
   y = Game.player.getY()
   passableCallback = (x, y) ->
-    x + "," + y of Game.map # // ToDO use Coordinates
+    x + "," + y of Game.oldMap # // ToDO use Coordinates
 
   astar = new ROT.Path.AStar(x, y, passableCallback,
     topology: 4
@@ -146,7 +146,7 @@ dragon::act = ->
   else
     x = path[0][0]
     y = path[0][1]
-    Game.display.draw @_x, @_y, Game.map[Coordinates.create(@_x, @_y)]
+    Game.display.draw @_x, @_y, Game.oldMap[Coordinates.create(@_x, @_y)]
     @_x = x
     @_y = y
     @_draw()
