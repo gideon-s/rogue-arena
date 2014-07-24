@@ -21,6 +21,13 @@ test "pickRandom Returns items from list", ()  ->
 	for t in listOfThings
 		ok result[t], "failed to find #{t}"
 
+test "coordinates at 0,0 aren't weird", () ->
+	deepEqual [0,0], Coordinates.parse("0,0")
+	equal "0,0", Coordinates.create(0,0)
+
+test "coordinates create/parse",() ->
+	deepEqual [1,1], Coordinates.parse("1,1")
+
 test "Coordinate Parse returns x=10 y=20", () ->
 	key = '10,20'
 	[x, y] = Coordinates.parse(key)
@@ -50,6 +57,17 @@ test "Map 1 and Map 2 should contain different characters at 0,0", () ->
     map1 = new Map()
     map2 = new Map()
     map1.setSquare([0,0], "@")
+    equal "@", map1.at([0,0])
     map2.setSquare([0,0], "$")
+    equal "$", map2.at([0,0])
     notEqual map1.at([0,0]), map2.at([0,0])
+
+test "locations of map should return list of x,y pairs", () ->
+	map = new Map()
+	deepEqual [], map.locationKeys()
+	map.setSquare([0,0], "X")
+	deepEqual ["0,0"], map.locationKeys()
+	map.setSquare([0,1], ".")
+	deepEqual ["0,0", "0,1"], map.locationKeys()
+
 

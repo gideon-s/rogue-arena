@@ -13,4 +13,7 @@ class window.Map
     at: (pair) ->
         @squares[@fromPair(pair)]
 
+    locationKeys: () ->
+    	Object.keys @squares    
+
     

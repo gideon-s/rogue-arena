@@ -5,6 +5,7 @@
   window.Game = {
     display: null,
     oldMap: {},
+    map: new Map(),
     engine: null,
     player: null,
     dragon: null,
@@ -14,11 +15,8 @@
       this.display = new ROT.Display({
         spacing: 1.1
       });
-      console.log(this.display);
       document.body.appendChild(this.display.getContainer());
       this._generateMap();
-      console.log("Map:");
-      console.log(this.oldMap);
       scheduler = new ROT.Scheduler.Simple();
       scheduler.add(this.player, true);
       scheduler.add(this.dragon, true);
@@ -34,6 +32,7 @@
         if (value) {
           return;
         }
+        this.map.setSquare([x, y], ".");
         key = Coordinates.create(x, y);
         this.oldMap[key] = ".";
         return freeCells.push(key);
@@ -55,6 +54,7 @@
       _results = [];
       while (i < 10) {
         key = Util.pickRandom(freeCells);
+        this.map.setSquare(Coordinates.parse(key), "*");
         this.oldMap[key] = "*";
         if (!i) {
           this.ananas = key;

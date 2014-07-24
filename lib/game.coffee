@@ -1,17 +1,15 @@
 window.Game =
   display: null
-  oldMap: {} #// new Map()
+  oldMap: {} 
+  map: new Map()
   engine: null
   player: null
   dragon: null
   ananas: null
   init: ->
     @display = new ROT.Display spacing: 1.1
-    console.log @display
     document.body.appendChild @display.getContainer()
     @_generateMap()
-    console.log "Map:"
-    console.log  @oldMap
     scheduler = new ROT.Scheduler.Simple()
     scheduler.add @player, true
     scheduler.add @dragon, true
@@ -23,6 +21,7 @@ window.Game =
     freeCells = []
     digCallback = (x, y, value) ->
       return  if value
+      @map.setSquare [x,y], "."
       key = Coordinates.create(x, y)
       @oldMap[key] = "."
       freeCells.push key
@@ -41,9 +40,8 @@ window.Game =
     i = 0
 
     while i < 10
-      #[x, y] = Coordinates.selectRandom(freeCells)
-      #key = Coordinates.create(x, y)
       key = Util.pickRandom(freeCells)
+      @map.setSquare Coordinates.parse(key), "*"
       @oldMap[key] = "*"
       @ananas = key  unless i # first box contains the prize
       i++

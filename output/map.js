@@ -18,6 +18,10 @@
       return this.squares[this.fromPair(pair)];
     };
 
+    Map.prototype.locationKeys = function() {
+      return Object.keys(this.squares);
+    };
+
     return Map;
 
   })();

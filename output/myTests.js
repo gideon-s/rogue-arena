@@ -39,6 +39,15 @@
     return _results;
   });
 
+  test("coordinates at 0,0 aren't weird", function() {
+    deepEqual([0, 0], Coordinates.parse("0,0"));
+    return equal("0,0", Coordinates.create(0, 0));
+  });
+
+  test("coordinates create/parse", function() {
+    return deepEqual([1, 1], Coordinates.parse("1,1"));
+  });
+
   test("Coordinate Parse returns x=10 y=20", function() {
     var actual, key, x, y, _ref;
     key = '10,20';
@@ -79,8 +88,20 @@
     map1 = new Map();
     map2 = new Map();
     map1.setSquare([0, 0], "@");
+    equal("@", map1.at([0, 0]));
     map2.setSquare([0, 0], "$");
+    equal("$", map2.at([0, 0]));
     return notEqual(map1.at([0, 0]), map2.at([0, 0]));
+  });
+
+  test("locations of map should return list of x,y pairs", function() {
+    var map;
+    map = new Map();
+    deepEqual([], map.locationKeys());
+    map.setSquare([0, 0], "X");
+    deepEqual(["0,0"], map.locationKeys());
+    map.setSquare([0, 1], ".");
+    return deepEqual(["0,0", "0,1"], map.locationKeys());
   });
 
 }).call(this);
