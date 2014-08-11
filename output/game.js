@@ -63,12 +63,18 @@
       }
       return _results;
     },
-    _drawWholeMap: function() {
-      var key, x, y, _ref, _results;
+    _drawWholeMap: function(map) {
+      var key, value, x, y, _ref, _ref1, _results;
+      _ref = this.map.locationKeys();
       _results = [];
-      for (key in this.oldMap) {
-        _ref = Coordinates.parse(key), x = _ref[0], y = _ref[1];
-        _results.push(this.display.draw(x, y, this.oldMap[key]));
+      for (key in _ref) {
+        value = _ref[key];
+        if (Util.isInteger(key)) {
+          _ref1 = Coordinates.parse(value), x = _ref1[0], y = _ref1[1];
+          _results.push(this.display.draw(x, y, this.map.at([x, y])));
+        } else {
+          _results.push(void 0);
+        }
       }
       return _results;
     }
@@ -120,10 +126,10 @@
     newX = this._x + dir[0];
     newY = this._y + dir[1];
     newKey = Coordinates.create(newX, newY);
-    if (!(newKey in Game.oldMap)) {
+    if (!(newKey in Game.map)) {
       return;
     }
-    Game.display.draw(this._x, this._y, Game.oldMap[Coordinates.create(this._x, this._y)]);
+    Game.display.draw(this._x, this._y, Game.map.at([this._x, this._y]));
     this._x = newX;
     this._y = newY;
     this._draw();

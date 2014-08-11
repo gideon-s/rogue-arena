@@ -100,7 +100,9 @@
     deepEqual([], map.locationKeys());
     map.setSquare([0, 0], "X");
     deepEqual(["0,0"], map.locationKeys());
+    console.log(map.locationKeys());
     map.setSquare([0, 1], ".");
+    console.log(map.locationKeys());
     return deepEqual(["0,0", "0,1"], map.locationKeys());
   });
 

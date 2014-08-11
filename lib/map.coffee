@@ -15,5 +15,3 @@ class window.Map
 
     locationKeys: () ->
     	Object.keys @squares    
-
-    

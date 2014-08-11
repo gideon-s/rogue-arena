@@ -21,7 +21,7 @@ window.Game =
     freeCells = []
     digCallback = (x, y, value) ->
       return  if value
-      @map.setSquare [x,y], "."
+      @map.setSquare [x, y], "."
       key = Coordinates.create(x, y)
       @oldMap[key] = "."
       freeCells.push key
@@ -46,10 +46,16 @@ window.Game =
       @ananas = key  unless i # first box contains the prize
       i++
 
-  _drawWholeMap: ->
-    for key of @oldMap
-      [x, y] = Coordinates.parse(key)
-      @display.draw x, y, @oldMap[key]
+  _drawWholeMap: (map) ->
+    #for key of @oldMap
+    #  [x, y] = Coordinates.parse(key)
+    #  @display.draw x, y, @oldMap[key]
+
+    for key, value of @map.locationKeys()
+      if Util.isInteger(key)
+        [x, y] = Coordinates.parse(value)
+        @display.draw x, y, @map.at ([x,y])
+
 
 Player = (x, y) ->
   @_x = x
@@ -93,8 +99,9 @@ Player::handleEvent = (e) ->
   newX = @_x + dir[0]
   newY = @_y + dir[1]
   newKey = Coordinates.create(newX, newY)
-  return  unless newKey of Game.oldMap
-  Game.display.draw @_x, @_y, Game.oldMap[Coordinates.create(@_x , @_y)]
+  return  unless newKey of Game.map
+  #Game.display.draw @_x, @_y, Game.oldMap[Coordinates.create(@_x , @_y)]
+  Game.display.draw @_x, @_y, Game.map.at ([@_x,@_y])
   @_x = newX
   @_y = newY
   @_draw()

@@ -67,7 +67,10 @@ test "locations of map should return list of x,y pairs", () ->
 	deepEqual [], map.locationKeys()
 	map.setSquare([0,0], "X")
 	deepEqual ["0,0"], map.locationKeys()
+	console.log map.locationKeys()
+
 	map.setSquare([0,1], ".")
+	console.log map.locationKeys()
 	deepEqual ["0,0", "0,1"], map.locationKeys()
 
 
