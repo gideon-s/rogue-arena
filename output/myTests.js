@@ -106,4 +106,10 @@
     return deepEqual(["0,0", "0,1"], map.locationKeys());
   });
 
+  test("isInteger of 10 returns true", function() {
+    var actual;
+    actual = Util.isInteger(10);
+    return equal(Util.isInteger(10), true);
+  });
+
 }).call(this);

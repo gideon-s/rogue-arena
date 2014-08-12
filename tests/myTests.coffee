@@ -74,3 +74,5 @@ test "locations of map should return list of x,y pairs", () ->
 	deepEqual ["0,0", "0,1"], map.locationKeys()
 
 
+test "isInteger of 10 returns true", () ->
+	equal Util.isInteger(10),true

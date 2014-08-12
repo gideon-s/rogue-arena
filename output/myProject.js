@@ -11,6 +11,10 @@
       return list[this.rand(list.length)];
     };
 
+    Util.isInteger = function(value) {
+      return !isNaN(parseInt(value, 10)) && (parseFloat(value, 10) === parseInt(value, 10));
+    };
+
     return Util;
 
   })();
