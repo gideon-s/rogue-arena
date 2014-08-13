@@ -5,10 +5,6 @@ class window.Util
 	@pickRandom: (list) -> 
 		list[@rand(list.length)]
 
-	@isInteger: (value) ->
-		!isNaN(parseInt(value,10)) && (parseFloat(value,10) == parseInt(value,10))
-
-
 class window.Coordinates
 	@parse: (keyValue) ->
 		parts = keyValue.split(",")

@@ -22,6 +22,10 @@
       return Object.keys(this.squares);
     };
 
+    Map.prototype.isOpen = function(pair) {
+      return this.at(pair) != null;
+    };
+
     return Map;
 
   })();

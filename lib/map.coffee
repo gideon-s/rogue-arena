@@ -15,3 +15,6 @@ class window.Map
 
     locationKeys: () ->
     	Object.keys @squares    
+
+    isOpen: (pair) ->
+        @at(pair)?

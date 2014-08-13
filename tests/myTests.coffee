@@ -73,6 +73,8 @@ test "locations of map should return list of x,y pairs", () ->
 	console.log map.locationKeys()
 	deepEqual ["0,0", "0,1"], map.locationKeys()
 
-
-test "isInteger of 10 returns true", () ->
-	equal Util.isInteger(10),true
+test "Is open map area", () ->
+	map = new Map()
+	map.setSquare([2,3],".")
+	ok map.isOpen([2,3])
+	ok !map.isOpen([2,4])

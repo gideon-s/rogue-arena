@@ -106,10 +106,12 @@
     return deepEqual(["0,0", "0,1"], map.locationKeys());
   });
 
-  test("isInteger of 10 returns true", function() {
-    var actual;
-    actual = Util.isInteger(10);
-    return equal(Util.isInteger(10), true);
+  test("Is open map area", function() {
+    var map;
+    map = new Map();
+    map.setSquare([2, 3], ".");
+    ok(map.isOpen([2, 3]));
+    return ok(!map.isOpen([2, 4]));
   });
 
 }).call(this);
