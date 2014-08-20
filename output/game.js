@@ -4,7 +4,7 @@
 
   window.Game = {
     display: null,
-    map: new Map(),
+    map: {},
     engine: null,
     player: null,
     dragon: null,
@@ -31,8 +31,8 @@
         if (value) {
           return;
         }
-        this.map.setSquare([x, y], ".");
         key = Coordinates.create(x, y);
+        this.map[key] = ".";
         return freeCells.push(key);
       };
       digger.create(digCallback.bind(this));
@@ -52,7 +52,7 @@
       _results = [];
       while (i < 10) {
         key = Util.pickRandom(freeCells);
-        this.map.setSquare(Coordinates.parse(key), "*");
+        this.map[key] = "*";
         if (!i) {
           this.ananas = key;
         }
@@ -60,14 +60,12 @@
       }
       return _results;
     },
-    _drawWholeMap: function(map) {
-      var key, x, y, _i, _len, _ref, _ref1, _results;
-      _ref = this.map.locationKeys();
+    _drawWholeMap: function() {
+      var key, x, y, _ref, _results;
       _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        key = _ref[_i];
-        _ref1 = Coordinates.parse(key), x = _ref1[0], y = _ref1[1];
-        _results.push(this.display.draw(x, y, this.map.at([x, y])));
+      for (key in this.map) {
+        _ref = Coordinates.parse(key), x = _ref[0], y = _ref[1];
+        _results.push(this.display.draw(x, y, this.map[key]));
       }
       return _results;
     }
@@ -97,7 +95,7 @@
   };
 
   Player.prototype.handleEvent = function(e) {
-    var code, dir, keyMap, newX, newY;
+    var code, dir, keyMap, newKey, newX, newY;
     code = e.keyCode;
     if (code === 13 || code === 32) {
       this._checkBox();
@@ -118,10 +116,11 @@
     dir = ROT.DIRS[8][keyMap[code]];
     newX = this._x + dir[0];
     newY = this._y + dir[1];
-    if (!Game.map.isOpen([newX, newY])) {
+    newKey = Coordinates.create(newX, newY);
+    if (!(newKey in Game.map)) {
       return;
     }
-    Game.display.draw(this._x, this._y, Game.map.at([this._x, this._y]));
+    Game.display.draw(this._x, this._y, Game.map[Coordinates.create(this._x, this._y)]);
     this._x = newX;
     this._y = newY;
     this._draw();
@@ -134,9 +133,11 @@
   };
 
   Player.prototype._checkBox = function() {
-    if (Game.map.at([this._x, this._y]) !== "*") {
+    var key;
+    key = Coordinates.create(this._x, this._y);
+    if (Game.map[key] !== "*") {
       return console.log("There is no box here!");
-    } else if (Coordinates.create(this._x, this._y) === Game.ananas) {
+    } else if (key === Game.ananas) {
       console.log("Hooray! You found the gem of success and won this game.");
       Game.engine.lock();
       return window.removeEventListener("keydown", this);
@@ -160,7 +161,7 @@
     x = Game.player.getX();
     y = Game.player.getY();
     passableCallback = function(x, y) {
-      return Game.map.isOpen([x, y]);
+      return x + "," + y in Game.map;
     };
     astar = new ROT.Path.AStar(x, y, passableCallback, {
       topology: 4
@@ -171,13 +172,14 @@
     };
     astar.compute(this._x, this._y, pathCallback);
     path.shift();
+    console.log("path length is " + path.length);
     if (path.length < 2) {
       Game.engine.lock();
       return alert("Game over - you were eaten by the dragon!");
     } else {
       x = path[0][0];
       y = path[0][1];
-      Game.display.draw(this._x, this._y, Game.map.at([this._x, this._y]));
+      Game.display.draw(this._x, this._y, Game.map[Coordinates.create(this._x, this._y)]);
       this._x = x;
       this._y = y;
       return this._draw();

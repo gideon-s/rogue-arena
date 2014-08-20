@@ -18,3 +18,6 @@ class window.Map
 
     isOpen: (pair) ->
         @at(pair)?
+
+    randomLocation: () ->
+        Coordinates.selectRandom(@locationKeys())

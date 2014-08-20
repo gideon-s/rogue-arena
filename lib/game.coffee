@@ -1,6 +1,6 @@
 window.Game =
   display: null
-  map: new Map()
+  map: {} #// new Map()
   engine: null
   player: null
   dragon: null
@@ -20,8 +20,8 @@ window.Game =
     freeCells = []
     digCallback = (x, y, value) ->
       return  if value
-      @map.setSquare [x, y], "."
       key = Coordinates.create(x, y)
+      @map[key] = "."
       freeCells.push key
 
     digger.create digCallback.bind(@)
@@ -38,16 +38,17 @@ window.Game =
     i = 0
 
     while i < 10
+      #[x, y] = Coordinates.selectRandom(freeCells)
+      #key = Coordinates.create(x, y)
       key = Util.pickRandom(freeCells)
-      @map.setSquare Coordinates.parse(key), "*"
+      @map[key] = "*"
       @ananas = key  unless i # first box contains the prize
       i++
 
-  _drawWholeMap: (map) ->
-    for key in @map.locationKeys()
+  _drawWholeMap: ->
+    for key of @map
       [x, y] = Coordinates.parse(key)
-      @display.draw x, y, @map.at ([x,y])
-
+      @display.draw x, y, @map[key]
 
 Player = (x, y) ->
   @_x = x
@@ -90,8 +91,9 @@ Player::handleEvent = (e) ->
   dir = ROT.DIRS[8][keyMap[code]]
   newX = @_x + dir[0]
   newY = @_y + dir[1]
-  return  unless Game.map.isOpen([newX,newY])
-  Game.display.draw @_x, @_y, Game.map.at ([@_x,@_y])
+  newKey = Coordinates.create(newX, newY)
+  return  unless newKey of Game.map
+  Game.display.draw @_x, @_y, Game.map[Coordinates.create(@_x , @_y)]
   @_x = newX
   @_y = newY
   @_draw()
@@ -102,9 +104,10 @@ Player::_draw = ->
   Game.display.draw @_x, @_y, "@", "#ff0"
 
 Player::_checkBox = ->
-  unless Game.map.at([@_x, @_y]) is "*"
+  key = Coordinates.create(@_x, @_y)
+  unless Game.map[key] is "*"
     console.log "There is no box here!"
-  else if Coordinates.create(@_x, @_y) is Game.ananas
+  else if key is Game.ananas
     console.log "Hooray! You found the gem of success and won this game."
     Game.engine.lock()
     window.removeEventListener "keydown", this
@@ -122,7 +125,8 @@ dragon::act = ->
   x = Game.player.getX()
   y = Game.player.getY()
   passableCallback = (x, y) ->
-    Game.map.isOpen([x,y])
+    x + "," + y of Game.map # // ToDO use Coordinates
+
   astar = new ROT.Path.AStar(x, y, passableCallback,
     topology: 4
   )
@@ -132,13 +136,14 @@ dragon::act = ->
 
   astar.compute @_x, @_y, pathCallback
   path.shift()
+  console.log "path length is #{path.length}"
   if path.length < 2
     Game.engine.lock()
     alert "Game over - you were eaten by the dragon!"
   else
     x = path[0][0]
     y = path[0][1]
-    Game.display.draw @_x, @_y, Game.map.at([@_x, @_y])
+    Game.display.draw @_x, @_y, Game.map[Coordinates.create(@_x, @_y)]
     @_x = x
     @_y = y
     @_draw()

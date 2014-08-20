@@ -114,4 +114,28 @@
     return ok(!map.isOpen([2, 4]));
   });
 
+  test("map.randomLocation returns realistic value spread", function() {
+    var actual, i, key, map, val, x, y, _i, _j, _k, _len, _ref, _ref1;
+    map = new Map();
+    for (i = _i = 0; _i < 10; i = ++_i) {
+      map.setSquare([0, i], "0");
+    }
+    for (i = _j = 0; _j < 100; i = ++_j) {
+      _ref = map.randomLocation(), x = _ref[0], y = _ref[1];
+      val = map.at([x, y]);
+      val++;
+      map.setSquare([x, y], val);
+      actual = true;
+    }
+    _ref1 = map.locationKeys();
+    for (_k = 0, _len = _ref1.length; _k < _len; _k++) {
+      key = _ref1[_k];
+      console.log(map.at(Coordinates.parse(key)));
+      if (map.at(Coordinates.parse(key)) > 18 || map.at(Coordinates.parse(key)) < 3) {
+        actual = false;
+      }
+    }
+    return equal(actual, true);
+  });
+
 }).call(this);

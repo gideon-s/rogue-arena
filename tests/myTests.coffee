@@ -78,3 +78,19 @@ test "Is open map area", () ->
 	map.setSquare([2,3],".")
 	ok map.isOpen([2,3])
 	ok !map.isOpen([2,4])
+
+test "map.randomLocation returns realistic value spread", () ->
+	map = new Map()
+	for i in [0...10]
+		map.setSquare([0,i],"0")	
+	for i in [0...100]
+		[x,y] = map.randomLocation()
+		val = map.at([x,y]) 
+		val++
+		map.setSquare([x,y], val)
+		actual = true
+	for key in map.locationKeys()
+		console.log map.at(Coordinates.parse(key))
+		if map.at(Coordinates.parse(key)) > 18 || map.at(Coordinates.parse(key)) < 3
+			actual = false
+	equal actual, true

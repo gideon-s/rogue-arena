@@ -26,6 +26,10 @@
       return this.at(pair) != null;
     };
 
+    Map.prototype.randomLocation = function() {
+      return Coordinates.selectRandom(this.locationKeys());
+    };
+
     return Map;
 
   })();
