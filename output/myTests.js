@@ -138,4 +138,18 @@
     return equal(actual, true);
   });
 
+  test("new map constructor works ok", function() {
+    var map;
+    map = new NewMap(10, 10);
+    return equal(true, true);
+  });
+
+  test("map.setLocation sets location 0,1 to *", function() {
+    var map;
+    map = new NewMap(2, 2);
+    console.log(map);
+    map.setLocation([0][1], "*");
+    return console.log(map);
+  });
+
 }).call(this);

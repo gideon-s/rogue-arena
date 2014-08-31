@@ -34,4 +34,30 @@
 
   })();
 
+  window.NewMap = (function() {
+    function NewMap(width, height) {
+      var x;
+      this.map = new Array(height - 1);
+      this.map = (function() {
+        var _i, _results;
+        _results = [];
+        for (x = _i = 0; 0 <= width ? _i < width : _i > width; x = 0 <= width ? ++_i : --_i) {
+          _results.push(this.map[x] = new Array(width));
+        }
+        return _results;
+      }).call(this);
+    }
+
+    NewMap.prototype.at = function(pair) {
+      return this.map[pair[0]][pair[1]];
+    };
+
+    NewMap.prototype.setLocation = function(pair, symbol) {
+      return this.map[pair[0]][pair[1]] = symbol;
+    };
+
+    return NewMap;
+
+  })();
+
 }).call(this);

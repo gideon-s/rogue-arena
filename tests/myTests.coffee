@@ -94,3 +94,9 @@ test "map.randomLocation returns realistic value spread", () ->
 		if map.at(Coordinates.parse(key)) > 18 || map.at(Coordinates.parse(key)) < 3
 			actual = false
 	equal actual, true
+
+test "new map constructor works ok", () ->
+	map = new NewMap(10,10)
+
+	equal true,true
+

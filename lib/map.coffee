@@ -21,3 +21,17 @@ class window.Map
 
     randomLocation: () ->
         Coordinates.selectRandom(@locationKeys())
+
+class window.NewMap
+
+    constructor: (width, height) ->
+        
+        @map = new Array(height-1)
+        @map = for x in [0...width]
+            @map[x] = new Array(width)
+        
+    at: (pair) ->
+        @map[pair[0]][pair[1]]
+
+    setLocation: (pair, symbol) ->
+        @map[pair[0]][pair[1]] = symbol
