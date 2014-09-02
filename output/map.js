@@ -37,12 +37,12 @@
   window.NewMap = (function() {
     function NewMap(width, height) {
       var x;
-      this.map = new Array(height - 1);
+      this.map = new Array(width);
       this.map = (function() {
         var _i, _results;
         _results = [];
         for (x = _i = 0; 0 <= width ? _i < width : _i > width; x = 0 <= width ? ++_i : --_i) {
-          _results.push(this.map[x] = new Array(width));
+          _results.push(this.map[x] = new Array(height));
         }
         return _results;
       }).call(this);
@@ -54,6 +54,18 @@
 
     NewMap.prototype.setLocation = function(pair, symbol) {
       return this.map[pair[0]][pair[1]] = symbol;
+    };
+
+    NewMap.prototype.isOpen = function(pair) {
+      return this.at(pair) != null;
+    };
+
+    NewMap.prototype.locationKeys = function() {
+      return typeof Object.keys === "function" ? Object.keys(this.map) : void 0;
+    };
+
+    NewMap.prototype.randomLocation = function() {
+      return Coordinates.selectRandom(this.locationKeys());
     };
 
     return NewMap;

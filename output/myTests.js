@@ -85,52 +85,50 @@
 
   test("Map 1 and Map 2 should contain different characters at 0,0", function() {
     var map1, map2;
-    map1 = new Map();
-    map2 = new Map();
-    map1.setSquare([0, 0], "@");
+    map1 = new NewMap(3, 3);
+    map2 = new NewMap(3, 3);
+    map1.setLocation([0, 0], "@");
     equal("@", map1.at([0, 0]));
-    map2.setSquare([0, 0], "$");
+    map2.setLocation([0, 0], "$");
     equal("$", map2.at([0, 0]));
     return notEqual(map1.at([0, 0]), map2.at([0, 0]));
   });
 
   test("locations of map should return list of x,y pairs", function() {
     var map;
-    map = new Map();
-    deepEqual([], map.locationKeys());
-    map.setSquare([0, 0], "X");
+    map = new NewMap(5, 5);
+    map.setLocation([0, 0], "X");
     deepEqual(["0,0"], map.locationKeys());
-    console.log(map.locationKeys());
-    map.setSquare([0, 1], ".");
-    console.log(map.locationKeys());
+    map.setLocation([0, 1], ".");
     return deepEqual(["0,0", "0,1"], map.locationKeys());
   });
 
   test("Is open map area", function() {
     var map;
-    map = new Map();
-    map.setSquare([2, 3], ".");
+    map = new NewMap(10, 10);
+    map.setLocation([2, 3], ".");
     ok(map.isOpen([2, 3]));
     return ok(!map.isOpen([2, 4]));
   });
 
   test("map.randomLocation returns realistic value spread", function() {
     var actual, i, key, map, val, x, y, _i, _j, _k, _len, _ref, _ref1;
-    map = new Map();
+    map = new NewMap(10, 10);
     for (i = _i = 0; _i < 10; i = ++_i) {
-      map.setSquare([0, i], "0");
+      map.setLocation([0, i], "0");
+      console.log("0," + i);
     }
     for (i = _j = 0; _j < 100; i = ++_j) {
       _ref = map.randomLocation(), x = _ref[0], y = _ref[1];
+      console.log("random location is " + x + "," + y);
       val = map.at([x, y]);
       val++;
-      map.setSquare([x, y], val);
+      map.setLocation([x, y], val);
       actual = true;
     }
     _ref1 = map.locationKeys();
     for (_k = 0, _len = _ref1.length; _k < _len; _k++) {
       key = _ref1[_k];
-      console.log(map.at(Coordinates.parse(key)));
       if (map.at(Coordinates.parse(key)) > 18 || map.at(Coordinates.parse(key)) < 3) {
         actual = false;
       }
@@ -140,16 +138,12 @@
 
   test("new map constructor works ok", function() {
     var map;
-    map = new NewMap(10, 10);
+    map = new NewMap(10, 2);
+    map[[4, 1]] = ".";
+    map[[0, 1]] = ".";
+    map[[3, 1]] = ".";
+    console.log(map.at([3, 1]));
     return equal(true, true);
-  });
-
-  test("map.setLocation sets location 0,1 to *", function() {
-    var map;
-    map = new NewMap(2, 2);
-    console.log(map);
-    map.setLocation([0][1], "*");
-    return console.log(map);
   });
 
 }).call(this);
