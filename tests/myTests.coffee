@@ -54,8 +54,8 @@ test "Coordinate selectRandom returns values from list of coordinates", () ->
 		ok result[c], "failed to find #{c}"
 
 test "Map 1 and Map 2 should contain different characters at 0,0", () ->
-    map1 = new NewMap(3,3)
-    map2 = new NewMap(3,3)
+    map1 = new Map(3,3)
+    map2 = new Map(3,3)
     map1.setLocation([0,0], "@")
     equal "@", map1.at([0,0])
     map2.setLocation([0,0], "$")
@@ -63,32 +63,30 @@ test "Map 1 and Map 2 should contain different characters at 0,0", () ->
     notEqual map1.at([0,0]), map2.at([0,0])
 
 test "locations of map should return list of x,y pairs", () ->
-	map = new NewMap(5,5)
+	map = new Map(5,5)
 	map.setLocation([0,0], "X")
-	deepEqual ["0,0"], map.locationKeys()
+	deepEqual [[0,0]], map.locations()
 	map.setLocation([0,1], ".")
-	deepEqual ["0,0", "0,1"], map.locationKeys()
+	deepEqual [[0,0],[0,1]], map.locations()
 
 test "Is open map area", () ->
-	map = new NewMap(10,10)
+	map = new Map(10,10)
 	map.setLocation([2,3],".")
 	ok map.isOpen([2,3])
 	ok !map.isOpen([2,4])
 
 test "map.randomLocation returns realistic value spread", () ->
-	map = new NewMap(10,10)
+	map = new Map(10,10)
 	for i in [0...10]
 		map.setLocation([0,i],"0")
-		console.log ("0," + i)	
 	for i in [0...100]
 		[x,y] = map.randomLocation()
-		console.log ("random location is " + x + "," + y);
 		val = map.at([x,y]) 
 		val++
 		map.setLocation([x,y], val)
 		actual = true
-	for key in map.locationKeys()
-		if map.at(Coordinates.parse(key)) > 18 || map.at(Coordinates.parse(key)) < 3
+	for location in map.locations()
+		if map.at(location) > 18 || map.at(location) < 3
 			actual = false
 	equal actual, true
 

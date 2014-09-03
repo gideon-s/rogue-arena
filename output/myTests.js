@@ -85,8 +85,8 @@
 
   test("Map 1 and Map 2 should contain different characters at 0,0", function() {
     var map1, map2;
-    map1 = new NewMap(3, 3);
-    map2 = new NewMap(3, 3);
+    map1 = new Map(3, 3);
+    map2 = new Map(3, 3);
     map1.setLocation([0, 0], "@");
     equal("@", map1.at([0, 0]));
     map2.setLocation([0, 0], "$");
@@ -96,54 +96,42 @@
 
   test("locations of map should return list of x,y pairs", function() {
     var map;
-    map = new NewMap(5, 5);
+    map = new Map(5, 5);
     map.setLocation([0, 0], "X");
-    deepEqual(["0,0"], map.locationKeys());
+    deepEqual([[0, 0]], map.locations());
     map.setLocation([0, 1], ".");
-    return deepEqual(["0,0", "0,1"], map.locationKeys());
+    return deepEqual([[0, 0], [0, 1]], map.locations());
   });
 
   test("Is open map area", function() {
     var map;
-    map = new NewMap(10, 10);
+    map = new Map(10, 10);
     map.setLocation([2, 3], ".");
     ok(map.isOpen([2, 3]));
     return ok(!map.isOpen([2, 4]));
   });
 
   test("map.randomLocation returns realistic value spread", function() {
-    var actual, i, key, map, val, x, y, _i, _j, _k, _len, _ref, _ref1;
-    map = new NewMap(10, 10);
+    var actual, i, location, map, val, x, y, _i, _j, _k, _len, _ref, _ref1;
+    map = new Map(10, 10);
     for (i = _i = 0; _i < 10; i = ++_i) {
       map.setLocation([0, i], "0");
-      console.log("0," + i);
     }
     for (i = _j = 0; _j < 100; i = ++_j) {
       _ref = map.randomLocation(), x = _ref[0], y = _ref[1];
-      console.log("random location is " + x + "," + y);
       val = map.at([x, y]);
       val++;
       map.setLocation([x, y], val);
       actual = true;
     }
-    _ref1 = map.locationKeys();
+    _ref1 = map.locations();
     for (_k = 0, _len = _ref1.length; _k < _len; _k++) {
-      key = _ref1[_k];
-      if (map.at(Coordinates.parse(key)) > 18 || map.at(Coordinates.parse(key)) < 3) {
+      location = _ref1[_k];
+      if (map.at(location) > 18 || map.at(location) < 3) {
         actual = false;
       }
     }
     return equal(actual, true);
-  });
-
-  test("new map constructor works ok", function() {
-    var map;
-    map = new NewMap(10, 2);
-    map[[4, 1]] = ".";
-    map[[0, 1]] = ".";
-    map[[3, 1]] = ".";
-    console.log(map.at([3, 1]));
-    return equal(true, true);
   });
 
 }).call(this);
