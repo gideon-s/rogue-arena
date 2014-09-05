@@ -134,4 +134,11 @@
     return equal(actual, true);
   });
 
+  test("player is new object of class player", function() {
+    var player;
+    player = new Player([0, 0]);
+    console.log(player.speed);
+    return equal(player.speed, 100);
+  });
+
 }).call(this);

@@ -91,3 +91,8 @@ test "map.randomLocation returns realistic value spread", () ->
 	equal actual, true
 
 
+test "player is new object of class player", () ->
+	player = new Player([0,0])
+	console.log player.speed
+
+	equal player.speed,100
