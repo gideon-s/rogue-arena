@@ -11,35 +11,11 @@
       return list[this.rand(list.length)];
     };
 
+    Util.addDir = function(location, dir) {
+      return [location[0] + dir[0], location[1] + dir[1]];
+    };
+
     return Util;
-
-  })();
-
-  window.Coordinates = (function() {
-    function Coordinates() {}
-
-    Coordinates.parse = function(keyValue) {
-      var parts, x, y;
-      parts = keyValue.split(",");
-      x = parseInt(parts[0]);
-      y = parseInt(parts[1]);
-      return [x, y];
-    };
-
-    Coordinates.create = function(xValue, yValue) {
-      var keyValue;
-      keyValue = xValue + ',' + yValue;
-      return keyValue;
-    };
-
-    Coordinates.selectRandom = function(coordinateList) {
-      var item, x, y, _ref;
-      item = Util.pickRandom(coordinateList);
-      _ref = Coordinates.parse(item), x = _ref[0], y = _ref[1];
-      return [x, y];
-    };
-
-    return Coordinates;
 
   })();
 

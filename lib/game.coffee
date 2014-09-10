@@ -8,30 +8,30 @@ window.Game =
   init: ->
     @display = new ROT.Display spacing: 1.1
     document.body.appendChild @display.getContainer()
-    @_generateMap()
+    @generateMap()
     scheduler = new ROT.Scheduler.Simple()
     scheduler.add @player, true
     scheduler.add @dragon, true
     @engine = new ROT.Engine scheduler
     @engine.start()
 
-  _generateMap: ->
+  generateMap: ->
     digger = new ROT.Map.Digger()
     digCallback = (x, y, value) ->
       return if value
       @map.setLocation([x,y],".")
 
     digger.create digCallback.bind(@)
-    @_generateBoxes()
-    @_drawWholeMap()
-    @player = @_createBeing(Player)
-    @dragon = @_createBeing(Enemy)
+    @generateBoxes()
+    @drawWholeMap()
+    @player = @createBeing(Player)
+    @dragon = @createBeing(Enemy)
 
-  _createBeing: (what) ->
-    [x, y] = @map.randomLocation()
-    new what(x, y)
+  createBeing: (what) ->
+    location = @map.randomLocation()
+    new what(location)
 
-  _generateBoxes: () ->
+  generateBoxes: () ->
     i = 0
 
     while i < 10
@@ -40,8 +40,15 @@ window.Game =
       @ananas = randLoc  unless i # first box contains the prize
       i++
 
-  _drawWholeMap: ->
+  drawWholeMap: ->
     for location in @map.locations()
-      @display.draw location[0],location[1], @map.at(location)
+      @drawMapLocation(location)
+
+  drawMapLocation: (location) ->
+    @draw location, @map.at(location)
+
+  draw: (location, character, color)  ->
+    @display.draw location[0],location[1], character, color
+    
 
 Game.init()

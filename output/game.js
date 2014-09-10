@@ -13,14 +13,14 @@
         spacing: 1.1
       });
       document.body.appendChild(this.display.getContainer());
-      this._generateMap();
+      this.generateMap();
       scheduler = new ROT.Scheduler.Simple();
       scheduler.add(this.player, true);
       scheduler.add(this.dragon, true);
       this.engine = new ROT.Engine(scheduler);
       return this.engine.start();
     },
-    _generateMap: function() {
+    generateMap: function() {
       var digCallback, digger;
       digger = new ROT.Map.Digger();
       digCallback = function(x, y, value) {
@@ -30,17 +30,17 @@
         return this.map.setLocation([x, y], ".");
       };
       digger.create(digCallback.bind(this));
-      this._generateBoxes();
-      this._drawWholeMap();
-      this.player = this._createBeing(Player);
-      return this.dragon = this._createBeing(Enemy);
+      this.generateBoxes();
+      this.drawWholeMap();
+      this.player = this.createBeing(Player);
+      return this.dragon = this.createBeing(Enemy);
     },
-    _createBeing: function(what) {
-      var x, y, _ref;
-      _ref = this.map.randomLocation(), x = _ref[0], y = _ref[1];
-      return new what(x, y);
+    createBeing: function(what) {
+      var location;
+      location = this.map.randomLocation();
+      return new what(location);
     },
-    _generateBoxes: function() {
+    generateBoxes: function() {
       var i, randLoc, _results;
       i = 0;
       _results = [];
@@ -54,15 +54,21 @@
       }
       return _results;
     },
-    _drawWholeMap: function() {
+    drawWholeMap: function() {
       var location, _i, _len, _ref, _results;
       _ref = this.map.locations();
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         location = _ref[_i];
-        _results.push(this.display.draw(location[0], location[1], this.map.at(location)));
+        _results.push(this.drawMapLocation(location));
       }
       return _results;
+    },
+    drawMapLocation: function(location) {
+      return this.draw(location, this.map.at(location));
+    },
+    draw: function(location, character, color) {
+      return this.display.draw(location[0], location[1], character, color);
     }
   };
 

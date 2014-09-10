@@ -39,50 +39,6 @@
     return _results;
   });
 
-  test("coordinates at 0,0 aren't weird", function() {
-    deepEqual([0, 0], Coordinates.parse("0,0"));
-    return equal("0,0", Coordinates.create(0, 0));
-  });
-
-  test("coordinates create/parse", function() {
-    return deepEqual([1, 1], Coordinates.parse("1,1"));
-  });
-
-  test("Coordinate Parse returns x=10 y=20", function() {
-    var actual, key, x, y, _ref;
-    key = '10,20';
-    _ref = Coordinates.parse(key), x = _ref[0], y = _ref[1];
-    actual = x === 10 && y === 20 ? true : false;
-    return equal(actual, true);
-  });
-
-  test("Coordinate Create returns 10,20", function() {
-    var actual, keyVal, x, y;
-    x = 10;
-    y = 20;
-    keyVal = Coordinates.create(x, y);
-    actual = keyVal === "10,20" ? true : false;
-    return equal(actual, true);
-  });
-
-  test("Coordinate selectRandom returns values from list of coordinates", function() {
-    var c, coordList, coords, index, result, x, y, _i, _j, _len, _ref, _results;
-    coordList = ["1,1", "1,2", "1,3", "1,4", "1,5", "1,6", "1,7", "1,8", "1,9", "1,10", "2,1", "2,2", "2,3", "2,4", "2,5", "2,6", "2,7", "2,8", "2,9", "2,10"];
-    result = {};
-    for (index = _i = 1; _i <= 200; index = ++_i) {
-      _ref = Coordinates.selectRandom(coordList), x = _ref[0], y = _ref[1];
-      coords = Coordinates.create(x, y);
-      result[coords] || (result[coords] = 0);
-      result[coords] += 1;
-    }
-    _results = [];
-    for (_j = 0, _len = coordList.length; _j < _len; _j++) {
-      c = coordList[_j];
-      _results.push(ok(result[c], "failed to find " + c));
-    }
-    return _results;
-  });
-
   test("Map 1 and Map 2 should contain different characters at 0,0", function() {
     var map1, map2;
     map1 = new Map(3, 3);
@@ -132,13 +88,6 @@
       }
     }
     return equal(actual, true);
-  });
-
-  test("player is new object of class player", function() {
-    var player;
-    player = new Player([0, 0]);
-    console.log(player.speed);
-    return equal(player.speed, 100);
   });
 
 }).call(this);

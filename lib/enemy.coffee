@@ -1,39 +1,33 @@
 class window.Enemy
 
-	constructor: (x, y) ->
-		@_x = x
-		@_y = y
+	constructor: (location) ->
+		@location = location
 		@draw()
 
 	getSpeed: () ->  
 		return 100
 
 	act: () ->
-		x = Game.player.getX()
-		y = Game.player.getY()
+		playerLocation = Game.player.getLocation()
 		passableCallback = (x, y) ->
 			Game.map.isOpen([x,y]) 
 
-		astar = new ROT.Path.AStar(x, y, passableCallback,
+		astar = new ROT.Path.AStar(playerLocation[0], playerLocation[1], passableCallback,
 			topology: 4
 		)
 		path = []
 		pathCallback = (x, y) ->
 			path.push [x,y]
 
-		astar.compute @_x, @_y, pathCallback
+		astar.compute @location[0], @location[1], pathCallback
 		path.shift()
 		if path.length < 2
 			Game.engine.lock()
 			alert "Game over - you were eaten by the dragon!"
 		else
-			x = path[0][0]
-			y = path[0][1]
-
-			Game.display.draw @_x, @_y, Game.map.at([@_x, @_y])
-			@_x = x
-			@_y = y
+			Game.drawMapLocation @location
+			@location = path[0]
 			@draw()
 
 	draw: () ->
-		Game.display.draw @_x, @_y, "&", "red"
+		Game.draw @location, "&", "red"
