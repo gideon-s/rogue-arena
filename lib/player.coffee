@@ -14,33 +14,30 @@ class window.Player
 		Game.engine.lock()
 		window.addEventListener "keydown", this
 
-	handleEvent: (e) ->
-
-		code = e.keyCode
-		#  13=space, 32=enter
-		if code is 13 or code is 32
-			@checkBox()
-			return
-		keyMap = {}
-		keyMap[38] = 0 # Up arrow
-		keyMap[33] = 1 # Up key
-		keyMap[39] = 2 # Right Arrow
-		keyMap[34] = 3 # Page down
-		keyMap[40] = 4 # Down Arrow
-		keyMap[35] = 5 
-		keyMap[37] = 6
-		keyMap[36] = 7
-	
-		# one of numpad directions? 
-		return  unless code of keyMap
-	
-		# is there a free space? 
-		dir = ROT.DIRS[8][keyMap[code]]
+	moveDir: (dirIndex) ->
+		dir = ROT.DIRS[8][dirIndex]
 		nextLocation = Util.addDir(@location, dir)
 		return  unless Game.map.isOpen(nextLocation)
 		Game.drawMapLocation @location
 		@location = nextLocation
 		@draw()
+
+	handleEvent: (e) ->
+		keyMap = {}
+		keyMap[13] = keyMap[32] = () => @checkBox()
+		keyMap[38] = () => @moveDir(0) # Up arrow
+		keyMap[33] = () => @moveDir(1) # Up key
+		keyMap[39] = () => @moveDir(2) # Right Arrow
+		keyMap[34] = () => @moveDir(3) # Page down
+		keyMap[40] = () => @moveDir(4) # Down Arrow
+		keyMap[35] = () => @moveDir(5) 
+		keyMap[37] = () => @moveDir(6)
+		keyMap[36] = () => @moveDir(7)
+	
+		# one of numpad directions? 
+		code = e.keyCode
+		return unless code of keyMap
+		keyMap[code]()
 		window.removeEventListener "keydown", this
 		Game.engine.unlock()
 

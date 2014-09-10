@@ -19,33 +19,71 @@
       return window.addEventListener("keydown", this);
     };
 
-    Player.prototype.handleEvent = function(e) {
-      var code, dir, keyMap, nextLocation;
-      code = e.keyCode;
-      if (code === 13 || code === 32) {
-        this.checkBox();
-        return;
-      }
-      keyMap = {};
-      keyMap[38] = 0;
-      keyMap[33] = 1;
-      keyMap[39] = 2;
-      keyMap[34] = 3;
-      keyMap[40] = 4;
-      keyMap[35] = 5;
-      keyMap[37] = 6;
-      keyMap[36] = 7;
-      if (!(code in keyMap)) {
-        return;
-      }
-      dir = ROT.DIRS[8][keyMap[code]];
+    Player.prototype.moveDir = function(dirIndex) {
+      var dir, nextLocation;
+      dir = ROT.DIRS[8][dirIndex];
       nextLocation = Util.addDir(this.location, dir);
       if (!Game.map.isOpen(nextLocation)) {
         return;
       }
       Game.drawMapLocation(this.location);
       this.location = nextLocation;
-      this.draw();
+      return this.draw();
+    };
+
+    Player.prototype.handleEvent = function(e) {
+      var code, keyMap;
+      keyMap = {};
+      keyMap[13] = keyMap[32] = (function(_this) {
+        return function() {
+          return _this.checkBox();
+        };
+      })(this);
+      keyMap[38] = (function(_this) {
+        return function() {
+          return _this.moveDir(0);
+        };
+      })(this);
+      keyMap[33] = (function(_this) {
+        return function() {
+          return _this.moveDir(1);
+        };
+      })(this);
+      keyMap[39] = (function(_this) {
+        return function() {
+          return _this.moveDir(2);
+        };
+      })(this);
+      keyMap[34] = (function(_this) {
+        return function() {
+          return _this.moveDir(3);
+        };
+      })(this);
+      keyMap[40] = (function(_this) {
+        return function() {
+          return _this.moveDir(4);
+        };
+      })(this);
+      keyMap[35] = (function(_this) {
+        return function() {
+          return _this.moveDir(5);
+        };
+      })(this);
+      keyMap[37] = (function(_this) {
+        return function() {
+          return _this.moveDir(6);
+        };
+      })(this);
+      keyMap[36] = (function(_this) {
+        return function() {
+          return _this.moveDir(7);
+        };
+      })(this);
+      code = e.keyCode;
+      if (!(code in keyMap)) {
+        return;
+      }
+      keyMap[code]();
       window.removeEventListener("keydown", this);
       return Game.engine.unlock();
     };
