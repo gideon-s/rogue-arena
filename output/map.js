@@ -45,6 +45,20 @@
       return Util.pickRandom(this.locations());
     };
 
+    Map.prototype.generateMap = function() {
+      var digCallback, digger;
+      digger = new ROT.Map.Digger();
+      console.log(digger);
+      digCallback = function(x, y, value) {
+        console.log(digCallback);
+        if (value) {
+          return;
+        }
+        return this.map.setLocation([x, y], ".");
+      };
+      return digger.create(digCallback.bind(this));
+    };
+
     return Map;
 
   })();

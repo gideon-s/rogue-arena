@@ -13,7 +13,7 @@
         spacing: 1.1
       });
       document.body.appendChild(this.display.getContainer());
-      this.generateMap();
+      this.map.generateMap();
       scheduler = new ROT.Scheduler.Simple();
       scheduler.add(this.player, true);
       scheduler.add(this.dragon, true);

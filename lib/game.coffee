@@ -8,7 +8,7 @@ window.Game =
   init: ->
     @display = new ROT.Display spacing: 1.1
     document.body.appendChild @display.getContainer()
-    @generateMap()
+    @map.generateMap()
     scheduler = new ROT.Scheduler.Simple()
     scheduler.add @player, true
     scheduler.add @dragon, true

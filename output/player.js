@@ -22,7 +22,7 @@
     Player.prototype.moveDir = function(dirIndex) {
       var dir, nextLocation;
       dir = ROT.DIRS[8][dirIndex];
-      nextLocation = Util.addDir(this.location, dir);
+      nextLocation = location.addDir(this.location, dir);
       if (!Game.map.isOpen(nextLocation)) {
         return;
       }
@@ -94,13 +94,13 @@
 
     Player.prototype.checkBox = function() {
       if (Game.map.at(this.location) !== "*") {
-        return console.log("There is no box here!");
+        return alert("There is no box here!");
       } else if (this.location === Game.ananas) {
-        console.log("Hooray! You found the gem of success and won this game.");
+        alert("Hooray! You found the gem of success and won this game.");
         Game.engine.lock();
         return window.removeEventListener("keydown", this);
       } else {
-        return console.log("This box is empty :-(");
+        return alert("This box is empty :-(");
       }
     };
 

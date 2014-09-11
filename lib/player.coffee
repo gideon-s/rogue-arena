@@ -16,7 +16,7 @@ class window.Player
 
 	moveDir: (dirIndex) ->
 		dir = ROT.DIRS[8][dirIndex]
-		nextLocation = Util.addDir(@location, dir)
+		nextLocation = location.addDir(@location, dir)
 		return  unless Game.map.isOpen(nextLocation)
 		Game.drawMapLocation @location
 		@location = nextLocation
@@ -26,13 +26,13 @@ class window.Player
 		keyMap = {}
 		keyMap[13] = keyMap[32] = () => @checkBox()
 		keyMap[38] = () => @moveDir(0) # Up arrow
-		keyMap[33] = () => @moveDir(1) # Up key
+		keyMap[33] = () => @moveDir(1) # Page Up key
 		keyMap[39] = () => @moveDir(2) # Right Arrow
 		keyMap[34] = () => @moveDir(3) # Page down
 		keyMap[40] = () => @moveDir(4) # Down Arrow
-		keyMap[35] = () => @moveDir(5) 
-		keyMap[37] = () => @moveDir(6)
-		keyMap[36] = () => @moveDir(7)
+		keyMap[35] = () => @moveDir(5) # End key
+		keyMap[37] = () => @moveDir(6) # Left arrow
+		keyMap[36] = () => @moveDir(7) # Home key
 	
 		# one of numpad directions? 
 		code = e.keyCode
@@ -46,10 +46,10 @@ class window.Player
 
 	checkBox: () ->
 		unless Game.map.at(@location) is "*"
-			console.log "There is no box here!"
+			alert "There is no box here!"
 		else if @location is Game.ananas
-			console.log "Hooray! You found the gem of success and won this game."
+			alert "Hooray! You found the gem of success and won this game."
 			Game.engine.lock()
 			window.removeEventListener "keydown", this
 		else
-			console.log "This box is empty :-("
+			alert "This box is empty :-("
