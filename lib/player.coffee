@@ -16,7 +16,7 @@ class window.Player
 
 	moveDir: (dirIndex) ->
 		dir = ROT.DIRS[8][dirIndex]
-		nextLocation = location.addDir(@location, dir)
+		nextLocation = Location.addDir(@location, dir)
 		return  unless Game.map.isOpen(nextLocation)
 		Game.drawMapLocation @location
 		@location = nextLocation

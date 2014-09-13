@@ -13,7 +13,11 @@
         spacing: 1.1
       });
       document.body.appendChild(this.display.getContainer());
-      this.map.generateMap();
+      this.generateMap();
+      this.generateBoxes();
+      this.drawWholeMap();
+      this.player = this.createBeing(Player);
+      this.dragon = this.createBeing(Enemy);
       scheduler = new ROT.Scheduler.Simple();
       scheduler.add(this.player, true);
       scheduler.add(this.dragon, true);
@@ -29,11 +33,7 @@
         }
         return this.map.setLocation([x, y], ".");
       };
-      digger.create(digCallback.bind(this));
-      this.generateBoxes();
-      this.drawWholeMap();
-      this.player = this.createBeing(Player);
-      return this.dragon = this.createBeing(Enemy);
+      return digger.create(digCallback.bind(this));
     },
     createBeing: function(what) {
       var location;

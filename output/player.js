@@ -22,7 +22,7 @@
     Player.prototype.moveDir = function(dirIndex) {
       var dir, nextLocation;
       dir = ROT.DIRS[8][dirIndex];
-      nextLocation = location.addDir(this.location, dir);
+      nextLocation = Location.addDir(this.location, dir);
       if (!Game.map.isOpen(nextLocation)) {
         return;
       }

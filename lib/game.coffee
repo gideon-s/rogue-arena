@@ -8,7 +8,11 @@ window.Game =
   init: ->
     @display = new ROT.Display spacing: 1.1
     document.body.appendChild @display.getContainer()
-    @map.generateMap()
+    @generateMap()
+    @generateBoxes()
+    @drawWholeMap()
+    @player = @createBeing(Player)
+    @dragon = @createBeing(Enemy)
     scheduler = new ROT.Scheduler.Simple()
     scheduler.add @player, true
     scheduler.add @dragon, true
@@ -22,10 +26,7 @@ window.Game =
       @map.setLocation([x,y],".")
 
     digger.create digCallback.bind(@)
-    @generateBoxes()
-    @drawWholeMap()
-    @player = @createBeing(Player)
-    @dragon = @createBeing(Enemy)
+    
 
   createBeing: (what) ->
     location = @map.randomLocation()
