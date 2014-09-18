@@ -31,9 +31,7 @@ class window.Map
 
     generateMap: () ->
         digger = new ROT.Map.Digger()
-        console.log digger
         digCallback = (x, y, value) ->
-            console.log digCallback
             return if value
             @map.setLocation([x,y],".")
         digger.create digCallback.bind(@)

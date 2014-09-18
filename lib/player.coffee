@@ -8,7 +8,7 @@ class window.Player
 		return 100
 
 	getLocation: () ->
-		return @location
+		return @location.pair()
 
 	act: ->
 		Game.engine.lock()
@@ -16,9 +16,9 @@ class window.Player
 
 	moveDir: (dirIndex) ->
 		dir = ROT.DIRS[8][dirIndex]
-		nextLocation = Location.addDir(@location, dir)
-		return  unless Game.map.isOpen(nextLocation)
-		Game.drawMapLocation @location
+		nextLocation = @location.addDir(dir)
+		return  unless Game.map.isOpen(nextLocation.pair())
+		Game.drawMapLocation @location.pair()
 		@location = nextLocation
 		@draw()
 
@@ -42,12 +42,12 @@ class window.Player
 		Game.engine.unlock()
 
 	draw: () ->
-		Game.draw @location, "@", "#ff0"
+		Game.draw @location.pair(), "@", "#ff0"
 
 	checkBox: () ->
-		unless Game.map.at(@location) is "*"
+		unless Game.map.at(@location.pair()) is "*"
 			alert "There is no box here!"
-		else if @location is Game.ananas
+		else if @location.pair() is Game.ananas
 			alert "Hooray! You found the gem of success and won this game."
 			Game.engine.lock()
 			window.removeEventListener "keydown", this

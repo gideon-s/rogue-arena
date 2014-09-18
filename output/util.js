@@ -11,10 +11,6 @@
       return list[this.rand(list.length)];
     };
 
-    Util.addDir = function(location, dir) {
-      return [location[0] + dir[0], location[1] + dir[1]];
-    };
-
     return Util;
 
   })();

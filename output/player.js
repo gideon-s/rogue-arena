@@ -11,7 +11,7 @@
     };
 
     Player.prototype.getLocation = function() {
-      return this.location;
+      return this.location.pair();
     };
 
     Player.prototype.act = function() {
@@ -22,11 +22,11 @@
     Player.prototype.moveDir = function(dirIndex) {
       var dir, nextLocation;
       dir = ROT.DIRS[8][dirIndex];
-      nextLocation = Location.addDir(this.location, dir);
-      if (!Game.map.isOpen(nextLocation)) {
+      nextLocation = this.location.addDir(dir);
+      if (!Game.map.isOpen(nextLocation.pair())) {
         return;
       }
-      Game.drawMapLocation(this.location);
+      Game.drawMapLocation(this.location.pair());
       this.location = nextLocation;
       return this.draw();
     };
@@ -89,13 +89,13 @@
     };
 
     Player.prototype.draw = function() {
-      return Game.draw(this.location, "@", "#ff0");
+      return Game.draw(this.location.pair(), "@", "#ff0");
     };
 
     Player.prototype.checkBox = function() {
-      if (Game.map.at(this.location) !== "*") {
+      if (Game.map.at(this.location.pair()) !== "*") {
         return alert("There is no box here!");
-      } else if (this.location === Game.ananas) {
+      } else if (this.location.pair() === Game.ananas) {
         alert("Hooray! You found the gem of success and won this game.");
         Game.engine.lock();
         return window.removeEventListener("keydown", this);

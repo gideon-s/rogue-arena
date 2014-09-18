@@ -4,6 +4,3 @@ class window.Util
 
 	@pickRandom: (list) -> 
 		list[@rand(list.length)]
-
-	@addDir: (location, dir) ->
-		[location[0]+dir[0],location[1]+dir[1]]

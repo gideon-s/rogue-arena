@@ -19,15 +19,16 @@ class window.Enemy
 		pathCallback = (x, y) ->
 			path.push [x,y]
 
-		astar.compute @location[0], @location[1], pathCallback
+		pair = @location.pair()
+		astar.compute pair[0], pair[1], pathCallback
 		path.shift()
 		if path.length < 2
 			Game.engine.lock()
 			alert "Game over - you were eaten by the dragon!"
 		else
-			Game.drawMapLocation @location
-			@location = path[0]
+			Game.drawMapLocation @location.pair()
+			@location = new Location(path[0])
 			@draw()
 
 	draw: () ->
-		Game.draw @location, "&", "red"
+		Game.draw @location.pair(), "&", "red"

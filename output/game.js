@@ -37,7 +37,7 @@
     },
     createBeing: function(what) {
       var location;
-      location = this.map.randomLocation();
+      location = new Location(this.map.randomLocation());
       return new what(location);
     },
     generateBoxes: function() {

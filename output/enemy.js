@@ -11,7 +11,7 @@
     };
 
     Enemy.prototype.act = function() {
-      var astar, passableCallback, path, pathCallback, playerLocation;
+      var astar, pair, passableCallback, path, pathCallback, playerLocation;
       playerLocation = Game.player.getLocation();
       passableCallback = function(x, y) {
         return Game.map.isOpen([x, y]);
@@ -23,20 +23,21 @@
       pathCallback = function(x, y) {
         return path.push([x, y]);
       };
-      astar.compute(this.location[0], this.location[1], pathCallback);
+      pair = this.location.pair();
+      astar.compute(pair[0], pair[1], pathCallback);
       path.shift();
       if (path.length < 2) {
         Game.engine.lock();
         return alert("Game over - you were eaten by the dragon!");
       } else {
-        Game.drawMapLocation(this.location);
-        this.location = path[0];
+        Game.drawMapLocation(this.location.pair());
+        this.location = new Location(path[0]);
         return this.draw();
       }
     };
 
     Enemy.prototype.draw = function() {
-      return Game.draw(this.location, "&", "red");
+      return Game.draw(this.location.pair(), "&", "red");
     };
 
     return Enemy;

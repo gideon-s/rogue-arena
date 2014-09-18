@@ -57,3 +57,15 @@ test "map.randomLocation returns realistic value spread", () ->
 		if map.at(location) > 18 || map.at(location) < 3
 			actual = false
 	equal actual, true
+
+test "location(0,1) returns x=0 and y=1", () ->
+	location = new Location [0,1]
+	equal location.x,0 
+	equal location.y,1
+	location = location.addDir [1,1]
+	equal location.x,1
+	equal location.y,2
+
+
+
+

@@ -29,7 +29,7 @@ window.Game =
     
 
   createBeing: (what) ->
-    location = @map.randomLocation()
+    location = new Location(@map.randomLocation())
     new what(location)
 
   generateBoxes: () ->
