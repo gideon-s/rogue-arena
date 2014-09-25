@@ -24,34 +24,38 @@ test "pickRandom Returns items from list", ()  ->
 test "Map 1 and Map 2 should contain different characters at 0,0", () ->
     map1 = new Map(3,3)
     map2 = new Map(3,3)
-    map1.setLocation([0,0], "@")
-    equal "@", map1.at([0,0])
-    map2.setLocation([0,0], "$")
-    equal "$", map2.at([0,0])
-    notEqual map1.at([0,0]), map2.at([0,0])
+    location = new Location [0,0]
+    map1.setLocation(location,"@")
+    equal "@", map1.at(location)
+    map2.setLocation(location, "$")
+    equal "$", map2.at(location)
+    notEqual map1.at(location), map2.at(location)
 
 test "locations of map should return list of x,y pairs", () ->
 	map = new Map(5,5)
-	map.setLocation([0,0], "X")
-	deepEqual [[0,0]], map.locations()
-	map.setLocation([0,1], ".")
-	deepEqual [[0,0],[0,1]], map.locations()
+	location = new Location [0,0]
+	map.setLocation(location, "X")
+	deepEqual [location], map.locations()
+	location2 = new Location [0,1]
+	map.setLocation(location2, ".")
+	deepEqual [location,location2], map.locations()
 
 test "Is open map area", () ->
 	map = new Map(10,10)
-	map.setLocation([2,3],".")
-	ok map.isOpen([2,3])
-	ok !map.isOpen([2,4])
+	location = new Location [2,3]
+	map.setLocation(location,".")
+	ok map.isOpen(location)
+	ok !map.isOpen(new Location [0,0])
 
 test "map.randomLocation returns realistic value spread", () ->
 	map = new Map(10,10)
 	for i in [0...10]
-		map.setLocation([0,i],"0")
+		map.setLocation(new Location([0,i]),"0")
 	for i in [0...100]
-		[x,y] = map.randomLocation()
-		val = map.at([x,y]) 
+		location = map.randomLocation()
+		val = map.at(location) 
 		val++
-		map.setLocation([x,y], val)
+		map.setLocation(location, val)
 		actual = true
 	for location in map.locations()
 		if map.at(location) > 18 || map.at(location) < 3
@@ -66,6 +70,18 @@ test "location(0,1) returns x=0 and y=1", () ->
 	equal location.x,1
 	equal location.y,2
 
+test "path contains expected path to destination, nextStep contains the first location in the path", () ->
+	map = new Map(5,5)
+	for i in [1...4]
+		map.setLocation(new Location([1,i]), ".")
+	location = new Location [1,1]
+	destLocation = new Location [1,4]
+	path = location.pathToDestination(destLocation,map)
+	nextStep = location.nextStepToDestination(destLocation,map)
+	deepEqual path,[new Location([1,2]),new Location([1,3]),new Location([1,4])]
+	deepEqual nextStep,new Location [1,2]
 
+
+	
 
 

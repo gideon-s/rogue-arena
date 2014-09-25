@@ -14,6 +14,40 @@
       return [this.x, this.y];
     };
 
+    Location.prototype.pathToDestination = function(destination, map) {
+      var astar, dest, passableCallback, path, pathCallback;
+      passableCallback = function(x, y) {
+        return map.isOpen(new Location([x, y]));
+      };
+      dest = destination.pair();
+      astar = new ROT.Path.AStar(dest[0], dest[1], passableCallback, {
+        topology: 8
+      });
+      path = [];
+      pathCallback = function(x, y) {
+        return path.push(new Location([x, y]));
+      };
+      astar.compute(this.x, this.y, pathCallback);
+      path.shift();
+      return path;
+    };
+
+    Location.prototype.nextStepToDestination = function(destination, map) {
+      return this.pathToDestination(destination, map)[0];
+    };
+
+    Location.prototype.drawOn = function(display, character, color) {
+      return display.draw(this.x, this.y, character, color);
+    };
+
+    Location.prototype.setOn = function(map, symbol) {
+      return map[this.x][this.y] = symbol;
+    };
+
+    Location.prototype.on = function(map) {
+      return map[this.x][this.y];
+    };
+
     return Location;
 
   })();

@@ -40,49 +40,53 @@
   });
 
   test("Map 1 and Map 2 should contain different characters at 0,0", function() {
-    var map1, map2;
+    var location, map1, map2;
     map1 = new Map(3, 3);
     map2 = new Map(3, 3);
-    map1.setLocation([0, 0], "@");
-    equal("@", map1.at([0, 0]));
-    map2.setLocation([0, 0], "$");
-    equal("$", map2.at([0, 0]));
-    return notEqual(map1.at([0, 0]), map2.at([0, 0]));
+    location = new Location([0, 0]);
+    map1.setLocation(location, "@");
+    equal("@", map1.at(location));
+    map2.setLocation(location, "$");
+    equal("$", map2.at(location));
+    return notEqual(map1.at(location), map2.at(location));
   });
 
   test("locations of map should return list of x,y pairs", function() {
-    var map;
+    var location, location2, map;
     map = new Map(5, 5);
-    map.setLocation([0, 0], "X");
-    deepEqual([[0, 0]], map.locations());
-    map.setLocation([0, 1], ".");
-    return deepEqual([[0, 0], [0, 1]], map.locations());
+    location = new Location([0, 0]);
+    map.setLocation(location, "X");
+    deepEqual([location], map.locations());
+    location2 = new Location([0, 1]);
+    map.setLocation(location2, ".");
+    return deepEqual([location, location2], map.locations());
   });
 
   test("Is open map area", function() {
-    var map;
+    var location, map;
     map = new Map(10, 10);
-    map.setLocation([2, 3], ".");
-    ok(map.isOpen([2, 3]));
-    return ok(!map.isOpen([2, 4]));
+    location = new Location([2, 3]);
+    map.setLocation(location, ".");
+    ok(map.isOpen(location));
+    return ok(!map.isOpen(new Location([0, 0])));
   });
 
   test("map.randomLocation returns realistic value spread", function() {
-    var actual, i, location, map, val, x, y, _i, _j, _k, _len, _ref, _ref1;
+    var actual, i, location, map, val, _i, _j, _k, _len, _ref;
     map = new Map(10, 10);
     for (i = _i = 0; _i < 10; i = ++_i) {
-      map.setLocation([0, i], "0");
+      map.setLocation(new Location([0, i]), "0");
     }
     for (i = _j = 0; _j < 100; i = ++_j) {
-      _ref = map.randomLocation(), x = _ref[0], y = _ref[1];
-      val = map.at([x, y]);
+      location = map.randomLocation();
+      val = map.at(location);
       val++;
-      map.setLocation([x, y], val);
+      map.setLocation(location, val);
       actual = true;
     }
-    _ref1 = map.locations();
-    for (_k = 0, _len = _ref1.length; _k < _len; _k++) {
-      location = _ref1[_k];
+    _ref = map.locations();
+    for (_k = 0, _len = _ref.length; _k < _len; _k++) {
+      location = _ref[_k];
       if (map.at(location) > 18 || map.at(location) < 3) {
         actual = false;
       }
@@ -98,6 +102,20 @@
     location = location.addDir([1, 1]);
     equal(location.x, 1);
     return equal(location.y, 2);
+  });
+
+  test("path contains expected path to destination, nextStep contains the first location in the path", function() {
+    var destLocation, i, location, map, nextStep, path, _i;
+    map = new Map(5, 5);
+    for (i = _i = 1; _i < 4; i = ++_i) {
+      map.setLocation(new Location([1, i]), ".");
+    }
+    location = new Location([1, 1]);
+    destLocation = new Location([1, 4]);
+    path = location.pathToDestination(destLocation, map);
+    nextStep = location.nextStepToDestination(destLocation, map);
+    deepEqual(path, [new Location([1, 2]), new Location([1, 3]), new Location([1, 4])]);
+    return deepEqual(nextStep, new Location([1, 2]));
   });
 
 }).call(this);

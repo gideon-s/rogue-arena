@@ -16,25 +16,26 @@
       }).call(this);
     }
 
-    Map.prototype.at = function(pair) {
-      return this.map[pair[0]][pair[1]];
+    Map.prototype.at = function(location) {
+      return location.on(this.map);
     };
 
-    Map.prototype.setLocation = function(pair, symbol) {
-      return this.map[pair[0]][pair[1]] = symbol;
+    Map.prototype.setLocation = function(location, symbol) {
+      return location.setOn(this.map, symbol);
     };
 
-    Map.prototype.isOpen = function(pair) {
-      return this.at(pair) != null;
+    Map.prototype.isOpen = function(location) {
+      return this.at(location) != null;
     };
 
     Map.prototype.locations = function() {
-      var result, x, y, _i, _j, _ref, _ref1;
+      var location, result, x, y, _i, _j, _ref, _ref1;
       result = [];
       for (x = _i = 0, _ref = this.width; 0 <= _ref ? _i < _ref : _i > _ref; x = 0 <= _ref ? ++_i : --_i) {
         for (y = _j = 0, _ref1 = this.height; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; y = 0 <= _ref1 ? ++_j : --_j) {
-          if (this.isOpen([x, y])) {
-            result.push([x, y]);
+          location = new Location([x, y]);
+          if (this.isOpen(location)) {
+            result.push(location);
           }
         }
       }
@@ -43,20 +44,6 @@
 
     Map.prototype.randomLocation = function() {
       return Util.pickRandom(this.locations());
-    };
-
-    Map.prototype.generateMap = function() {
-      var digCallback, digger;
-      digger = new ROT.Map.Digger();
-      console.log(digger);
-      digCallback = function(x, y, value) {
-        console.log(digCallback);
-        if (value) {
-          return;
-        }
-        return this.map.setLocation([x, y], ".");
-      };
-      return digger.create(digCallback.bind(this));
     };
 
     return Map;

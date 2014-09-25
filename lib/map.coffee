@@ -8,34 +8,26 @@ class window.Map
         @map = for x in [0...width]
             @map[x] = new Array(height)
         
-    at: (pair) ->
-        @map[pair[0]][pair[1]]
+    at: (location) ->
+        location.on(@map)
 
-    setLocation: (pair, symbol) ->
-        @map[pair[0]][pair[1]] = symbol
-
-    isOpen: (pair) ->
-        @at(pair)?
+    setLocation: (location, symbol) ->
+        location.setOn(@map, symbol)
+        
+    isOpen: (location) ->
+        @at(location)?
 
     locations: () ->
         result = []
         for x in [0...@width]
             for y in [0...@height]
-                if @isOpen([x,y])
-                    result.push [x,y]   
+                location = new Location([x,y])
+                if @isOpen(location)
+                    result.push location   
         result
 
     randomLocation: () ->
         Util.pickRandom(@locations())
-
-
-    generateMap: () ->
-        digger = new ROT.Map.Digger()
-        digCallback = (x, y, value) ->
-            return if value
-            @map.setLocation([x,y],".")
-        digger.create digCallback.bind(@)
-
 
 
 

@@ -11,8 +11,8 @@ window.Game =
     @generateMap()
     @generateBoxes()
     @drawWholeMap()
-    @player = @createBeing(Player)
-    @dragon = @createBeing(Enemy)
+    @player = new Player(@map.randomLocation())
+    @dragon = new Enemy(@map.randomLocation())
     scheduler = new ROT.Scheduler.Simple()
     scheduler.add @player, true
     scheduler.add @dragon, true
@@ -23,14 +23,9 @@ window.Game =
     digger = new ROT.Map.Digger()
     digCallback = (x, y, value) ->
       return if value
-      @map.setLocation([x,y],".")
+      @map.setLocation(new Location([x,y]),".")
 
     digger.create digCallback.bind(@)
-    
-
-  createBeing: (what) ->
-    location = new Location(@map.randomLocation())
-    new what(location)
 
   generateBoxes: () ->
     i = 0
@@ -49,7 +44,7 @@ window.Game =
     @draw location, @map.at(location)
 
   draw: (location, character, color)  ->
-    @display.draw location[0],location[1], character, color
+    location.drawOn @display, character, color
     
 
 Game.init()

@@ -16,8 +16,8 @@
       this.generateMap();
       this.generateBoxes();
       this.drawWholeMap();
-      this.player = this.createBeing(Player);
-      this.dragon = this.createBeing(Enemy);
+      this.player = new Player(this.map.randomLocation());
+      this.dragon = new Enemy(this.map.randomLocation());
       scheduler = new ROT.Scheduler.Simple();
       scheduler.add(this.player, true);
       scheduler.add(this.dragon, true);
@@ -31,14 +31,9 @@
         if (value) {
           return;
         }
-        return this.map.setLocation([x, y], ".");
+        return this.map.setLocation(new Location([x, y]), ".");
       };
       return digger.create(digCallback.bind(this));
-    },
-    createBeing: function(what) {
-      var location;
-      location = new Location(this.map.randomLocation());
-      return new what(location);
     },
     generateBoxes: function() {
       var i, randLoc, _results;
@@ -68,7 +63,7 @@
       return this.draw(location, this.map.at(location));
     },
     draw: function(location, character, color) {
-      return this.display.draw(location[0], location[1], character, color);
+      return location.drawOn(this.display, character, color);
     }
   };
 

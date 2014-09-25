@@ -11,33 +11,20 @@
     };
 
     Enemy.prototype.act = function() {
-      var astar, pair, passableCallback, path, pathCallback, playerLocation;
-      playerLocation = Game.player.getLocation();
-      passableCallback = function(x, y) {
-        return Game.map.isOpen([x, y]);
-      };
-      astar = new ROT.Path.AStar(playerLocation[0], playerLocation[1], passableCallback, {
-        topology: 4
-      });
-      path = [];
-      pathCallback = function(x, y) {
-        return path.push([x, y]);
-      };
-      pair = this.location.pair();
-      astar.compute(pair[0], pair[1], pathCallback);
-      path.shift();
+      var path;
+      path = this.location.pathToDestination(Game.player.getLocation(), Game.map);
       if (path.length < 2) {
         Game.engine.lock();
         return alert("Game over - you were eaten by the dragon!");
       } else {
-        Game.drawMapLocation(this.location.pair());
-        this.location = new Location(path[0]);
+        Game.drawMapLocation(this.location);
+        this.location = path[0];
         return this.draw();
       }
     };
 
     Enemy.prototype.draw = function() {
-      return Game.draw(this.location.pair(), "&", "red");
+      return Game.draw(this.location, "&", "red");
     };
 
     return Enemy;
