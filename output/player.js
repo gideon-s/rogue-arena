@@ -80,12 +80,11 @@
         };
       })(this);
       code = e.keyCode;
-      if (!(code in keyMap)) {
-        return;
+      if (code in keyMap) {
+        keyMap[code]();
+        window.removeEventListener("keydown", this);
+        return Game.engine.unlock();
       }
-      keyMap[code]();
-      window.removeEventListener("keydown", this);
-      return Game.engine.unlock();
     };
 
     Player.prototype.draw = function() {
@@ -95,7 +94,7 @@
     Player.prototype.checkBox = function() {
       if (Game.map.at(this.location) !== "*") {
         return alert("There is no box here!");
-      } else if (this.location === Game.ananas) {
+      } else if (_.isEqual(this.location, Game.prize)) {
         alert("Hooray! You found the gem of success and won this game.");
         Game.engine.lock();
         return window.removeEventListener("keydown", this);

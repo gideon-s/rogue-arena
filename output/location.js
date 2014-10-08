@@ -48,6 +48,10 @@
       return map[this.x][this.y];
     };
 
+    Location.prototype.toString = function() {
+      return "[ " + this.x + ", " + this.y + " ]";
+    };
+
     return Location;
 
   })();

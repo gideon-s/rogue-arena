@@ -4,13 +4,11 @@ class window.Enemy
 		@location = location
 		@draw()
 
-	getSpeed: () ->  
-		return 100
+	getSpeed: () -> 100
 
 	act: () ->
 
 		path = @location.pathToDestination(Game.player.getLocation(),Game.map)
-		
 		if path.length < 2
 			Game.engine.lock()
 			alert "Game over - you were eaten by the dragon!"
@@ -19,5 +17,4 @@ class window.Enemy
 			@location = path[0]
 			@draw()
 
-	draw: () ->
-		Game.draw @location, "&", "red"
+	draw: () -> Game.draw @location, "&", "red"

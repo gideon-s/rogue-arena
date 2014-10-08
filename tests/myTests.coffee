@@ -81,7 +81,3 @@ test "path contains expected path to destination, nextStep contains the first lo
 	deepEqual path,[new Location([1,2]),new Location([1,3]),new Location([1,4])]
 	deepEqual nextStep,new Location [1,2]
 
-
-	
-
-

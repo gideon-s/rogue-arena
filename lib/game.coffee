@@ -4,12 +4,12 @@ window.Game =
   engine: null
   player: null
   dragon: null
-  ananas: null
+  prize: null
   init: ->
     @display = new ROT.Display spacing: 1.1
     document.body.appendChild @display.getContainer()
     @generateMap()
-    @generateBoxes()
+    @generateBoxes(10)
     @drawWholeMap()
     @player = new Player(@map.randomLocation())
     @dragon = new Enemy(@map.randomLocation())
@@ -24,20 +24,18 @@ window.Game =
     digCallback = (x, y, value) ->
       return if value
       @map.setLocation(new Location([x,y]),".")
-
     digger.create digCallback.bind(@)
 
-  generateBoxes: () ->
-    i = 0
-
-    while i < 10
+  generateBoxes: (num) ->
+  
+    _.each _.range(num), =>
       randLoc = @map.randomLocation()
       @map.setLocation(randLoc,"*")
-      @ananas = randLoc  unless i # first box contains the prize
-      i++
+      if @prize is null
+        @prize = randLoc
 
   drawWholeMap: ->
-    for location in @map.locations()
+    _.each @map.locations(), (location) =>  
       @drawMapLocation(location)
 
   drawMapLocation: (location) ->

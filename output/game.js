@@ -6,7 +6,7 @@
     engine: null,
     player: null,
     dragon: null,
-    ananas: null,
+    prize: null,
     init: function() {
       var scheduler;
       this.display = new ROT.Display({
@@ -14,7 +14,7 @@
       });
       document.body.appendChild(this.display.getContainer());
       this.generateMap();
-      this.generateBoxes();
+      this.generateBoxes(10);
       this.drawWholeMap();
       this.player = new Player(this.map.randomLocation());
       this.dragon = new Enemy(this.map.randomLocation());
@@ -35,29 +35,24 @@
       };
       return digger.create(digCallback.bind(this));
     },
-    generateBoxes: function() {
-      var i, randLoc, _results;
-      i = 0;
-      _results = [];
-      while (i < 10) {
-        randLoc = this.map.randomLocation();
-        this.map.setLocation(randLoc, "*");
-        if (!i) {
-          this.ananas = randLoc;
-        }
-        _results.push(i++);
-      }
-      return _results;
+    generateBoxes: function(num) {
+      return _.each(_.range(num), (function(_this) {
+        return function() {
+          var randLoc;
+          randLoc = _this.map.randomLocation();
+          _this.map.setLocation(randLoc, "*");
+          if (_this.prize === null) {
+            return _this.prize = randLoc;
+          }
+        };
+      })(this));
     },
     drawWholeMap: function() {
-      var location, _i, _len, _ref, _results;
-      _ref = this.map.locations();
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        location = _ref[_i];
-        _results.push(this.drawMapLocation(location));
-      }
-      return _results;
+      return _.each(this.map.locations(), (function(_this) {
+        return function(location) {
+          return _this.drawMapLocation(location);
+        };
+      })(this));
     },
     drawMapLocation: function(location) {
       return this.draw(location, this.map.at(location));

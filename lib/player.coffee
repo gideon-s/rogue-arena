@@ -21,7 +21,7 @@ class window.Player
 
 	handleEvent: (e) ->
 		keyMap = {}
-		keyMap[13] = keyMap[32] = () => @checkBox()
+		keyMap[13] = keyMap[32] = () => @checkBox() # enter, space
 		keyMap[38] = () => @moveDir(0) # Up arrow
 		keyMap[33] = () => @moveDir(1) # Page Up key
 		keyMap[39] = () => @moveDir(2) # Right Arrow
@@ -31,20 +31,19 @@ class window.Player
 		keyMap[37] = () => @moveDir(6) # Left arrow
 		keyMap[36] = () => @moveDir(7) # Home key
 	
-		# one of numpad directions? 
 		code = e.keyCode
-		return unless code of keyMap
-		keyMap[code]()
-		window.removeEventListener "keydown", this
-		Game.engine.unlock()
+		if code of keyMap
+			keyMap[code]()
+			window.removeEventListener "keydown", this
+			Game.engine.unlock()
 
 	draw: () ->
 		Game.draw @location, "@", "#ff0"
 
 	checkBox: () ->
-		unless Game.map.at(@location) is "*"
+		if Game.map.at(@location) != "*"
 			alert "There is no box here!"
-		else if @location is Game.ananas
+		else if _.isEqual(@location, Game.prize)
 			alert "Hooray! You found the gem of success and won this game."
 			Game.engine.lock()
 			window.removeEventListener "keydown", this

@@ -28,3 +28,5 @@ class window.Location
     setOn: (map, symbol) -> map[@x][@y] = symbol
     on: (map) -> map[@x][@y]
 
+    toString: ->
+    	"[ #{@x}, #{@y} ]"
