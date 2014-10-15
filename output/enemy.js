@@ -4,6 +4,11 @@
     function Enemy(location) {
       this.location = location;
       this.draw();
+      window.setTimeout(((function(_this) {
+        return function() {
+          return _this.act();
+        };
+      })(this)), 1000);
     }
 
     Enemy.prototype.getSpeed = function() {
@@ -12,14 +17,19 @@
 
     Enemy.prototype.act = function() {
       var path;
+      console.log(this.location);
       path = this.location.pathToDestination(Game.player.getLocation(), Game.map);
       if (path.length < 2) {
-        Game.engine.lock();
         return alert("Game over - you were eaten by the dragon!");
       } else {
         Game.drawMapLocation(this.location);
         this.location = path[0];
-        return this.draw();
+        this.draw();
+        return window.setTimeout(((function(_this) {
+          return function() {
+            return _this.act();
+          };
+        })(this)), 1000);
       }
     };
 

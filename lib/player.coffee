@@ -3,13 +3,14 @@ class window.Player
 	constructor: (location) ->
 		@location = location
 		@draw()
+		window.setTimeout (=> @act()), 2000 
+		window.addEventListener "keydown", this
 
 	getSpeed: () -> 100
 	getLocation: () -> @location
 
-	act: ->
-		Game.engine.lock()
-		window.addEventListener "keydown", this
+	handleEvent: (e) ->
+		@lastCode = e.keyCode
 
 	moveDir: (dirIndex) ->
 		dir = ROT.DIRS[8][dirIndex]
@@ -19,7 +20,7 @@ class window.Player
 		@location = nextLocation
 		@draw()
 
-	handleEvent: (e) ->
+	act: (e) ->
 		keyMap = {}
 		keyMap[13] = keyMap[32] = () => @checkBox() # enter, space
 		keyMap[38] = () => @moveDir(0) # Up arrow
@@ -31,11 +32,12 @@ class window.Player
 		keyMap[37] = () => @moveDir(6) # Left arrow
 		keyMap[36] = () => @moveDir(7) # Home key
 	
-		code = e.keyCode
-		if code of keyMap
-			keyMap[code]()
-			window.removeEventListener "keydown", this
-			Game.engine.unlock()
+		if @lastCode? and (@lastCode of keyMap)
+			keyMap[@lastCode]()
+			#window.removeEventListener "keydown", this
+			#Game.engine.unlock()
+		@lastCode = null
+		window.setTimeout (=> @act()), 2000 
 
 	draw: () ->
 		Game.draw @location, "@", "#ff0"
@@ -45,7 +47,7 @@ class window.Player
 			alert "There is no box here!"
 		else if _.isEqual(@location, Game.prize)
 			alert "Hooray! You found the gem of success and won this game."
-			Game.engine.lock()
+			#Game.engine.lock()
 			window.removeEventListener "keydown", this
 		else
 			alert "This box is empty :-("

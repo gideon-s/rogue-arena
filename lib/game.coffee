@@ -1,7 +1,7 @@
 window.Game =
   display: null
   map: new Map(ROT.DEFAULT_WIDTH,ROT.DEFAULT_HEIGHT)
-  engine: null
+  #engine: null
   player: null
   dragon: null
   prize: null
@@ -13,11 +13,11 @@ window.Game =
     @drawWholeMap()
     @player = new Player(@map.randomLocation())
     @dragon = new Enemy(@map.randomLocation())
-    scheduler = new ROT.Scheduler.Simple()
-    scheduler.add @player, true
-    scheduler.add @dragon, true
-    @engine = new ROT.Engine scheduler
-    @engine.start()
+    #scheduler = new ROT.Scheduler.Simple()
+    #scheduler.add @player, true
+    #scheduler.add @dragon, true
+    #@engine = new ROT.Engine scheduler
+    #@engine.start()
 
   generateMap: ->
     digger = new ROT.Map.Digger()

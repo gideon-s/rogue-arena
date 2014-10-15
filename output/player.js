@@ -4,6 +4,12 @@
     function Player(location) {
       this.location = location;
       this.draw();
+      window.setTimeout(((function(_this) {
+        return function() {
+          return _this.act();
+        };
+      })(this)), 2000);
+      window.addEventListener("keydown", this);
     }
 
     Player.prototype.getSpeed = function() {
@@ -14,9 +20,8 @@
       return this.location;
     };
 
-    Player.prototype.act = function() {
-      Game.engine.lock();
-      return window.addEventListener("keydown", this);
+    Player.prototype.handleEvent = function(e) {
+      return this.lastCode = e.keyCode;
     };
 
     Player.prototype.moveDir = function(dirIndex) {
@@ -31,8 +36,8 @@
       return this.draw();
     };
 
-    Player.prototype.handleEvent = function(e) {
-      var code, keyMap;
+    Player.prototype.act = function(e) {
+      var keyMap;
       keyMap = {};
       keyMap[13] = keyMap[32] = (function(_this) {
         return function() {
@@ -79,12 +84,15 @@
           return _this.moveDir(7);
         };
       })(this);
-      code = e.keyCode;
-      if (code in keyMap) {
-        keyMap[code]();
-        window.removeEventListener("keydown", this);
-        return Game.engine.unlock();
+      if ((this.lastCode != null) && (this.lastCode in keyMap)) {
+        keyMap[this.lastCode]();
       }
+      this.lastCode = null;
+      return window.setTimeout(((function(_this) {
+        return function() {
+          return _this.act();
+        };
+      })(this)), 2000);
     };
 
     Player.prototype.draw = function() {
@@ -96,7 +104,6 @@
         return alert("There is no box here!");
       } else if (_.isEqual(this.location, Game.prize)) {
         alert("Hooray! You found the gem of success and won this game.");
-        Game.engine.lock();
         return window.removeEventListener("keydown", this);
       } else {
         return alert("This box is empty :-(");

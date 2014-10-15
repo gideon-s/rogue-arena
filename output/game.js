@@ -3,12 +3,10 @@
   window.Game = {
     display: null,
     map: new Map(ROT.DEFAULT_WIDTH, ROT.DEFAULT_HEIGHT),
-    engine: null,
     player: null,
     dragon: null,
     prize: null,
     init: function() {
-      var scheduler;
       this.display = new ROT.Display({
         spacing: 1.1
       });
@@ -17,12 +15,7 @@
       this.generateBoxes(10);
       this.drawWholeMap();
       this.player = new Player(this.map.randomLocation());
-      this.dragon = new Enemy(this.map.randomLocation());
-      scheduler = new ROT.Scheduler.Simple();
-      scheduler.add(this.player, true);
-      scheduler.add(this.dragon, true);
-      this.engine = new ROT.Engine(scheduler);
-      return this.engine.start();
+      return this.dragon = new Enemy(this.map.randomLocation());
     },
     generateMap: function() {
       var digCallback, digger;
