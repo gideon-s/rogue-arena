@@ -92,42 +92,42 @@
       })(this);
       keyMap[89] = (function(_this) {
         return function() {
-          return _this.moveDir(0);
+          return _this.fire(0);
         };
       })(this);
       keyMap[85] = (function(_this) {
         return function() {
-          return _this.moveDir(1);
+          return _this.fire(1);
         };
       })(this);
-      keyMap[68] = (function(_this) {
+      keyMap[74] = (function(_this) {
         return function() {
-          return _this.moveDir(2);
+          return _this.fire(2);
         };
       })(this);
       keyMap[77] = (function(_this) {
         return function() {
-          return _this.moveDir(3);
+          return _this.fire(3);
         };
       })(this);
       keyMap[78] = (function(_this) {
         return function() {
-          return _this.moveDir(4);
+          return _this.fire(4);
         };
       })(this);
       keyMap[66] = (function(_this) {
         return function() {
-          return _this.moveDir(5);
+          return _this.fire(5);
         };
       })(this);
       keyMap[71] = (function(_this) {
         return function() {
-          return _this.moveDir(6);
+          return _this.fire(6);
         };
       })(this);
       keyMap[84] = (function(_this) {
         return function() {
-          return _this.moveDir(7);
+          return _this.fire(7);
         };
       })(this);
       keyMap[38] = (function(_this) {

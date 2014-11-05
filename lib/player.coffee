@@ -36,14 +36,14 @@ class window.Player
 		keyMap[65] = () => @moveDir(6) # a key
 		keyMap[81] = () => @moveDir(7) # q key
 
-		keyMap[89] = () => @moveDir(0) # y key
-		keyMap[85] = () => @moveDir(1) # u key
-		keyMap[68] = () => @moveDir(2) # j key
-		keyMap[77] = () => @moveDir(3) # m key
-		keyMap[78] = () => @moveDir(4) # n key
-		keyMap[66] = () => @moveDir(5) # b key
-		keyMap[71] = () => @moveDir(6) # g key
-		keyMap[84] = () => @moveDir(7) # t key
+		keyMap[89] = () => @fire(0) # y key
+		keyMap[85] = () => @fire(1) # u key
+		keyMap[74] = () => @fire(2) # j key
+		keyMap[77] = () => @fire(3) # m key
+		keyMap[78] = () => @fire(4) # n key
+		keyMap[66] = () => @fire(5) # b key
+		keyMap[71] = () => @fire(6) # g key
+		keyMap[84] = () => @fire(7) # t key
 
 
 		keyMap[38] = () => @fire(0) # Up arrow
