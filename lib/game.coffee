@@ -3,7 +3,7 @@ window.Game =
   map: new Map(ROT.DEFAULT_WIDTH,ROT.DEFAULT_HEIGHT)
   #engine: null
   player: null
-  dragon: null
+  enemies: []
   prize: null
   init: ->
     @display = new ROT.Display spacing: 1.1
@@ -12,19 +12,15 @@ window.Game =
     @generateBoxes(10)
     @drawWholeMap()
     @player = new Player(@map.randomLocation())
-    @dragon = new Enemy(@map.randomLocation())
-    #scheduler = new ROT.Scheduler.Simple()
-    #scheduler.add @player, true
-    #scheduler.add @dragon, true
-    #@engine = new ROT.Engine scheduler
-    #@engine.start()
-
+    #@enemies.push new Enemy(@map.randomLocation())
+    #@enemies.push new Enemy(@map.randomLocation())
+    @spawn()
   generateMap: ->
-    digger = new ROT.Map.Digger()
-    digCallback = (x, y, value) ->
+    arena = new ROT.Map.Arena()
+    arenaCallback = (x, y, value) ->
       return if value
-      @map.setLocation(new Location([x,y]),".")
-    digger.create digCallback.bind(@)
+      @map.setLocation(new Location([x,y])," ")
+    arena.create arenaCallback.bind(@)
 
   generateBoxes: (num) ->
   
@@ -43,6 +39,17 @@ window.Game =
 
   draw: (location, character, color)  ->
     location.drawOn @display, character, color
+
+  enters: (location, entity) ->
+    _.each @enemies,(enemy) =>
+      enemy.struckBy(entity)
+
+  died: (entity) ->
+    @enemies = _.without @enemies,entity
+
+  spawn: () ->
+    @enemies.push new Enemy(@map.randomLocation())
+    window.setTimeout (=> @spawn()), 1000 
     
 
 Game.init()

@@ -36,6 +36,12 @@
       return this.draw();
     };
 
+    Player.prototype.fire = function(dirIndex) {
+      var dir;
+      dir = ROT.DIRS[8][dirIndex];
+      return new Projectile(this.location, dir);
+    };
+
     Player.prototype.act = function(e) {
       var keyMap;
       keyMap = {};
@@ -44,44 +50,84 @@
           return _this.checkBox();
         };
       })(this);
-      keyMap[38] = (function(_this) {
+      keyMap[87] = (function(_this) {
         return function() {
           return _this.moveDir(0);
         };
       })(this);
-      keyMap[33] = (function(_this) {
+      keyMap[69] = (function(_this) {
         return function() {
           return _this.moveDir(1);
         };
       })(this);
-      keyMap[39] = (function(_this) {
+      keyMap[68] = (function(_this) {
         return function() {
           return _this.moveDir(2);
         };
       })(this);
-      keyMap[34] = (function(_this) {
+      keyMap[67] = (function(_this) {
         return function() {
           return _this.moveDir(3);
         };
       })(this);
-      keyMap[40] = (function(_this) {
+      keyMap[88] = (function(_this) {
         return function() {
           return _this.moveDir(4);
         };
       })(this);
-      keyMap[35] = (function(_this) {
+      keyMap[90] = (function(_this) {
         return function() {
           return _this.moveDir(5);
         };
       })(this);
-      keyMap[37] = (function(_this) {
+      keyMap[65] = (function(_this) {
         return function() {
           return _this.moveDir(6);
         };
       })(this);
-      keyMap[36] = (function(_this) {
+      keyMap[81] = (function(_this) {
         return function() {
           return _this.moveDir(7);
+        };
+      })(this);
+      keyMap[38] = (function(_this) {
+        return function() {
+          return _this.fire(0);
+        };
+      })(this);
+      keyMap[33] = (function(_this) {
+        return function() {
+          return _this.fire(1);
+        };
+      })(this);
+      keyMap[39] = (function(_this) {
+        return function() {
+          return _this.fire(2);
+        };
+      })(this);
+      keyMap[34] = (function(_this) {
+        return function() {
+          return _this.fire(3);
+        };
+      })(this);
+      keyMap[40] = (function(_this) {
+        return function() {
+          return _this.fire(4);
+        };
+      })(this);
+      keyMap[35] = (function(_this) {
+        return function() {
+          return _this.fire(5);
+        };
+      })(this);
+      keyMap[37] = (function(_this) {
+        return function() {
+          return _this.fire(6);
+        };
+      })(this);
+      keyMap[36] = (function(_this) {
+        return function() {
+          return _this.fire(7);
         };
       })(this);
       if ((this.lastCode != null) && (this.lastCode in keyMap)) {
@@ -92,7 +138,7 @@
         return function() {
           return _this.act();
         };
-      })(this)), 2000);
+      })(this)), 50);
     };
 
     Player.prototype.draw = function() {
@@ -104,7 +150,8 @@
         return alert("There is no box here!");
       } else if (_.isEqual(this.location, Game.prize)) {
         alert("Hooray! You found the gem of success and won this game.");
-        return window.removeEventListener("keydown", this);
+        window.removeEventListener("keydown", this);
+        return location.reload();
       } else {
         return alert("This box is empty :-(");
       }

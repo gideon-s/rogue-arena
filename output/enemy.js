@@ -4,6 +4,7 @@
     function Enemy(location) {
       this.location = location;
       this.draw();
+      this.dead = false;
       window.setTimeout(((function(_this) {
         return function() {
           return _this.act();
@@ -17,10 +18,15 @@
 
     Enemy.prototype.act = function() {
       var path;
-      console.log(this.location);
+      if (this.dead) {
+        Game.died(this);
+        Game.drawMapLocation(this.location);
+        return;
+      }
       path = this.location.pathToDestination(Game.player.getLocation(), Game.map);
       if (path.length < 2) {
-        return alert("Game over - you were eaten by the dragon!");
+        alert("Game over - you were eaten by the dragon!");
+        return location.reload();
       } else {
         Game.drawMapLocation(this.location);
         this.location = path[0];
@@ -29,12 +35,20 @@
           return function() {
             return _this.act();
           };
-        })(this)), 1000);
+        })(this)), 400);
       }
     };
 
     Enemy.prototype.draw = function() {
       return Game.draw(this.location, "&", "red");
+    };
+
+    Enemy.prototype.struckBy = function(entity) {
+      if (_.isEqual(this.location, entity.location)) {
+        this.dead = true;
+        entity.destroy();
+        return console.log("struckBy Called! " + this.location + " == " + entity.location + " ");
+      }
     };
 
     return Enemy;

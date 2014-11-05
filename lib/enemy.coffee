@@ -3,20 +3,30 @@ class window.Enemy
 	constructor: (location) ->
 		@location = location
 		@draw()
+		@dead = false
 		window.setTimeout (=> @act()), 1000 
 
 	getSpeed: () -> 100
 
 	act: () ->
-		console.log (@location)
+		if @dead
+			Game.died(this)
+			Game.drawMapLocation @location
+			return
 		path = @location.pathToDestination(Game.player.getLocation(),Game.map)
 		if path.length < 2
-			#Game.engine.lock()
 			alert "Game over - you were eaten by the dragon!"
+			location.reload()
 		else
 			Game.drawMapLocation @location
 			@location = path[0]
 			@draw()
-			window.setTimeout (=> @act()), 1000 
+			window.setTimeout (=> @act()), 400 
 			
 	draw: () -> Game.draw @location, "&", "red"
+
+	struckBy: (entity) ->
+		if _.isEqual @location, entity.location
+			@dead = true
+			entity.destroy()
+			console.log "struckBy Called! #{@location} == #{entity.location} "

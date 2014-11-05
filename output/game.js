@@ -4,7 +4,7 @@
     display: null,
     map: new Map(ROT.DEFAULT_WIDTH, ROT.DEFAULT_HEIGHT),
     player: null,
-    dragon: null,
+    enemies: [],
     prize: null,
     init: function() {
       this.display = new ROT.Display({
@@ -15,18 +15,18 @@
       this.generateBoxes(10);
       this.drawWholeMap();
       this.player = new Player(this.map.randomLocation());
-      return this.dragon = new Enemy(this.map.randomLocation());
+      return this.spawn();
     },
     generateMap: function() {
-      var digCallback, digger;
-      digger = new ROT.Map.Digger();
-      digCallback = function(x, y, value) {
+      var arena, arenaCallback;
+      arena = new ROT.Map.Arena();
+      arenaCallback = function(x, y, value) {
         if (value) {
           return;
         }
-        return this.map.setLocation(new Location([x, y]), ".");
+        return this.map.setLocation(new Location([x, y]), " ");
       };
-      return digger.create(digCallback.bind(this));
+      return arena.create(arenaCallback.bind(this));
     },
     generateBoxes: function(num) {
       return _.each(_.range(num), (function(_this) {
@@ -52,6 +52,24 @@
     },
     draw: function(location, character, color) {
       return location.drawOn(this.display, character, color);
+    },
+    enters: function(location, entity) {
+      return _.each(this.enemies, (function(_this) {
+        return function(enemy) {
+          return enemy.struckBy(entity);
+        };
+      })(this));
+    },
+    died: function(entity) {
+      return this.enemies = _.without(this.enemies, entity);
+    },
+    spawn: function() {
+      this.enemies.push(new Enemy(this.map.randomLocation()));
+      return window.setTimeout(((function(_this) {
+        return function() {
+          return _this.spawn();
+        };
+      })(this)), 1000);
     }
   };
 
