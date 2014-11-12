@@ -1,15 +1,11 @@
-class window.Player
+class window.Player extends window.Actor
 
 	constructor: (location) ->
-		@location = location
-		@draw()
+		super(location, "@", "white", 50)
 		@score = 0
 		@shotsFired = 0
-		@dead = false
-		window.setTimeout (=> @act()), 2000 
 		window.addEventListener "keydown", this
 
-	getSpeed: () -> 100
 	getLocation: () -> @location
 
 	handleEvent: (e) ->
@@ -19,9 +15,7 @@ class window.Player
 		dir = ROT.DIRS[8][dirIndex]
 		nextLocation = @location.addDir(dir)
 		return  unless Game.map.isOpen(nextLocation)
-		Game.drawMapLocation @location
 		@location = nextLocation
-		@draw()
 
 	fire: (dirIndex) ->
 		dir = ROT.DIRS[8][dirIndex]
@@ -33,10 +27,6 @@ class window.Player
 		@score++
 
 	act: (e) ->
-		if @dead
-			Game.died(this)
-			Game.drawMapLocation @location
-			return
 		keyMap = {}
 		keyMap[13] = keyMap[32] = () => @checkBox() # enter, space
 		keyMap[87] = () => @moveDir(0) # w key
@@ -72,10 +62,6 @@ class window.Player
 		if @lastCode? and (@lastCode of keyMap)
 			keyMap[@lastCode]()
 		@lastCode = null
-		window.setTimeout (=> @act()), 50 
-
-	draw: () ->
-		Game.draw @location, "@", "#ff0"
 
 	checkBox: () ->
 		if Game.map.at(@location) != "*"

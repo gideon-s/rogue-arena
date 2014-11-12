@@ -38,12 +38,13 @@ window.Game =
     location.drawOn @display, character, color
 
   enters: (location, entity) ->
-    _.each @enemies,(enemy) =>
-      enemy.struckBy(entity)
+    if entity instanceof window.Projectile
+      _.each @enemies,(enemy) =>
+        enemy.struckBy(entity)
 
   died: (entity) ->
     @enemies = _.without @enemies,entity
-    @player.addScore()
+    entity.died()
 
   spawn: () ->
     @enemies.push new Enemy(@map.randomLocation())

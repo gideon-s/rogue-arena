@@ -53,15 +53,17 @@
       return location.drawOn(this.display, character, color);
     },
     enters: function(location, entity) {
-      return _.each(this.enemies, (function(_this) {
-        return function(enemy) {
-          return enemy.struckBy(entity);
-        };
-      })(this));
+      if (entity instanceof window.Projectile) {
+        return _.each(this.enemies, (function(_this) {
+          return function(enemy) {
+            return enemy.struckBy(entity);
+          };
+        })(this));
+      }
     },
     died: function(entity) {
       this.enemies = _.without(this.enemies, entity);
-      return this.player.addScore();
+      return entity.died();
     },
     spawn: function() {
       this.enemies.push(new Enemy(this.map.randomLocation()));
