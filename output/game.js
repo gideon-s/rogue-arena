@@ -4,7 +4,7 @@
     display: null,
     map: new Map(ROT.DEFAULT_WIDTH, ROT.DEFAULT_HEIGHT),
     player: null,
-    enemies: [],
+    actors: [],
     prize: null,
     init: function() {
       this.display = new ROT.Display({
@@ -52,21 +52,21 @@
     draw: function(location, character, color) {
       return location.drawOn(this.display, character, color);
     },
-    enters: function(location, entity) {
-      if (entity instanceof window.Projectile) {
-        return _.each(this.enemies, (function(_this) {
-          return function(enemy) {
-            return enemy.struckBy(entity);
-          };
-        })(this));
-      }
+    enters: function(entity) {
+      return _.each(this.actors, (function(_this) {
+        return function(actor) {
+          if (actor !== entity && _.isEqual(actor.location, entity.location)) {
+            return actor.struckBy(entity);
+          }
+        };
+      })(this));
     },
     died: function(entity) {
-      this.enemies = _.without(this.enemies, entity);
+      this.actors = _.without(this.actors, entity);
       return entity.died();
     },
     spawn: function() {
-      this.enemies.push(new Enemy(this.map.randomLocation()));
+      this.actors.push(new Enemy(this.map.randomLocation()));
       return window.setTimeout(((function(_this) {
         return function() {
           return _this.spawn();

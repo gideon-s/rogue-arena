@@ -13,6 +13,7 @@
     Actor.prototype.action = function() {
       Game.drawMapLocation(this.location);
       if ((Game.player != null) && Game.player.dead) {
+        Game.gameOver();
         return;
       }
       if (this.dead) {
@@ -24,7 +25,7 @@
         this.dead = true;
         return;
       }
-      Game.enters(this.location, this);
+      Game.enters(this);
       this.draw();
       return window.setTimeout(((function(_this) {
         return function() {
@@ -41,6 +42,11 @@
 
     Actor.prototype.destroy = function() {
       return this.dead = true;
+    };
+
+    Actor.prototype.struckBy = function(entity) {
+      this.dead = true;
+      return entity.destroy();
     };
 
     return Actor;

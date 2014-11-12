@@ -7,6 +7,7 @@ class window.Actor
 	action: () ->
 		Game.drawMapLocation @location
 		if Game.player? && Game.player.dead
+			Game.gameOver()	
 			return
 		if @dead 
 			Game.died(this)
@@ -15,7 +16,7 @@ class window.Actor
 		if not Game.map.isOpen(@location)
 			@dead = true
 			return
-		Game.enters @location, this
+		Game.enters this
 		@draw()	
 		window.setTimeout (=> @action()), @speed
 	
@@ -26,3 +27,7 @@ class window.Actor
 
 	destroy: () ->
 		@dead = true
+
+	struckBy: (entity) ->
+		@dead = true
+		entity.destroy()

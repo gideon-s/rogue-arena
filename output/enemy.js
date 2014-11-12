@@ -14,8 +14,7 @@
       var path;
       path = this.location.pathToDestination(Game.player.getLocation(), Game.map);
       if (path.length < 2) {
-        Game.player.dead = true;
-        return Game.gameOver();
+        return Game.player.dead = true;
       } else {
         return this.location = path[0];
       }
@@ -23,13 +22,6 @@
 
     Enemy.prototype.died = function() {
       return Game.player.addScore();
-    };
-
-    Enemy.prototype.struckBy = function(entity) {
-      if (_.isEqual(this.location, entity.location)) {
-        this.dead = true;
-        return entity.destroy();
-      }
     };
 
     return Enemy;

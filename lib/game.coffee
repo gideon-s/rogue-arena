@@ -2,7 +2,7 @@ window.Game =
   display: null
   map: new Map(ROT.DEFAULT_WIDTH,ROT.DEFAULT_HEIGHT)
   player: null
-  enemies: []
+  actors: []
   prize: null
   init: ->
     @display = new ROT.Display spacing: 1.1
@@ -37,17 +37,17 @@ window.Game =
   draw: (location, character, color)  ->
     location.drawOn @display, character, color
 
-  enters: (location, entity) ->
-    if entity instanceof window.Projectile
-      _.each @enemies,(enemy) =>
-        enemy.struckBy(entity)
+  enters: (entity) ->
+    _.each @actors,(actor) =>
+      if actor != entity && _.isEqual actor.location, entity.location
+        actor.struckBy(entity)
 
   died: (entity) ->
-    @enemies = _.without @enemies,entity
+    @actors = _.without @actors,entity
     entity.died()
 
   spawn: () ->
-    @enemies.push new Enemy(@map.randomLocation())
+    @actors.push new Enemy(@map.randomLocation())
     window.setTimeout (=> @spawn()), 1000 
     
   gameOver:() ->
