@@ -3,6 +3,9 @@ class window.Player
 	constructor: (location) ->
 		@location = location
 		@draw()
+		@score = 0
+		@shotsFired = 0
+		@dead = false
 		window.setTimeout (=> @act()), 2000 
 		window.addEventListener "keydown", this
 
@@ -22,9 +25,18 @@ class window.Player
 
 	fire: (dirIndex) ->
 		dir = ROT.DIRS[8][dirIndex]
-		new Projectile(@location,dir)
+		nextLocation = @location.addDir(dir)
+		new Projectile(nextLocation,dir)
+		@shotsFired++
+
+	addScore: () ->
+		@score++
 
 	act: (e) ->
+		if @dead
+			Game.died(this)
+			Game.drawMapLocation @location
+			return
 		keyMap = {}
 		keyMap[13] = keyMap[32] = () => @checkBox() # enter, space
 		keyMap[87] = () => @moveDir(0) # w key
@@ -54,6 +66,8 @@ class window.Player
 		keyMap[35] = () => @fire(5) # End key
 		keyMap[37] = () => @fire(6) # Left arrow
 		keyMap[36] = () => @fire(7) # Home key
+
+		keyMap[27] = () => location.reload()
 	
 		if @lastCode? and (@lastCode of keyMap)
 			keyMap[@lastCode]()

@@ -4,6 +4,9 @@
     function Player(location) {
       this.location = location;
       this.draw();
+      this.score = 0;
+      this.shotsFired = 0;
+      this.dead = false;
       window.setTimeout(((function(_this) {
         return function() {
           return _this.act();
@@ -37,13 +40,24 @@
     };
 
     Player.prototype.fire = function(dirIndex) {
-      var dir;
+      var dir, nextLocation;
       dir = ROT.DIRS[8][dirIndex];
-      return new Projectile(this.location, dir);
+      nextLocation = this.location.addDir(dir);
+      new Projectile(nextLocation, dir);
+      return this.shotsFired++;
+    };
+
+    Player.prototype.addScore = function() {
+      return this.score++;
     };
 
     Player.prototype.act = function(e) {
       var keyMap;
+      if (this.dead) {
+        Game.died(this);
+        Game.drawMapLocation(this.location);
+        return;
+      }
       keyMap = {};
       keyMap[13] = keyMap[32] = (function(_this) {
         return function() {
@@ -168,6 +182,11 @@
       keyMap[36] = (function(_this) {
         return function() {
           return _this.fire(7);
+        };
+      })(this);
+      keyMap[27] = (function(_this) {
+        return function() {
+          return location.reload();
         };
       })(this);
       if ((this.lastCode != null) && (this.lastCode in keyMap)) {

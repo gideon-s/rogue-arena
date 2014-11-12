@@ -14,9 +14,9 @@ class window.Enemy
 			Game.drawMapLocation @location
 			return
 		path = @location.pathToDestination(Game.player.getLocation(),Game.map)
-		if path.length < 2
-			alert "Game over - you were eaten by the dragon!"
-			location.reload()
+		if path.length < 2		
+			Game.player.dead = true
+			Game.gameOver()	
 		else
 			Game.drawMapLocation @location
 			@location = path[0]
@@ -29,4 +29,3 @@ class window.Enemy
 		if _.isEqual @location, entity.location
 			@dead = true
 			entity.destroy()
-			console.log "struckBy Called! #{@location} == #{entity.location} "

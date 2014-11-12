@@ -12,7 +12,6 @@
       });
       document.body.appendChild(this.display.getContainer());
       this.generateMap();
-      this.generateBoxes(10);
       this.drawWholeMap();
       this.player = new Player(this.map.randomLocation());
       return this.spawn();
@@ -61,7 +60,8 @@
       })(this));
     },
     died: function(entity) {
-      return this.enemies = _.without(this.enemies, entity);
+      this.enemies = _.without(this.enemies, entity);
+      return this.player.addScore();
     },
     spawn: function() {
       this.enemies.push(new Enemy(this.map.randomLocation()));
@@ -70,6 +70,17 @@
           return _this.spawn();
         };
       })(this)), 1000);
+    },
+    gameOver: function() {
+      Game.display.drawText(5, 5, "You have died.  Game Over. Score: " + this.player.score + " Press [ESC] to restart");
+      return window.addEventListener("keydown", this);
+    },
+    handleEvent: function(e) {
+      var code;
+      code = e.keyCode;
+      if (code === 27) {
+        location.reload();
+      }
     }
   };
 

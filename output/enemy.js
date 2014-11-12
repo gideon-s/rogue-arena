@@ -25,8 +25,8 @@
       }
       path = this.location.pathToDestination(Game.player.getLocation(), Game.map);
       if (path.length < 2) {
-        alert("Game over - you were eaten by the dragon!");
-        return location.reload();
+        Game.player.dead = true;
+        return Game.gameOver();
       } else {
         Game.drawMapLocation(this.location);
         this.location = path[0];
@@ -46,8 +46,7 @@
     Enemy.prototype.struckBy = function(entity) {
       if (_.isEqual(this.location, entity.location)) {
         this.dead = true;
-        entity.destroy();
-        return console.log("struckBy Called! " + this.location + " == " + entity.location + " ");
+        return entity.destroy();
       }
     };
 
