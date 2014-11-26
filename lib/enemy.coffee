@@ -5,10 +5,7 @@ class window.Enemy extends window.Actor
 
 	act: () ->
 		path = @location.pathToDestination(Game.player.getLocation(),Game.map)
-		if path.length < 2		
-			Game.player.dead = true
-		else
-			@location = path[0]
+		@location = path[0]
 
 	died: () ->
 		Game.player.addScore()
