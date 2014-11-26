@@ -1,9 +1,9 @@
 class window.Actor
 
 	constructor: (@location, @sigil, @color, @speed) ->
-    @dead = false
-    Game.actors.push this
-    @action()
+    	@dead = false
+   		Game.actors.push this
+    	@action()
 
 	action: () ->
 		Game.drawMapLocation @location
