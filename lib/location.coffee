@@ -1,6 +1,12 @@
 class window.Location
 
 	constructor: (pair) ->
+		if pair.length != 2
+			throw new Error("error in pair length: #{pair}")
+		if typeof(pair[0]) != "number"
+			throw new Error("First in pair is not a number: #{pair[0]}")
+		if typeof(pair[1]) != "number"
+			throw new Error("Second in pair is not a number: #{pair[1]}")
 		@x=pair[0]
 		@y=pair[1]
 
@@ -23,10 +29,20 @@ class window.Location
 	nextStepToDestination: (destination, map) -> @pathToDestination(destination, map)[0]
 		
 	drawOn: (display, character, color) ->
-        display.draw @x, @y, character, color
+		display.draw @x, @y, character, color
 
-    setOn: (map, symbol) -> map[@x][@y] = symbol
-    on: (map) -> map[@x][@y]
+	setOn: (map, symbol) ->
+		if not Array.isArray(map)
+			throw new Error("Map is not an array")
+		map[@x][@y] = symbol
 
-    toString: ->
-    	"[ #{@x}, #{@y} ]"
+	on: (map) ->
+		if not Array.isArray(map)
+			throw new Error("Map is not an array")
+		if not map[@x]?
+			return undefined
+		map[@x][@y]
+
+
+	toString: ->
+		"[ #{@x}, #{@y} ]"

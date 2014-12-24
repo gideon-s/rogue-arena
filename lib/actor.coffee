@@ -1,30 +1,34 @@
 class window.Actor
-
-	constructor: (@location, @sigil, @color, @speed) ->
-    	@dead = false
-   		Game.actors.push this
-    	@action()
+	constructor: (@game, @location, @sigil, @color, @speed) ->
+		console.log @location
+		@dead = false
+		@game.actors.push this
+		@action()
 
 	action: () ->
-		Game.drawMapLocation @location
-		if Game.player? && Game.player.dead
-			Game.gameOver()	
+		@game.drawMapLocation @location
+		if @game.player? && @game.player.dead
+			@game.gameOver()	
 			return
 		if @dead 
-			Game.died(this)
+			@game.died(this)
 			return
 		@act()
-		if not Game.map.isOpen(@location)
+		if not @game.map.isOpen(@location)
 			@dead = true
 			return
-		Game.enters this
+		@game.enters this
 		@draw()	
-		window.setTimeout (=> @action()), @speed
+		@game.nextAction (=> @action()), @speed
+		
 	
 	died:() ->
 		#no op
 
-	draw: () -> Game.draw @location, @sigil, @color
+	act:() ->
+		#no op
+
+	draw: () -> @game.draw @location, @sigil, @color
 
 	destroy: () ->
 		@dead = true

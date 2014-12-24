@@ -1,7 +1,7 @@
 class window.Player extends window.Actor
 
 	constructor: (location) ->
-		super(location, "@", "white", 50)
+		super(Game, location, "@", "white", 50)
 		@score = 0
 		@shotsFired = 0
 		window.addEventListener "keydown", this

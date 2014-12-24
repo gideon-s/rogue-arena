@@ -1,3 +1,15 @@
+test "location constructor does not accept invalid values", () ->
+	throws (-> new Location("X")), "asdf"
+	throws (-> new Location([1,2,3])), "three ints"
+	throws (-> new Location(["one","two"])), "two strings"
+	throws (-> new Location(["X","Y"])), "array of char"
+
+test "map 'on' does not accept an invalid argument", () ->
+	location1 = new Location([1,1])
+	map = "This is a string"
+	throws (-> location1.on(map)), "map is bad"
+
+
 test "Random Returns number between 0 and 9", ()  ->
 	for index in [1..200]
 		number = Util.rand(10)
@@ -32,31 +44,28 @@ test "Map 1 and Map 2 should contain different characters at 0,0", () ->
     notEqual map1.at(location), map2.at(location)
 
 test "locations of map should return list of x,y pairs", () ->
-	map = new Map(5,5)
+	map = new Map(1,2)
 	location = new Location [0,0]
-	map.setLocation(location, "X")
-	deepEqual [location], map.locations()
 	location2 = new Location [0,1]
-	map.setLocation(location2, ".")
 	deepEqual [location,location2], map.locations()
 
 test "Is open map area", () ->
-	map = new Map(10,10)
-	location = new Location [2,3]
-	map.setLocation(location,".")
+	map = new Map(3,3)
+	location = new Location [0,1]
+	location2 = new Location [2,3] 
 	ok map.isOpen(location)
-	ok !map.isOpen(new Location [0,0])
+	ok !map.isOpen(location2)
 
 test "map.randomLocation returns realistic value spread", () ->
-	map = new Map(10,10)
-	for i in [0...10]
-		map.setLocation(new Location([0,i]),"0")
+	map = new Map(1,10)
+	for location in map.locations()
+		map.setLocation(location,"0")
 	for i in [0...100]
 		location = map.randomLocation()
-		val = map.at(location) 
-		val++
-		map.setLocation(location, val)
-		actual = true
+		val = map.at(location)
+		val++ 
+		map.setLocation(location, val)	
+	actual = true
 	for location in map.locations()
 		if map.at(location) > 18 || map.at(location) < 3
 			actual = false
@@ -71,13 +80,52 @@ test "location(0,1) returns x=0 and y=1", () ->
 	equal location.y,2
 
 test "path contains expected path to destination, nextStep contains the first location in the path", () ->
-	map = new Map(5,5)
-	for i in [1...4]
-		map.setLocation(new Location([1,i]), ".")
-	location = new Location [1,1]
-	destLocation = new Location [1,4]
+	map = new Map(10,10)
+	location = new Location [2,1]
+	destLocation = new Location [2,4]
 	path = location.pathToDestination(destLocation,map)
 	nextStep = location.nextStepToDestination(destLocation,map)
-	deepEqual path,[new Location([1,2]),new Location([1,3]),new Location([1,4])]
-	deepEqual nextStep,new Location [1,2]
+	deepEqual path,[new Location([2,2]),new Location([2,3]),new Location([2,4])]
+	deepEqual nextStep,new Location [2,2]
+
+mockGame = 
+	player: false
+	actors: []
+	map: new Map(5,5)
+	drawMapLocation: (loc) -> #no op
+	gameOver: () -> #no op
+	enters: () -> #no op
+	draw: () -> #no op
+	nextAction: () -> #no op
+
+test "actor is not dead", () ->
+	location = new Location [1,1]
+	mockGame.map.setLocation location," "
+	actor = new Actor(mockGame, location,"Y","blue",50)
+	equal actor.dead,false
+
+test "actor struckBy another actor kills both", () ->
+	location1 = new Location [0,0]
+	location2 = new Location [0,1]
+	mockGame.map.setLocation location1," "
+	mockGame.map.setLocation location2," "
+	actor = new Actor(mockGame, location1, "Y", "blue", 50)
+	actor2 = new Actor(mockGame, location2, "X","red",50)
+	equal actor.dead,false
+	actor.struckBy(actor2)
+	equal actor.dead,true
+	equal actor2.dead,true
+
+test "edgeLocations contain map edge coordinates", () ->
+	map = new Map(2,2)
+	deepEqual map.edgeLocations(), [new Location([0,0]),new Location([0,1]),new Location([1,0]),new Location([1,1])]
+
+test "In map.on, return false if location is undefined", () ->
+	map = new Map(3,2)
+	equal map.isOpen(new Location([-1,-1])), false
+	equal map.isOpen(new Location([0,2])), false
+	equal map.isOpen(new Location([0,-1])), false
+	equal map.isOpen(new Location([1,2])), false
+	console.log "THIS TEST YO"
+	equal map.isOpen(new Location([4,3])), false
 

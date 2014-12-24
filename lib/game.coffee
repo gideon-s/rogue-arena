@@ -1,13 +1,13 @@
 window.Game =
   display: null
-  map: new Map(ROT.DEFAULT_WIDTH,ROT.DEFAULT_HEIGHT)
+  map: new Map(80,25)
   player: null
   actors: []
   prize: null
   init: ->
     @display = new ROT.Display spacing: 1.1
     document.body.appendChild @display.getContainer()
-    @generateMap()
+    #@generateMap()
     #@generateBoxes(10)
     @drawWholeMap()
     @player = new Player(@map.randomLocation())
@@ -47,7 +47,7 @@ window.Game =
     entity.died()
 
   spawn: () ->
-    @actors.push new Enemy(@map.randomLocation())
+    @actors.push new Enemy(@map.randomEdgeLocation())
     window.setTimeout (=> @spawn()), 1000 
     
   gameOver:() ->
@@ -61,6 +61,7 @@ window.Game =
       location.reload()
       return
 
-   
+  nextAction: (action, speed) ->
+    window.setTimeout (-> action()), speed
     
 Game.init()

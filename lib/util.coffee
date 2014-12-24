@@ -4,3 +4,5 @@ class window.Util
 
 	@pickRandom: (list) -> 
 		list[@rand(list.length)]
+
+		
