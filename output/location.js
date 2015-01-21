@@ -23,14 +23,17 @@
       return [this.x, this.y];
     };
 
-    Location.prototype.pathToDestination = function(destination, map) {
+    Location.prototype.pathToDestination = function(destination, map, topology) {
       var astar, dest, passableCallback, path, pathCallback;
+      if (topology == null) {
+        topology = 8;
+      }
       passableCallback = function(x, y) {
         return map.isOpen(new Location([x, y]));
       };
       dest = destination.pair();
       astar = new ROT.Path.AStar(dest[0], dest[1], passableCallback, {
-        topology: 8
+        topology: topology
       });
       path = [];
       pathCallback = function(x, y) {
@@ -41,8 +44,11 @@
       return path;
     };
 
-    Location.prototype.nextStepToDestination = function(destination, map) {
-      return this.pathToDestination(destination, map)[0];
+    Location.prototype.nextStepToDestination = function(destination, map, topology) {
+      if (topology == null) {
+        topology = 8;
+      }
+      return this.pathToDestination(destination, map, topology)[0];
     };
 
     Location.prototype.drawOn = function(display, character, color) {

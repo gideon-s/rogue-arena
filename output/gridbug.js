@@ -7,28 +7,48 @@
     __extends(Gridbug, _super);
 
     function Gridbug(game, location) {
-      Gridbug.__super__.constructor.call(this, game, location, "X", "purple", 400);
+      Gridbug.__super__.constructor.call(this, game, location, "X", "green", 50);
+      this.direction = null;
+      this.stepsLeft = 0;
     }
 
-    Gridbug.prototype.act = function() {
-      var dir, nextLocation;
-      if (Util.rand(4) === 0) {
-        dir = ROT.DIRS[4][Util.rand(4)];
-        nextLocation = this.location.addDir(dir);
-      } else {
-        nextLocation = this.location.pathToDestination(this.game.player.location, this.game.map, 4)[0];
+    Gridbug.prototype.step = function() {
+      var nextLocation;
+      this.stepsLeft = this.stepsLeft - 1;
+      if (this.direction == null) {
+        return;
       }
+      nextLocation = this.location.addDir(this.direction);
       if (!this.game.map.isOpen(nextLocation)) {
         return;
       }
       if (_.find(nextLocation.otherActors(this), (function(_this) {
         return function(actor) {
-          return actor instanceof Enemy;
+          return actor instanceof Gridbug;
         };
       })(this))) {
         return;
       }
       return this.location = nextLocation;
+    };
+
+    Gridbug.prototype.act = function() {
+      if (this.stepsLeft === 0) {
+        this.calculateNextStep();
+      }
+      return this.step();
+    };
+
+    Gridbug.prototype.calculateNextStep = function() {
+      var nextLocation;
+      if (this.direction != null) {
+        this.direction = null;
+        return this.stepsLeft = 5;
+      } else {
+        nextLocation = this.location.nextStepToDestination(this.game.player.location, this.game.map, 4);
+        this.direction = [nextLocation.x - this.location.x, nextLocation.y - this.location.y];
+        return this.stepsLeft = 3;
+      }
     };
 
     Gridbug.prototype.died = function() {

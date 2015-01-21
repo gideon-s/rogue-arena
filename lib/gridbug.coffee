@@ -1,19 +1,34 @@
 class window.Gridbug extends window.Actor
 
-	constructor: (game, location) ->
-		super(game, location, "X", "purple", 400)
+    constructor: (game, location) ->
+        super(game, location, "X", "green", 50)
+        @direction = null
+        @stepsLeft = 0
 
-	act: () ->
-		if Util.rand(4) == 0
-			dir = ROT.DIRS[4][Util.rand(4)]
-			nextLocation = @location.addDir(dir)
-		else
-			nextLocation = @location.pathToDestination(@game.player.location,@game.map,4)[0]
-		return  unless @game.map.isOpen(nextLocation)
-		if (_.find nextLocation.otherActors(this),(actor) => actor instanceof Enemy)
-			return
-		@location = nextLocation
+    step: () ->
+        @stepsLeft = @stepsLeft - 1
+        return unless @direction?
+        nextLocation = @location.addDir(@direction)
+        return unless @game.map.isOpen(nextLocation)
+        if (_.find nextLocation.otherActors(this),(actor) => actor instanceof Gridbug)
+            return
+        @location = nextLocation
 
-	died: () ->
-		@game.player.addScore()
+    act: () ->
+        if @stepsLeft == 0
+            @calculateNextStep()
+        @step()
+
+        
+    calculateNextStep: () -> # at 10, 10      15, 15
+        if @direction?
+            @direction = null
+            @stepsLeft = 5
+        else
+            nextLocation = @location.nextStepToDestination(@game.player.location, @game.map, 4)
+            @direction = [nextLocation.x - @location.x, nextLocation.y - @location.y]
+            @stepsLeft = 3
+
+    died: () ->
+        @game.player.addScore()
 

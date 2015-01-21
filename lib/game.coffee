@@ -26,8 +26,6 @@ window.Game =
     Game.display.drawText(5, 0, "Score: #{@player.score}")
 
   enters: (entity) ->
-    console.log "entity #{entity}"
-    console.log "#{entity.location}"
     _.each entity.location.otherActors(entity),(actor) =>
         actor.struckBy(entity)
 
@@ -36,7 +34,11 @@ window.Game =
     entity.died()
 
   spawn: () ->
-    @actors.push new Enemy(Game, @map.randomEdgeLocation())
+    if Util.oneIn(2)
+      type = Enemy
+    else
+      type = Gridbug
+    @actors.push new type(Game, @map.randomEdgeLocation())
     window.setTimeout (=> @spawn()), 1000 
     
   gameOver:() ->

@@ -11,6 +11,10 @@
       return list[this.rand(list.length)];
     };
 
+    Util.oneIn = function(number) {
+      return Util.rand(number) === 0;
+    };
+
     return Util;
 
   })();

@@ -33,8 +33,6 @@
       return Game.display.drawText(5, 0, "Score: " + this.player.score);
     },
     enters: function(entity) {
-      console.log("entity " + entity);
-      console.log("" + entity.location);
       return _.each(entity.location.otherActors(entity), (function(_this) {
         return function(actor) {
           return actor.struckBy(entity);
@@ -46,7 +44,13 @@
       return entity.died();
     },
     spawn: function() {
-      this.actors.push(new Enemy(Game, this.map.randomEdgeLocation()));
+      var type;
+      if (Util.oneIn(2)) {
+        type = Enemy;
+      } else {
+        type = Gridbug;
+      }
+      this.actors.push(new type(Game, this.map.randomEdgeLocation()));
       return window.setTimeout(((function(_this) {
         return function() {
           return _this.spawn();

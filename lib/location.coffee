@@ -16,17 +16,17 @@ class window.Location
 	pair: () ->
 		[@x,@y]
 
-	pathToDestination: (destination, map) ->
+	pathToDestination: (destination, map, topology=8) ->
 		passableCallback = (x, y) -> map.isOpen(new Location([x,y])) 
 		dest = destination.pair()
-		astar = new ROT.Path.AStar(dest[0], dest[1], passableCallback, topology: 8)
+		astar = new ROT.Path.AStar(dest[0], dest[1], passableCallback, topology: topology)
 		path = []
 		pathCallback = (x, y) -> path.push new Location [x,y]
 		astar.compute @x, @y, pathCallback
 		path.shift()
 		return path
 
-	nextStepToDestination: (destination, map) -> @pathToDestination(destination, map)[0]
+	nextStepToDestination: (destination, map, topology=8) -> @pathToDestination(destination, map, topology)[0]
 		
 	drawOn: (display, character, color) ->
 		display.draw @x, @y, character, color
