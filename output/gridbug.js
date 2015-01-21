@@ -3,20 +3,20 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  window.Enemy = (function(_super) {
-    __extends(Enemy, _super);
+  window.Gridbug = (function(_super) {
+    __extends(Gridbug, _super);
 
-    function Enemy(game, location) {
-      Enemy.__super__.constructor.call(this, game, location, "&", "red", 400);
+    function Gridbug(game, location) {
+      Gridbug.__super__.constructor.call(this, game, location, "X", "purple", 400);
     }
 
-    Enemy.prototype.act = function() {
+    Gridbug.prototype.act = function() {
       var dir, nextLocation;
       if (Util.rand(4) === 0) {
-        dir = ROT.DIRS[8][Util.rand(8)];
+        dir = ROT.DIRS[4][Util.rand(4)];
         nextLocation = this.location.addDir(dir);
       } else {
-        nextLocation = this.location.pathToDestination(this.game.player.location, this.game.map)[0];
+        nextLocation = this.location.pathToDestination(this.game.player.location, this.game.map, 4)[0];
       }
       if (!this.game.map.isOpen(nextLocation)) {
         return;
@@ -31,11 +31,11 @@
       return this.location = nextLocation;
     };
 
-    Enemy.prototype.died = function() {
+    Gridbug.prototype.died = function() {
       return this.game.player.addScore();
     };
 
-    return Enemy;
+    return Gridbug;
 
   })(window.Actor);
 

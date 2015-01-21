@@ -13,30 +13,8 @@
       document.body.appendChild(this.display.getContainer());
       this.drawWholeMap();
       this.player = new Player(this.map.randomLocation());
-      return this.spawn();
-    },
-    generateMap: function() {
-      var arena, arenaCallback;
-      arena = new ROT.Map.Arena();
-      arenaCallback = function(x, y, value) {
-        if (value) {
-          return;
-        }
-        return this.map.setLocation(new Location([x, y]), " ");
-      };
-      return arena.create(arenaCallback.bind(this));
-    },
-    generateBoxes: function(num) {
-      return _.each(_.range(num), (function(_this) {
-        return function() {
-          var randLoc;
-          randLoc = _this.map.randomLocation();
-          _this.map.setLocation(randLoc, "*");
-          if (_this.prize === null) {
-            return _this.prize = randLoc;
-          }
-        };
-      })(this));
+      this.spawn();
+      return this.drawScore();
     },
     drawWholeMap: function() {
       return _.each(this.map.locations(), (function(_this) {
@@ -51,12 +29,15 @@
     draw: function(location, character, color) {
       return location.drawOn(this.display, character, color);
     },
+    drawScore: function() {
+      return Game.display.drawText(5, 0, "Score: " + this.player.score);
+    },
     enters: function(entity) {
-      return _.each(this.actors, (function(_this) {
+      console.log("entity " + entity);
+      console.log("" + entity.location);
+      return _.each(entity.location.otherActors(entity), (function(_this) {
         return function(actor) {
-          if (actor !== entity && _.isEqual(actor.location, entity.location)) {
-            return actor.struckBy(entity);
-          }
+          return actor.struckBy(entity);
         };
       })(this));
     },
@@ -65,7 +46,7 @@
       return entity.died();
     },
     spawn: function() {
-      this.actors.push(new Enemy(this.map.randomEdgeLocation()));
+      this.actors.push(new Enemy(Game, this.map.randomEdgeLocation()));
       return window.setTimeout(((function(_this) {
         return function() {
           return _this.spawn();

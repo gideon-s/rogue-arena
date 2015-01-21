@@ -126,6 +126,12 @@ test "In map.on, return false if location is undefined", () ->
 	equal map.isOpen(new Location([0,2])), false
 	equal map.isOpen(new Location([0,-1])), false
 	equal map.isOpen(new Location([1,2])), false
-	console.log "THIS TEST YO"
 	equal map.isOpen(new Location([4,3])), false
 
+#test "If an Enemy's neighbor square contains another Enemy, stay put", () ->
+#	map = new Map(3,3)
+#	location1 = new Location [1,1]
+#	location2 = new Location [2,2]
+#	enemy1 = new Enemy(mockGame, location1)
+#	enemy2 = new Enemy(mockGame, location2)
+	

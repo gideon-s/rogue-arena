@@ -13,10 +13,6 @@
       window.addEventListener("keydown", this);
     }
 
-    Player.prototype.getLocation = function() {
-      return this.location;
-    };
-
     Player.prototype.handleEvent = function(e) {
       return this.lastCode = e.keyCode;
     };
@@ -40,17 +36,13 @@
     };
 
     Player.prototype.addScore = function() {
-      return this.score++;
+      this.score++;
+      return Game.drawScore();
     };
 
     Player.prototype.act = function(e) {
       var keyMap;
       keyMap = {};
-      keyMap[13] = keyMap[32] = (function(_this) {
-        return function() {
-          return _this.checkBox();
-        };
-      })(this);
       keyMap[87] = (function(_this) {
         return function() {
           return _this.moveDir(0);
@@ -180,18 +172,6 @@
         keyMap[this.lastCode]();
       }
       return this.lastCode = null;
-    };
-
-    Player.prototype.checkBox = function() {
-      if (Game.map.at(this.location) !== "*") {
-        return alert("There is no box here!");
-      } else if (_.isEqual(this.location, Game.prize)) {
-        alert("Hooray! You found the gem of success and won this game.");
-        window.removeEventListener("keydown", this);
-        return location.reload();
-      } else {
-        return alert("This box is empty :-(");
-      }
     };
 
     return Player;

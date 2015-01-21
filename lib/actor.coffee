@@ -1,11 +1,12 @@
 class window.Actor
 	constructor: (@game, @location, @sigil, @color, @speed) ->
-		console.log @location
 		@dead = false
 		@game.actors.push this
+		@age = 0
 		@action()
 
 	action: () ->
+		@age++
 		@game.drawMapLocation @location
 		if @game.player? && @game.player.dead
 			@game.gameOver()	

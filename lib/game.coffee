@@ -7,25 +7,10 @@ window.Game =
   init: ->
     @display = new ROT.Display spacing: 1.1
     document.body.appendChild @display.getContainer()
-    #@generateMap()
-    #@generateBoxes(10)
     @drawWholeMap()
     @player = new Player(@map.randomLocation())
     @spawn()
-  generateMap: ->
-    arena = new ROT.Map.Arena()
-    arenaCallback = (x, y, value) ->
-      return if value
-      @map.setLocation(new Location([x,y])," ")
-    arena.create arenaCallback.bind(@)
-
-  generateBoxes: (num) ->
-  
-    _.each _.range(num), =>
-      randLoc = @map.randomLocation()
-      @map.setLocation(randLoc,"*")
-      if @prize is null
-        @prize = randLoc
+    @drawScore()
 
   drawWholeMap: ->
     _.each @map.locations(), (location) =>  
@@ -37,9 +22,13 @@ window.Game =
   draw: (location, character, color)  ->
     location.drawOn @display, character, color
 
+  drawScore: () ->
+    Game.display.drawText(5, 0, "Score: #{@player.score}")
+
   enters: (entity) ->
-    _.each @actors,(actor) =>
-      if actor != entity && _.isEqual actor.location, entity.location
+    console.log "entity #{entity}"
+    console.log "#{entity.location}"
+    _.each entity.location.otherActors(entity),(actor) =>
         actor.struckBy(entity)
 
   died: (entity) ->
@@ -47,7 +36,7 @@ window.Game =
     entity.died()
 
   spawn: () ->
-    @actors.push new Enemy(@map.randomEdgeLocation())
+    @actors.push new Enemy(Game, @map.randomEdgeLocation())
     window.setTimeout (=> @spawn()), 1000 
     
   gameOver:() ->

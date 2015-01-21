@@ -66,6 +66,14 @@
       return map[this.x][this.y];
     };
 
+    Location.prototype.otherActors = function(entity) {
+      return _.filter(Game.actors, (function(_this) {
+        return function(actor) {
+          return (actor !== entity) && (_.isEqual(actor.location, _this));
+        };
+      })(this));
+    };
+
     Location.prototype.toString = function() {
       return "[ " + this.x + ", " + this.y + " ]";
     };

@@ -186,7 +186,6 @@
     equal(map.isOpen(new Location([0, 2])), false);
     equal(map.isOpen(new Location([0, -1])), false);
     equal(map.isOpen(new Location([1, 2])), false);
-    console.log("THIS TEST YO");
     return equal(map.isOpen(new Location([4, 3])), false);
   });
 

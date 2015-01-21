@@ -6,8 +6,6 @@ class window.Player extends window.Actor
 		@shotsFired = 0
 		window.addEventListener "keydown", this
 
-	getLocation: () -> @location
-
 	handleEvent: (e) ->
 		@lastCode = e.keyCode
 
@@ -25,10 +23,11 @@ class window.Player extends window.Actor
 
 	addScore: () ->
 		@score++
+		Game.drawScore()
 
 	act: (e) ->
 		keyMap = {}
-		keyMap[13] = keyMap[32] = () => @checkBox() # enter, space
+		#keyMap[13] = keyMap[32] = () => @checkBox() # enter, space
 		keyMap[87] = () => @moveDir(0) # w key
 		keyMap[69] = () => @moveDir(1) # e key
 		keyMap[68] = () => @moveDir(2) # d key
@@ -63,12 +62,4 @@ class window.Player extends window.Actor
 			keyMap[@lastCode]()
 		@lastCode = null
 
-	checkBox: () ->
-		if Game.map.at(@location) != "*"
-			alert "There is no box here!"
-		else if _.isEqual(@location, Game.prize)
-			alert "Hooray! You found the gem of success and won this game."
-			window.removeEventListener "keydown", this
-			location.reload()
-		else
-			alert "This box is empty :-("
+	

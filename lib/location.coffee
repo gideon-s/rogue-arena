@@ -43,6 +43,8 @@ class window.Location
 			return undefined
 		map[@x][@y]
 
+	otherActors: (entity) ->
+		_.filter(Game.actors, (actor)=>(actor != entity) && (_.isEqual actor.location, this))
 
 	toString: ->
 		"[ #{@x}, #{@y} ]"

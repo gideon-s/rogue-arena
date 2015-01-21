@@ -7,13 +7,14 @@
       this.sigil = sigil;
       this.color = color;
       this.speed = speed;
-      console.log(this.location);
       this.dead = false;
       this.game.actors.push(this);
+      this.age = 0;
       this.action();
     }
 
     Actor.prototype.action = function() {
+      this.age++;
       this.game.drawMapLocation(this.location);
       if ((this.game.player != null) && this.game.player.dead) {
         this.game.gameOver();
