@@ -28,14 +28,10 @@ class window.Player extends window.Actor
 	act: (e) ->
 		keyMap = {}
 		#keyMap[13] = keyMap[32] = () => @checkBox() # enter, space
-		keyMap[87] = () => @moveDir(0) # w key
-		keyMap[69] = () => @moveDir(1) # e key
-		keyMap[68] = () => @moveDir(2) # d key
-		keyMap[67] = () => @moveDir(3) # c key
-		keyMap[88] = () => @moveDir(4) # x key
-		keyMap[90] = () => @moveDir(5) # z key
-		keyMap[65] = () => @moveDir(6) # a key
-		keyMap[81] = () => @moveDir(7) # q key
+		keyMap[ROT.VK_W] = () => @moveDir(0) 
+		keyMap[ROT.VK_D] = () => @moveDir(2)
+		keyMap[ROT.VK_S] = () => @moveDir(4) 
+		keyMap[ROT.VK_A] = () => @moveDir(6)
 
 		keyMap[89] = () => @fire(0) # y key
 		keyMap[85] = () => @fire(1) # u key
