@@ -1,16 +1,18 @@
-window.Game =
-  display: null
-  map: new Map(80,25)
-  player: null
-  actors: []
-  prize: null
-  init: ->
+class window.Game 
+  
+  @init: () ->
+    @game = new Game()
+
+  constructor: ->
+    @map = new Map(this,80,25)
+    console.log "created map"
+    @actors = []
     @display = new ROT.Display spacing: 1.1
     document.body.appendChild @display.getContainer()
     @drawWholeMap()
-    @player = new Player(@map.randomLocation())
+    @player = new Player(this,@map.randomLocation())
     @spawn()
-    @drawScore()
+    @drawScore() 
 
   drawWholeMap: ->
     _.each @map.locations(), (location) =>  
@@ -23,7 +25,7 @@ window.Game =
     location.drawOn @display, character, color
 
   drawScore: () ->
-    Game.display.drawText(5, 0, "Score: #{@player.score}")
+    @display.drawText(5, 0, "Score: #{@player.score}")
 
   enters: (entity) ->
     _.each entity.location.otherActors(entity),(actor) =>
@@ -38,11 +40,11 @@ window.Game =
       type = Enemy
     else
       type = Gridbug
-    @actors.push new type(Game, @map.randomEdgeLocation())
+    @actors.push new type(this, @map.randomEdgeLocation())
     window.setTimeout (=> @spawn()), 1000 
     
   gameOver:() ->
-    Game.display.drawText(5, 5, "You have died.  Game Over. Score: #{@player.score} Press [ESC] to restart");
+    @display.drawText(5, 5, "You have died.  Game Over. Score: #{@player.score} Press [ESC] to restart");
     window.addEventListener "keydown", this 
       
   handleEvent: (e) ->
@@ -55,4 +57,3 @@ window.Game =
   nextAction: (action, speed) ->
     window.setTimeout (-> action()), speed
     
-Game.init()

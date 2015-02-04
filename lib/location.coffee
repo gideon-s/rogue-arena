@@ -1,6 +1,8 @@
 class window.Location
 
-	constructor: (pair) ->
+	constructor: (@game, pair) ->
+		if not @game instanceof Game
+			throw new Error("game not set to instance of Game")
 		if pair.length != 2
 			throw new Error("error in pair length: #{pair}")
 		if typeof(pair[0]) != "number"
@@ -11,17 +13,17 @@ class window.Location
 		@y=pair[1]
 
 	addDir: (dir) ->
-		new Location [@x+dir[0],@y+dir[1]]
+		new Location @game, [@x+dir[0],@y+dir[1]]
 
 	pair: () ->
 		[@x,@y]
 
 	pathToDestination: (destination, map, topology=8) ->
-		passableCallback = (x, y) -> map.isOpen(new Location([x,y])) 
+		passableCallback = (x, y) => map.isOpen(new Location(@game, [x,y])) 
 		dest = destination.pair()
 		astar = new ROT.Path.AStar(dest[0], dest[1], passableCallback, topology: topology)
 		path = []
-		pathCallback = (x, y) -> path.push new Location [x,y]
+		pathCallback = (x, y) => path.push new Location(@game, [x,y])
 		astar.compute @x, @y, pathCallback
 		path.shift()
 		return path
@@ -44,7 +46,7 @@ class window.Location
 		map[@x][@y]
 
 	otherActors: (entity) ->
-		_.filter(Game.actors, (actor)=>(actor != entity) && (_.isEqual actor.location, this))
+		_.filter(@game.actors, (actor)=>(actor != entity) && (_.isEqual actor.location, this))
 
 	toString: ->
 		"[ #{@x}, #{@y} ]"

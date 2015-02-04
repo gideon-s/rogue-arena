@@ -1,15 +1,12 @@
 class window.Map
 
-    constructor: (width, height) ->
-        @width = width
-        @height = height
-       
-        @map = new Array(width)
-        @map = for x in [0...width]
-            @map[x] = new Array(height)
+    constructor: (@game, @width, @height) ->
+        @map = new Array(@width)
+        @map = for x in [0...@width]
+            @map[x] = new Array(@height)
         for x in [0...@width]
             for y in [0...@height]
-                @setLocation(new Location([x,y]), " ")
+                @setLocation(new Location(@game, [x,y]), " ")
       
     at: (location) ->
         location.on(@map)
@@ -21,7 +18,7 @@ class window.Map
         @at(location)?
 
     addIfOpen: (result, pair) ->
-        location = new Location(pair)
+        location = new Location(@game, pair)
         if @isOpen(location)
             result.push location
 

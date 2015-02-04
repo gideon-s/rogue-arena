@@ -1,3 +1,4 @@
+
 class window.Enemy extends window.Actor
 
 	constructor: (game, location) ->

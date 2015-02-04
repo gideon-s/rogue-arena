@@ -1,7 +1,7 @@
 class window.Player extends window.Actor
 
-	constructor: (location) ->
-		super(Game, location, "@", "white", 50)
+	constructor: (game, location) ->
+		super(game, location, "@", "white", 50)
 		@score = 0
 		@shotsFired = 0
 		window.addEventListener "keydown", this
@@ -12,18 +12,18 @@ class window.Player extends window.Actor
 	moveDir: (dirIndex) ->
 		dir = ROT.DIRS[8][dirIndex]
 		nextLocation = @location.addDir(dir)
-		return  unless Game.map.isOpen(nextLocation)
+		return  unless @game.map.isOpen(nextLocation)
 		@location = nextLocation
 
 	fire: (dirIndex) ->
 		dir = ROT.DIRS[8][dirIndex]
 		nextLocation = @location.addDir(dir)
-		new Projectile(nextLocation,dir)
+		new Projectile(@game, nextLocation,dir)
 		@shotsFired++
 
 	addScore: () ->
 		@score++
-		Game.drawScore()
+		@game.drawScore()
 
 	act: (e) ->
 		keyMap = {}
