@@ -90,19 +90,12 @@ test "location(0,1) returns x=0 and y=1", () ->
 
 test "path contains expected path to destination, nextStep contains the first location in the path", () ->
     map = new Map(mockGame,5,5)
-    console.log "map.game #{map.game}"
     location = new Location(mockGame,[2,1])
-    console.log "location.game #{location.game}"
     destLocation = new Location(mockGame,[2,4])
     path = location.pathToDestination(destLocation,map)
-    console.log "path[0].game #{path[0].game}"
-    console.log path
     nextStep = location.nextStepToDestination(destLocation,map)
-    console.log nextStep
     expectedPath = [new Location(mockGame,[2,2]),new Location(mockGame,[2,3]),new Location(mockGame,[2,4])]
     expectedNext = new Location(mockGame,[2,2])
-    console.log expectedPath
-    console.log expectedNext
     deepEqual path,expectedPath
     deepEqual nextStep,expectedNext
 
@@ -147,11 +140,3 @@ class window.TestClass
 test "Test class factory method works within a class", () ->
     TestClass.init()
     equal 7, TestClass.instance().number
-
-#test "If an Enemy's neighbor square contains another Enemy, stay put", () ->
-#    map = new Map(3,3)
-#    location1 = new Location [1,1]
-#    location2 = new Location [2,2]
-#    enemy1 = new Enemy(mockGame, location1)
-#    enemy2 = new Enemy(mockGame, location2)
-    

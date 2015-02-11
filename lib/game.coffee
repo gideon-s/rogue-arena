@@ -4,10 +4,11 @@ class window.Game
     @game = new Game()
 
   constructor: ->
-    @map = new Map(this,80,25)
-    console.log "created map"
+    height = 60
+    width = 140
+    @map = new Map(this,width,height)
     @actors = []
-    @display = new ROT.Display spacing: 1.1
+    @display = new ROT.Display width: width,height: height,spacing: 1.1,fontSize: 12
     document.body.appendChild @display.getContainer()
     @drawWholeMap()
     @player = new Player(this,@map.randomLocation())
@@ -25,7 +26,7 @@ class window.Game
     location.drawOn @display, character, color
 
   drawScore: () ->
-    @display.drawText(5, 0, "Score: #{@player.score}")
+    @display.drawText((height/2), 0, "Score: #{@player.score}")
 
   enters: (entity) ->
     _.each entity.location.otherActors(entity),(actor) =>
@@ -37,7 +38,7 @@ class window.Game
 
   spawn: () ->
     if Util.oneIn(2)
-      type = Enemy
+      type = MinorDemon
     else
       type = Gridbug
     @actors.push new type(this, @map.randomEdgeLocation())
