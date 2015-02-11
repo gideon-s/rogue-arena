@@ -48,5 +48,11 @@ class window.Location
 	otherActors: (entity) ->
 		_.filter(@game.actors, (actor)=>(actor != entity) && (_.isEqual actor.location, this))
 
+	hasOtherActor: (theActor, other) ->
+		_.find @otherActors(theActor),(actor) => actor == other
+
+	hasOtherActorType: (theActor, type) ->
+		_.find @otherActors(theActor),(actor) => actor instanceof type
+
 	toString: ->
 		"[ #{@x}, #{@y} ]"

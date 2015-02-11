@@ -25,7 +25,12 @@
         return;
       }
       this.act();
+      if (this.dead) {
+        this.game.died(this);
+        return;
+      }
       if (!this.game.map.isOpen(this.location)) {
+        this.game.died(this);
         this.dead = true;
         return;
       }
@@ -52,7 +57,9 @@
 
     Actor.prototype.struckBy = function(entity) {
       this.dead = true;
-      return entity.destroy();
+      this.destroyedBy = entity.constructor.name;
+      entity.destroy();
+      return entity.destroyedBy = this.constructor.name;
     };
 
     return Actor;

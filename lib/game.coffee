@@ -12,7 +12,8 @@ class window.Game
     document.body.appendChild @display.getContainer()
     @drawWholeMap()
     @player = new Player(this,@map.randomLocation())
-    @spawn()
+    @spawner = new Spawner(this)
+    @spawner.spawn()
     @drawScore() 
 
   drawWholeMap: ->
@@ -36,16 +37,8 @@ class window.Game
     @actors = _.without @actors,entity
     entity.died()
 
-  spawn: () ->
-    if Util.oneIn(2)
-      type = MinorDemon
-    else
-      type = Gridbug
-    @actors.push new type(this, @map.randomEdgeLocation())
-    window.setTimeout (=> @spawn()), 1000 
-    
   gameOver:() ->
-    @display.drawText(@height/2, 5, "You have died.  Game Over. Score: #{@player.score} Press [ESC] to restart");
+    @display.drawText(@height/2, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");
     window.addEventListener "keydown", this 
       
   handleEvent: (e) ->

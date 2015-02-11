@@ -15,7 +15,11 @@ class window.Actor
 			@game.died(this)
 			return
 		@act()
+		if @dead 
+			@game.died(this)
+			return
 		if not @game.map.isOpen(@location)
+			@game.died(this)
 			@dead = true
 			return
 		@game.enters this
@@ -36,4 +40,6 @@ class window.Actor
 
 	struckBy: (entity) ->
 		@dead = true
+		@destroyedBy = entity.constructor.name
 		entity.destroy()
+		entity.destroyedBy = this.constructor.name

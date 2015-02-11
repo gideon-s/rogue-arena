@@ -23,7 +23,6 @@ class window.Player extends window.Actor
 
     moveDir: (dirIndex) ->
         dir = ROT.DIRS[8][dirIndex]
-        console.log "dir #{dir} dirIndex #{dirIndex} location #{@location}"
         nextLocation = @location.addDir(dir)
         return  unless @game.map.isOpen(nextLocation)
         @location = nextLocation
@@ -31,7 +30,7 @@ class window.Player extends window.Actor
     fire: (dirIndex) ->
         dir = ROT.DIRS[8][dirIndex]
         nextLocation = @location.addDir(dir)
-        new Projectile(@game, nextLocation,dir)
+        new Projectile(@game, nextLocation, dir, this)
         @shotsFired++
 
     addScore: () ->

@@ -16,11 +16,7 @@
       if (!this.game.map.isOpen(next)) {
         return;
       }
-      if (_.find(next.otherActors(this), (function(_this) {
-        return function(actor) {
-          return actor instanceof Enemy;
-        };
-      })(this))) {
+      if (next.hasOtherActorType(this, Enemy)) {
         return;
       }
       return this.location = next;
@@ -34,8 +30,97 @@
       return this.game.player.addScore();
     };
 
+    Enemy.prototype.towardsPlayer = function() {
+      return this.location.nextStepToDestination(this.game.player.location, this.game.map);
+    };
+
+    Enemy.prototype.playerXYDirection = function(topology) {
+      var nextLocation;
+      nextLocation = this.location.nextStepToDestination(this.game.player.location, this.game.map, topology);
+      return [nextLocation.x - this.location.x, nextLocation.y - this.location.y];
+    };
+
     return Enemy;
 
   })(window.Actor);
+
+  window.Gridbug = (function(_super) {
+    __extends(Gridbug, _super);
+
+    function Gridbug(game, location) {
+      Gridbug.__super__.constructor.call(this, game, location, "X", "green", 50);
+      this.direction = null;
+      this.stepsLeft = 0;
+    }
+
+    Gridbug.prototype.nextLocation = function() {
+      if (this.stepsLeft === 0) {
+        this.calculateNextStep();
+      }
+      this.stepsLeft = this.stepsLeft - 1;
+      if (this.direction != null) {
+        return this.location.addDir(this.direction);
+      } else {
+        return this.location;
+      }
+    };
+
+    Gridbug.prototype.calculateNextStep = function() {
+      if (this.direction != null) {
+        this.direction = null;
+        return this.stepsLeft = 5;
+      } else {
+        this.direction = this.playerXYDirection(4);
+        return this.stepsLeft = 3;
+      }
+    };
+
+    return Gridbug;
+
+  })(window.Enemy);
+
+  window.ElvenArcher = (function(_super) {
+    __extends(ElvenArcher, _super);
+
+    function ElvenArcher(game, location) {
+      ElvenArcher.__super__.constructor.call(this, game, location, "E", "blue", 1000);
+    }
+
+    ElvenArcher.prototype.nextLocation = function() {
+      var dir, firstLocation;
+      if (Util.oneIn(5)) {
+        return this.towardsPlayer();
+      } else if (Util.oneIn(5)) {
+        dir = this.playerXYDirection(8);
+        firstLocation = this.location.addDir(dir);
+        new Projectile(this.game, firstLocation, dir, this, "cyan");
+        return this.location;
+      } else {
+        return this.location;
+      }
+    };
+
+    return ElvenArcher;
+
+  })(window.Enemy);
+
+  window.MinorDemon = (function(_super) {
+    __extends(MinorDemon, _super);
+
+    function MinorDemon(game, location) {
+      MinorDemon.__super__.constructor.call(this, game, location, "&", "red", 400);
+    }
+
+    MinorDemon.prototype.nextLocation = function() {
+      if (Util.oneIn(3)) {
+        return this.location.addDir(Util.rand8Dir());
+      } else {
+        return this.towardsPlayer();
+      }
+    };
+
+    return MinorDemon;
+
+  })(window.Enemy);
 
 }).call(this);

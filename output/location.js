@@ -88,6 +88,22 @@
       })(this));
     };
 
+    Location.prototype.hasOtherActor = function(theActor, other) {
+      return _.find(this.otherActors(theActor), (function(_this) {
+        return function(actor) {
+          return actor === other;
+        };
+      })(this));
+    };
+
+    Location.prototype.hasOtherActorType = function(theActor, type) {
+      return _.find(this.otherActors(theActor), (function(_this) {
+        return function(actor) {
+          return actor instanceof type;
+        };
+      })(this));
+    };
+
     Location.prototype.toString = function() {
       return "[ " + this.x + ", " + this.y + " ]";
     };

@@ -15,6 +15,14 @@
       return Util.rand(number) === 0;
     };
 
+    Util.rand8Dir = function() {
+      return ROT.DIRS[8][Util.rand(8)];
+    };
+
+    Util.rand4Dir = function() {
+      return ROT.DIRS[4][Util.rand(4)];
+    };
+
     return Util;
 
   })();

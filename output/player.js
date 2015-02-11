@@ -35,7 +35,6 @@
     Player.prototype.moveDir = function(dirIndex) {
       var dir, nextLocation;
       dir = ROT.DIRS[8][dirIndex];
-      console.log("dir " + dir + " dirIndex " + dirIndex + " location " + this.location);
       nextLocation = this.location.addDir(dir);
       if (!this.game.map.isOpen(nextLocation)) {
         return;
@@ -47,7 +46,7 @@
       var dir, nextLocation;
       dir = ROT.DIRS[8][dirIndex];
       nextLocation = this.location.addDir(dir);
-      new Projectile(this.game, nextLocation, dir);
+      new Projectile(this.game, nextLocation, dir, this);
       return this.shotsFired++;
     };
 

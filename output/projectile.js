@@ -6,13 +6,30 @@
   window.Projectile = (function(_super) {
     __extends(Projectile, _super);
 
-    function Projectile(game, location, direction) {
+    function Projectile(game, location, direction, owner, color) {
       this.direction = direction;
-      Projectile.__super__.constructor.call(this, game, location, "+", "yellow", 190);
+      this.owner = owner;
+      if (color == null) {
+        color = "yellow";
+      }
+      Projectile.__super__.constructor.call(this, game, location, "+", color, 190);
     }
 
     Projectile.prototype.act = function() {
-      return this.location = this.location.addDir(this.direction);
+      var nextLoc;
+      nextLoc = this.location.addDir(this.direction);
+      if (nextLoc.hasOtherActor(this, this.owner)) {
+        this.dead = true;
+        return;
+      }
+      return this.location = nextLoc;
+    };
+
+    Projectile.prototype.struckBy = function(entity) {
+      if (entity === this.owner) {
+        return;
+      }
+      return Projectile.__super__.struckBy.call(this, entity);
     };
 
     return Projectile;

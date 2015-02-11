@@ -19,7 +19,8 @@
       document.body.appendChild(this.display.getContainer());
       this.drawWholeMap();
       this.player = new Player(this, this.map.randomLocation());
-      this.spawn();
+      this.spawner = new Spawner(this);
+      this.spawner.spawn();
       this.drawScore();
     }
 
@@ -56,23 +57,8 @@
       return entity.died();
     };
 
-    Game.prototype.spawn = function() {
-      var type;
-      if (Util.oneIn(2)) {
-        type = MinorDemon;
-      } else {
-        type = Gridbug;
-      }
-      this.actors.push(new type(this, this.map.randomEdgeLocation()));
-      return window.setTimeout(((function(_this) {
-        return function() {
-          return _this.spawn();
-        };
-      })(this)), 1000);
-    };
-
     Game.prototype.gameOver = function() {
-      this.display.drawText(this.height / 2, 5, "You have died.  Game Over. Score: " + this.player.score + " Press [ESC] to restart");
+      this.display.drawText(this.height / 2, 5, "You have died.  Game Over. Score: " + this.player.score + " Killed By A: " + this.player.destroyedBy + " Press [ESC] to restart");
       return window.addEventListener("keydown", this);
     };
 
