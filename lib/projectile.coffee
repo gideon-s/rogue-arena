@@ -1,11 +1,12 @@
 class window.Projectile extends window.Actor
 
-    constructor: (game,location,@direction, @owner, color = "yellow") ->
-        super(game, location, "+", color, 190)
+    constructor: (game,location,@direction, @owner, color = "yellow", @maxLife = 1000) ->
+        super(game, location, "+", color, 20)
 
     act: () ->
         nextLoc = @location.addDir @direction
-        if (nextLoc.hasOtherActor(this, @owner))
+        @maxLife = @maxLife - 1
+        if (nextLoc.hasOtherActor(this, @owner) or @maxLife < 0)
             @dead = true
             return
         @location = nextLoc

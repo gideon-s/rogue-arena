@@ -8,7 +8,7 @@
     __extends(Player, _super);
 
     function Player(game, location) {
-      Player.__super__.constructor.call(this, game, location, "@", "white", 50);
+      Player.__super__.constructor.call(this, game, location, "@", "white", 100);
       console.log("player constructor started");
       this.score = 0;
       this.shotsFired = 0;
@@ -23,13 +23,18 @@
       this.allowedKeys[ROT.VK_K] = 1;
       this.allowedKeys[ROT.VK_L] = 1;
       window.addEventListener("keydown", this);
+      window.addEventListener("keyup", this);
     }
 
     Player.prototype.handleEvent = function(e) {
       if (this.allowedKeys[e.keyCode] !== 1) {
         return;
       }
-      return this.lastCode[e.keyCode] = 1;
+      if (e.type === "keydown") {
+        return this.lastCode[e.keyCode] = 1;
+      } else if (e.type === "keyup") {
+        return this.lastCode[e.keyCode] = 0;
+      }
     };
 
     Player.prototype.moveDir = function(dirIndex) {
@@ -44,10 +49,14 @@
 
     Player.prototype.fire = function(dirIndex) {
       var dir, nextLocation;
+      if ((this.lastFired != null) && Util.millisSince(this.lastFired) < 101) {
+        return;
+      }
       dir = ROT.DIRS[8][dirIndex];
       nextLocation = this.location.addDir(dir);
-      new Projectile(this.game, nextLocation, dir, this);
-      return this.shotsFired++;
+      new Projectile(this.game, nextLocation, dir, this, "yellow", 20);
+      this.shotsFired++;
+      return this.lastFired = Util.millis();
     };
 
     Player.prototype.addScore = function() {
@@ -77,12 +86,6 @@
 
     Player.prototype.wasdDirection = function(w, a, s, d) {
       var direction;
-      if (this.keysPressed(w, s)) {
-        this.clearKeys(w, s);
-      }
-      if (this.keysPressed(a, d)) {
-        this.clearKeys(a, d);
-      }
       if (this.keysPressed(w, d)) {
         return direction = 1;
       } else if (this.keysPressed(d, s)) {
@@ -109,7 +112,6 @@
       }
       moveDirection = this.wasdDirection(ROT.VK_W, ROT.VK_A, ROT.VK_S, ROT.VK_D);
       fireDirection = this.wasdDirection(ROT.VK_I, ROT.VK_J, ROT.VK_K, ROT.VK_L);
-      this.clearKeys.apply(this, _.keys(this.allowedKeys));
       if (moveDirection != null) {
         this.moveDir(moveDirection);
       }

@@ -12,7 +12,7 @@ class window.Spawner
   monsterChooser: () -> 
     if @score() < 10
       new Level1()
-    else if @score < 20
+    else if @score() < 20
       new Level2()
     else
       new Level3()

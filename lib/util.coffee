@@ -13,3 +13,9 @@ class window.Util
 
     @rand4Dir: () ->
         ROT.DIRS[4][Util.rand(4)]
+
+    @millis: () ->
+        new Date().getTime()
+
+    @millisSince: (otherMillis) ->
+        Util.millis() - otherMillis

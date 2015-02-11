@@ -83,14 +83,14 @@
     __extends(ElvenArcher, _super);
 
     function ElvenArcher(game, location) {
-      ElvenArcher.__super__.constructor.call(this, game, location, "E", "blue", 1000);
+      ElvenArcher.__super__.constructor.call(this, game, location, "E", "blue", 200);
     }
 
     ElvenArcher.prototype.nextLocation = function() {
       var dir, firstLocation;
-      if (Util.oneIn(5)) {
+      if (Util.oneIn(20)) {
         return this.towardsPlayer();
-      } else if (Util.oneIn(5)) {
+      } else if (Util.oneIn(4)) {
         dir = this.playerXYDirection(8);
         firstLocation = this.location.addDir(dir);
         new Projectile(this.game, firstLocation, dir, this, "cyan");

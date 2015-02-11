@@ -23,6 +23,14 @@
       return ROT.DIRS[4][Util.rand(4)];
     };
 
+    Util.millis = function() {
+      return new Date().getTime();
+    };
+
+    Util.millisSince = function(otherMillis) {
+      return Util.millis() - otherMillis;
+    };
+
     return Util;
 
   })();

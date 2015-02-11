@@ -46,12 +46,12 @@ class window.Gridbug extends window.Enemy
 
 class window.ElvenArcher extends window.Enemy
     constructor: (game, location) -> 
-      super(game, location, "E", "blue", 1000)
+      super(game, location, "E", "blue", 200)
 
     nextLocation: () ->
-        if Util.oneIn(5)
+        if Util.oneIn(20)
             @towardsPlayer()
-        else if Util.oneIn(5)
+        else if Util.oneIn(4)
             dir = @playerXYDirection(8)
             firstLocation = @location.addDir(dir)
             new Projectile(@game, firstLocation, dir, this, "cyan")

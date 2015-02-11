@@ -23,7 +23,7 @@
     Spawner.prototype.monsterChooser = function() {
       if (this.score() < 10) {
         return new Level1();
-      } else if (this.score < 20) {
+      } else if (this.score() < 20) {
         return new Level2();
       } else {
         return new Level3();

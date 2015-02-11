@@ -1,7 +1,7 @@
 class window.Player extends window.Actor
 
     constructor: (game, location) ->
-        super(game, location, "@", "white", 50)
+        super(game, location, "@", "white", 100)
         console.log "player constructor started"
         @score = 0
         @shotsFired = 0
@@ -16,10 +16,14 @@ class window.Player extends window.Actor
         @allowedKeys[ROT.VK_K] = 1
         @allowedKeys[ROT.VK_L] = 1
         window.addEventListener "keydown", this
+        window.addEventListener "keyup", this
 
     handleEvent: (e) ->
         return unless @allowedKeys[e.keyCode] == 1
-        @lastCode[e.keyCode] = 1
+        if e.type == "keydown"
+            @lastCode[e.keyCode] = 1
+        else if e.type == "keyup"
+            @lastCode[e.keyCode] = 0
 
     moveDir: (dirIndex) ->
         dir = ROT.DIRS[8][dirIndex]
@@ -28,10 +32,13 @@ class window.Player extends window.Actor
         @location = nextLocation
 
     fire: (dirIndex) ->
+        if @lastFired? and Util.millisSince(@lastFired) < 101
+            return
         dir = ROT.DIRS[8][dirIndex]
         nextLocation = @location.addDir(dir)
-        new Projectile(@game, nextLocation, dir, this)
+        new Projectile(@game, nextLocation, dir, this, "yellow", 20)
         @shotsFired++
+        @lastFired = Util.millis()
 
     addScore: () ->
         @score++
@@ -44,10 +51,6 @@ class window.Player extends window.Actor
         _.each(keys, (k) => @lastCode[k] = 0)
 
     wasdDirection: (w, a, s, d) ->
-        if @keysPressed(w, s)
-            @clearKeys(w, s)
-        if @keysPressed(a, d)
-            @clearKeys(a, d)
         if @keysPressed(w, d)
             direction = 1
         else if @keysPressed(d, s)
@@ -69,7 +72,6 @@ class window.Player extends window.Actor
         return unless @lastCode? # skip act if the player isn't done being constructed yet
         moveDirection = @wasdDirection(ROT.VK_W, ROT.VK_A, ROT.VK_S, ROT.VK_D)
         fireDirection = @wasdDirection(ROT.VK_I, ROT.VK_J, ROT.VK_K, ROT.VK_L)
-        @clearKeys.apply(this, _.keys(@allowedKeys))
         if moveDirection?
             @moveDir(moveDirection)
         if fireDirection?
