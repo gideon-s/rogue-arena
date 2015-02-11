@@ -1,20 +1,14 @@
-
 class window.Enemy extends window.Actor
 
-	constructor: (game, location) ->
-		super(game, location, "&", "red", 400)
+    act: () ->
+        next = @nextLocation()
+        return  unless @game.map.isOpen(next)
+        if (_.find next.otherActors(this),(actor) => actor instanceof Enemy)
+            return
+        @location = next
 
-	act: () ->
-		if Util.rand(4) == 0
-			dir = ROT.DIRS[8][Util.rand(8)]
-			nextLocation = @location.addDir(dir)
-		else
-			nextLocation = @location.pathToDestination(@game.player.location,@game.map)[0]
-		return  unless @game.map.isOpen(nextLocation)
-		if (_.find nextLocation.otherActors(this),(actor) => actor instanceof Enemy)
-			return
-		@location = nextLocation
+    nextLocation: () ->
+    	@location
 
-	died: () ->
-		@game.player.addScore()
-
+    died: () ->
+        @game.player.addScore()

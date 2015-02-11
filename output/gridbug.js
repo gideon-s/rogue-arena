@@ -12,31 +12,16 @@
       this.stepsLeft = 0;
     }
 
-    Gridbug.prototype.step = function() {
-      var nextLocation;
-      this.stepsLeft = this.stepsLeft - 1;
-      if (this.direction == null) {
-        return;
-      }
-      nextLocation = this.location.addDir(this.direction);
-      if (!this.game.map.isOpen(nextLocation)) {
-        return;
-      }
-      if (_.find(nextLocation.otherActors(this), (function(_this) {
-        return function(actor) {
-          return actor instanceof Gridbug;
-        };
-      })(this))) {
-        return;
-      }
-      return this.location = nextLocation;
-    };
-
-    Gridbug.prototype.act = function() {
+    Gridbug.prototype.nextLocation = function() {
       if (this.stepsLeft === 0) {
         this.calculateNextStep();
       }
-      return this.step();
+      this.stepsLeft = this.stepsLeft - 1;
+      if (this.direction != null) {
+        return this.location.addDir(this.direction);
+      } else {
+        return this.location;
+      }
     };
 
     Gridbug.prototype.calculateNextStep = function() {
@@ -51,12 +36,8 @@
       }
     };
 
-    Gridbug.prototype.died = function() {
-      return this.game.player.addScore();
-    };
-
     return Gridbug;
 
-  })(window.Actor);
+  })(window.Enemy);
 
 }).call(this);

@@ -10,33 +10,18 @@
       MinorDemon.__super__.constructor.call(this, game, location, "&", "red", 400);
     }
 
-    MinorDemon.prototype.act = function() {
-      var dir, nextLocation;
+    MinorDemon.prototype.nextLocation = function() {
+      var dir;
       if (Util.rand(4) === 0) {
         dir = ROT.DIRS[8][Util.rand(8)];
-        nextLocation = this.location.addDir(dir);
+        return this.location.addDir(dir);
       } else {
-        nextLocation = this.location.pathToDestination(this.game.player.location, this.game.map)[0];
+        return this.location.pathToDestination(this.game.player.location, this.game.map)[0];
       }
-      if (!this.game.map.isOpen(nextLocation)) {
-        return;
-      }
-      if (_.find(nextLocation.otherActors(this), (function(_this) {
-        return function(actor) {
-          return actor instanceof MinorDemon;
-        };
-      })(this))) {
-        return;
-      }
-      return this.location = nextLocation;
-    };
-
-    MinorDemon.prototype.died = function() {
-      return this.game.player.addScore();
     };
 
     return MinorDemon;
 
-  })(window.Actor);
+  })(window.Enemy);
 
 }).call(this);
