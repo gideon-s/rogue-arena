@@ -6,14 +6,13 @@
     };
 
     function Game() {
-      var height, width;
-      height = 60;
-      width = 140;
-      this.map = new Map(this, width, height);
+      this.height = 60;
+      this.width = 140;
+      this.map = new Map(this, this.width, this.height);
       this.actors = [];
       this.display = new ROT.Display({
-        width: width,
-        height: height,
+        width: this.width,
+        height: this.height,
         spacing: 1.1,
         fontSize: 12
       });
@@ -41,7 +40,7 @@
     };
 
     Game.prototype.drawScore = function() {
-      return this.display.drawText(height / 2, 0, "Score: " + this.player.score);
+      return this.display.drawText(5, 0, "Score: " + this.player.score);
     };
 
     Game.prototype.enters = function(entity) {
@@ -73,7 +72,7 @@
     };
 
     Game.prototype.gameOver = function() {
-      this.display.drawText(5, 5, "You have died.  Game Over. Score: " + this.player.score + " Press [ESC] to restart");
+      this.display.drawText(this.height / 2, 5, "You have died.  Game Over. Score: " + this.player.score + " Press [ESC] to restart");
       return window.addEventListener("keydown", this);
     };
 

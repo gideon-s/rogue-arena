@@ -8,13 +8,27 @@
 
     function Player(game, location) {
       Player.__super__.constructor.call(this, game, location, "@", "white", 50);
+      console.log("player constructor started");
       this.score = 0;
       this.shotsFired = 0;
+      this.lastCode = {};
+      this.allowedKeys = {};
+      this.allowedKeys[ROT.VK_W] = 1;
+      this.allowedKeys[ROT.VK_A] = 1;
+      this.allowedKeys[ROT.VK_S] = 1;
+      this.allowedKeys[ROT.VK_D] = 1;
+      console.log(this.allowedKeys);
       window.addEventListener("keydown", this);
     }
 
     Player.prototype.handleEvent = function(e) {
-      return this.lastCode = e.keyCode;
+      console.log(this.allowedKeys);
+      if (this.allowedKeys[e.keyCode] !== 1) {
+        return;
+      }
+      console.log(this.lastCode);
+      this.lastCode[e.keyCode] = 1;
+      return console.log(this.lastCode);
     };
 
     Player.prototype.moveDir = function(dirIndex) {
@@ -41,117 +55,12 @@
     };
 
     Player.prototype.act = function(e) {
-      var keyMap;
-      keyMap = {};
-      keyMap[ROT.VK_W] = (function(_this) {
-        return function() {
-          return _this.moveDir(0);
-        };
-      })(this);
-      keyMap[ROT.VK_D] = (function(_this) {
-        return function() {
-          return _this.moveDir(2);
-        };
-      })(this);
-      keyMap[ROT.VK_S] = (function(_this) {
-        return function() {
-          return _this.moveDir(4);
-        };
-      })(this);
-      keyMap[ROT.VK_A] = (function(_this) {
-        return function() {
-          return _this.moveDir(6);
-        };
-      })(this);
-      keyMap[89] = (function(_this) {
-        return function() {
-          return _this.fire(0);
-        };
-      })(this);
-      keyMap[85] = (function(_this) {
-        return function() {
-          return _this.fire(1);
-        };
-      })(this);
-      keyMap[74] = (function(_this) {
-        return function() {
-          return _this.fire(2);
-        };
-      })(this);
-      keyMap[77] = (function(_this) {
-        return function() {
-          return _this.fire(3);
-        };
-      })(this);
-      keyMap[78] = (function(_this) {
-        return function() {
-          return _this.fire(4);
-        };
-      })(this);
-      keyMap[66] = (function(_this) {
-        return function() {
-          return _this.fire(5);
-        };
-      })(this);
-      keyMap[71] = (function(_this) {
-        return function() {
-          return _this.fire(6);
-        };
-      })(this);
-      keyMap[84] = (function(_this) {
-        return function() {
-          return _this.fire(7);
-        };
-      })(this);
-      keyMap[38] = (function(_this) {
-        return function() {
-          return _this.fire(0);
-        };
-      })(this);
-      keyMap[33] = (function(_this) {
-        return function() {
-          return _this.fire(1);
-        };
-      })(this);
-      keyMap[39] = (function(_this) {
-        return function() {
-          return _this.fire(2);
-        };
-      })(this);
-      keyMap[34] = (function(_this) {
-        return function() {
-          return _this.fire(3);
-        };
-      })(this);
-      keyMap[40] = (function(_this) {
-        return function() {
-          return _this.fire(4);
-        };
-      })(this);
-      keyMap[35] = (function(_this) {
-        return function() {
-          return _this.fire(5);
-        };
-      })(this);
-      keyMap[37] = (function(_this) {
-        return function() {
-          return _this.fire(6);
-        };
-      })(this);
-      keyMap[36] = (function(_this) {
-        return function() {
-          return _this.fire(7);
-        };
-      })(this);
-      keyMap[27] = (function(_this) {
-        return function() {
-          return location.reload();
-        };
-      })(this);
-      if ((this.lastCode != null) && (this.lastCode in keyMap)) {
-        keyMap[this.lastCode]();
+      var dir;
+      console.log(this.lastCode);
+      if (this.lastCode[ROT.VK_W] === 1) {
+        dir = 1;
       }
-      return this.lastCode = null;
+      return this.moveDir(dir);
     };
 
     return Player;
