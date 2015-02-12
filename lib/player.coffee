@@ -11,7 +11,10 @@ class window.Player extends window.Actor
 
     handleEvent: (e) ->
         if e.type == "keydown"
-            @lastCode[e.keyCode] = 1
+            if e.keyCode == ROT.VK_U
+                @changeWeapon()
+            else
+                @lastCode[e.keyCode] = 1
         else if e.type == "keyup"
             @lastCode[e.keyCode] = 0
 
@@ -67,8 +70,6 @@ class window.Player extends window.Actor
             @moveDir(moveDirection)
         if fireDirection?
             @fire(fireDirection)
-        if @keysPressed(ROT.VK_U)
-            @changeWeapon()
         if @keysPressed(ROT.VK_P)
             @addScore 10
             @game.spawner.current = @game.spawner.current.next()

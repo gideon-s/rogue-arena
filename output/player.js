@@ -19,7 +19,11 @@
 
     Player.prototype.handleEvent = function(e) {
       if (e.type === "keydown") {
-        return this.lastCode[e.keyCode] = 1;
+        if (e.keyCode === ROT.VK_U) {
+          return this.changeWeapon();
+        } else {
+          return this.lastCode[e.keyCode] = 1;
+        }
       } else if (e.type === "keyup") {
         return this.lastCode[e.keyCode] = 0;
       }
@@ -109,9 +113,6 @@
       }
       if (fireDirection != null) {
         this.fire(fireDirection);
-      }
-      if (this.keysPressed(ROT.VK_U)) {
-        this.changeWeapon();
       }
       if (this.keysPressed(ROT.VK_P)) {
         this.addScore(10);
