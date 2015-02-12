@@ -41,7 +41,9 @@
     };
 
     Game.prototype.drawScore = function() {
-      return this.display.drawText(5, 0, "Score: " + this.player.score + " " + (this.spawner.level().constructor.name));
+      if (this.player != null) {
+        return this.display.drawText(5, 0, "Score: " + this.player.score + " " + (this.spawner.level().constructor.name) + " Weapon: " + this.player.weapon.constructor.name);
+      }
     };
 
     Game.prototype.enters = function(entity) {

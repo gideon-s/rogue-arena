@@ -2,7 +2,7 @@ class window.Player extends window.Actor
 
     constructor: (game, location) ->
         super(game, location, "@", "white", 100)
-        console.log "player constructor started"
+        @changeWeapon()
         @score = 0
         @shotsFired = 0
         @lastCode = {}
@@ -22,14 +22,15 @@ class window.Player extends window.Actor
         @location = nextLocation
 
     fire: (dirIndex) ->
-        if @lastFired? and Util.millisSince(@lastFired) < 150
-            return
-        xyDir = Util.xyDir(dirIndex)
-        nextLocation = @location.addDir(xyDir)
-        new Projectile(@game, nextLocation, xyDir, this, "yellow", 20)
-        @shotsFired++
-        @lastFired = Util.millis()
+        @weapon.fire(dirIndex)
 
+    changeWeapon: () ->
+        if @weapon instanceof Pistol
+            @weapon = new GrenadeLauncher(this)
+        else
+            @weapon = new Pistol(this)
+        @game.drawScore()
+        
     addScore: (amount = 1) ->
         @score += amount
         @game.drawScore()
@@ -67,6 +68,8 @@ class window.Player extends window.Actor
         if fireDirection?
             @fire(fireDirection)
         if @keysPressed(ROT.VK_U)
+            @changeWeapon()
+        if @keysPressed(ROT.VK_P)
             @addScore 10
             @game.spawner.current = @game.spawner.current.next()
  

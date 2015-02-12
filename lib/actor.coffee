@@ -43,3 +43,9 @@ class window.Actor
 		@destroyedBy = entity.constructor.name
 		entity.destroy()
 		entity.destroyedBy = this.constructor.name
+
+
+class window.Colorizor 
+    constructor: (@colors = ["yellow", "red", "orange"]) ->
+    color: () ->
+        Util.pickRandom(@colors)

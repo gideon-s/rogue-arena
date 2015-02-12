@@ -9,7 +9,7 @@
 
     function Player(game, location) {
       Player.__super__.constructor.call(this, game, location, "@", "white", 100);
-      console.log("player constructor started");
+      this.changeWeapon();
       this.score = 0;
       this.shotsFired = 0;
       this.lastCode = {};
@@ -36,15 +36,16 @@
     };
 
     Player.prototype.fire = function(dirIndex) {
-      var nextLocation, xyDir;
-      if ((this.lastFired != null) && Util.millisSince(this.lastFired) < 150) {
-        return;
+      return this.weapon.fire(dirIndex);
+    };
+
+    Player.prototype.changeWeapon = function() {
+      if (this.weapon instanceof Pistol) {
+        this.weapon = new GrenadeLauncher(this);
+      } else {
+        this.weapon = new Pistol(this);
       }
-      xyDir = Util.xyDir(dirIndex);
-      nextLocation = this.location.addDir(xyDir);
-      new Projectile(this.game, nextLocation, xyDir, this, "yellow", 20);
-      this.shotsFired++;
-      return this.lastFired = Util.millis();
+      return this.game.drawScore();
     };
 
     Player.prototype.addScore = function(amount) {
@@ -110,6 +111,9 @@
         this.fire(fireDirection);
       }
       if (this.keysPressed(ROT.VK_U)) {
+        this.changeWeapon();
+      }
+      if (this.keysPressed(ROT.VK_P)) {
         this.addScore(10);
         return this.game.spawner.current = this.game.spawner.current.next();
       }

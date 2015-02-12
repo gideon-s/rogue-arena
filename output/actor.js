@@ -66,4 +66,17 @@
 
   })();
 
+  window.Colorizor = (function() {
+    function Colorizor(colors) {
+      this.colors = colors != null ? colors : ["yellow", "red", "orange"];
+    }
+
+    Colorizor.prototype.color = function() {
+      return Util.pickRandom(this.colors);
+    };
+
+    return Colorizor;
+
+  })();
+
 }).call(this);

@@ -27,7 +27,8 @@ class window.Game
     location.drawOn @display, character, color
 
   drawScore: () ->
-    @display.drawText(5, 0, "Score: #{@player.score} #{@spawner.level().constructor.name}")
+    if @player?
+      @display.drawText(5, 0, "Score: #{@player.score} #{@spawner.level().constructor.name} Weapon: #{@player.weapon.constructor.name}")
 
   enters: (entity) ->
     _.each entity.location.otherActors(entity),(actor) =>
