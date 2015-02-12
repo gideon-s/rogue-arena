@@ -11,7 +11,6 @@ class window.Game
     @display = new ROT.Display width: @width,height: @height,spacing: 1.1,fontSize: 12
     document.body.appendChild @display.getContainer()
     @drawWholeMap()
-    ploc = @map.randomLocation()
     @player = new Player(this, new Location(this, [70, 30]))
     @spawner = new Spawner(this)
     @spawner.spawn(1000)

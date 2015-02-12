@@ -37,7 +37,7 @@
 
     Player.prototype.fire = function(dirIndex) {
       var nextLocation, xyDir;
-      if ((this.lastFired != null) && Util.millisSince(this.lastFired) < 200) {
+      if ((this.lastFired != null) && Util.millisSince(this.lastFired) < 150) {
         return;
       }
       xyDir = Util.xyDir(dirIndex);

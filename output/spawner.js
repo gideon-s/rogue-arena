@@ -39,7 +39,9 @@
     };
 
     Chooser.prototype.create = function(type) {
-      return this.game.actors.push(new type(this.game, this.game.map.randomEdgeLocation()));
+      if (type != null) {
+        return this.game.actors.push(new type(this.game, this.game.map.randomEdgeLocation()));
+      }
     };
 
     Chooser.prototype.spawn = function() {
@@ -149,7 +151,7 @@
       }
       this.called = this.called + 1;
       if (this.called === 10) {
-        for (dir = _i = 0; _i <= 30; dir = ++_i) {
+        for (dir = _i = 0; _i <= 20; dir = ++_i) {
           this.create(Gridbug);
         }
         return this.create(Boss1);
@@ -180,7 +182,9 @@
     }
 
     Level5.prototype.monsterType = function() {
-      return ElvenArcher;
+      if (Util.oneIn(3)) {
+        return ElvenArcher;
+      }
     };
 
     Level5.prototype.finished = function() {

@@ -15,7 +15,9 @@ class window.Spawner
 class window.Chooser 
     constructor: (@game) ->
     name: () -> this.constructor.name
-    create: (type) -> @game.actors.push new type(@game, @game.map.randomEdgeLocation())
+    create: (type) -> 
+        if type?
+            @game.actors.push new type(@game, @game.map.randomEdgeLocation())
     spawn: () -> @create(@monsterType())
     score: () -> @game.player.score
 
@@ -50,7 +52,7 @@ class window.Level4 extends window.Chooser
             @called = 0
         @called = @called + 1
         if @called == 10
-            for dir in [0..30]
+            for dir in [0..20]
                 @create(Gridbug)
             @create(Boss1)
     finished: () ->
@@ -59,7 +61,8 @@ class window.Level4 extends window.Chooser
 
 class window.Level5 extends window.Chooser
     monsterType: () ->
-        ElvenArcher
+        if Util.oneIn(3)
+            ElvenArcher
     finished: () -> false
     next: () -> new Level5(@game)
 

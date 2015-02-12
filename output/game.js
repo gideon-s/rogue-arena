@@ -6,7 +6,6 @@
     };
 
     function Game() {
-      var ploc;
       this.height = 60;
       this.width = 140;
       this.map = new Map(this, this.width, this.height);
@@ -19,7 +18,6 @@
       });
       document.body.appendChild(this.display.getContainer());
       this.drawWholeMap();
-      ploc = this.map.randomLocation();
       this.player = new Player(this, new Location(this, [70, 30]));
       this.spawner = new Spawner(this);
       this.spawner.spawn(1000);

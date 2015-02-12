@@ -22,7 +22,7 @@ class window.Player extends window.Actor
         @location = nextLocation
 
     fire: (dirIndex) ->
-        if @lastFired? and Util.millisSince(@lastFired) < 200
+        if @lastFired? and Util.millisSince(@lastFired) < 150
             return
         xyDir = Util.xyDir(dirIndex)
         nextLocation = @location.addDir(xyDir)
