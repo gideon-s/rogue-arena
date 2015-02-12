@@ -19,3 +19,6 @@ class window.Util
 
     @millisSince: (otherMillis) ->
         Util.millis() - otherMillis
+
+    @xyDir: (dirIndex, topology = 8) ->
+        ROT.DIRS[topology][dirIndex]

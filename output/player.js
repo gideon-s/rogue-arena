@@ -13,23 +13,11 @@
       this.score = 0;
       this.shotsFired = 0;
       this.lastCode = {};
-      this.allowedKeys = {};
-      this.allowedKeys[ROT.VK_W] = 1;
-      this.allowedKeys[ROT.VK_A] = 1;
-      this.allowedKeys[ROT.VK_S] = 1;
-      this.allowedKeys[ROT.VK_D] = 1;
-      this.allowedKeys[ROT.VK_I] = 1;
-      this.allowedKeys[ROT.VK_J] = 1;
-      this.allowedKeys[ROT.VK_K] = 1;
-      this.allowedKeys[ROT.VK_L] = 1;
       window.addEventListener("keydown", this);
       window.addEventListener("keyup", this);
     }
 
     Player.prototype.handleEvent = function(e) {
-      if (this.allowedKeys[e.keyCode] !== 1) {
-        return;
-      }
       if (e.type === "keydown") {
         return this.lastCode[e.keyCode] = 1;
       } else if (e.type === "keyup") {
@@ -48,19 +36,22 @@
     };
 
     Player.prototype.fire = function(dirIndex) {
-      var dir, nextLocation;
-      if ((this.lastFired != null) && Util.millisSince(this.lastFired) < 101) {
+      var nextLocation, xyDir;
+      if ((this.lastFired != null) && Util.millisSince(this.lastFired) < 200) {
         return;
       }
-      dir = ROT.DIRS[8][dirIndex];
-      nextLocation = this.location.addDir(dir);
-      new Projectile(this.game, nextLocation, dir, this, "yellow", 20);
+      xyDir = Util.xyDir(dirIndex);
+      nextLocation = this.location.addDir(xyDir);
+      new Projectile(this.game, nextLocation, xyDir, this, "yellow", 20);
       this.shotsFired++;
       return this.lastFired = Util.millis();
     };
 
-    Player.prototype.addScore = function() {
-      this.score++;
+    Player.prototype.addScore = function(amount) {
+      if (amount == null) {
+        amount = 1;
+      }
+      this.score += amount;
       return this.game.drawScore();
     };
 
@@ -116,7 +107,11 @@
         this.moveDir(moveDirection);
       }
       if (fireDirection != null) {
-        return this.fire(fireDirection);
+        this.fire(fireDirection);
+      }
+      if (this.keysPressed(ROT.VK_U)) {
+        this.addScore(10);
+        return this.game.spawner.current = this.game.spawner.current.next();
       }
     };
 

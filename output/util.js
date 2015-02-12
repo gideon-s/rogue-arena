@@ -31,6 +31,13 @@
       return Util.millis() - otherMillis;
     };
 
+    Util.xyDir = function(dirIndex, topology) {
+      if (topology == null) {
+        topology = 8;
+      }
+      return ROT.DIRS[topology][dirIndex];
+    };
+
     return Util;
 
   })();

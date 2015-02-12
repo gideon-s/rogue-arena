@@ -31,13 +31,24 @@
     };
 
     Enemy.prototype.towardsPlayer = function() {
-      return this.location.nextStepToDestination(this.game.player.location, this.game.map);
+      return this.location.addDir(this.playerXYDirection(8));
     };
 
     Enemy.prototype.playerXYDirection = function(topology) {
-      var nextLocation;
-      nextLocation = this.location.nextStepToDestination(this.game.player.location, this.game.map, topology);
-      return [nextLocation.x - this.location.x, nextLocation.y - this.location.y];
+      var absXDiff, absYDiff, xDiff, yDiff;
+      xDiff = this.game.player.location.x - this.location.x;
+      yDiff = this.game.player.location.y - this.location.y;
+      absXDiff = Math.abs(xDiff);
+      absYDiff = Math.abs(yDiff);
+      if (topology === 4) {
+        if (absXDiff > absYDiff) {
+          return [xDiff / absXDiff, 0];
+        } else {
+          return [0, yDiff / absYDiff];
+        }
+      } else {
+        return [xDiff / absXDiff, yDiff / absYDiff];
+      }
     };
 
     return Enemy;
@@ -47,8 +58,12 @@
   window.Gridbug = (function(_super) {
     __extends(Gridbug, _super);
 
-    function Gridbug(game, location) {
-      Gridbug.__super__.constructor.call(this, game, location, "X", "green", 50);
+    function Gridbug(game, location, steps, sigil) {
+      this.steps = steps != null ? steps : 5;
+      if (sigil == null) {
+        sigil = "x";
+      }
+      Gridbug.__super__.constructor.call(this, game, location, sigil, "green", 50);
       this.direction = null;
       this.stepsLeft = 0;
     }
@@ -68,16 +83,38 @@
     Gridbug.prototype.calculateNextStep = function() {
       if (this.direction != null) {
         this.direction = null;
-        return this.stepsLeft = 5;
+        return this.stepsLeft = this.steps;
       } else {
         this.direction = this.playerXYDirection(4);
-        return this.stepsLeft = 3;
+        return this.stepsLeft = this.steps;
       }
     };
 
     return Gridbug;
 
   })(window.Enemy);
+
+  window.Boss1 = (function(_super) {
+    __extends(Boss1, _super);
+
+    function Boss1(game, location) {
+      var sigil;
+      Boss1.__super__.constructor.call(this, game, location, 10, sigil = "X");
+    }
+
+    Boss1.prototype.calculateNextStep = function() {
+      var dir, firstLocation, xyDir, _i;
+      for (dir = _i = 0; _i <= 7; dir = _i += 2) {
+        xyDir = Util.xyDir(dir);
+        firstLocation = this.location.addDir(xyDir);
+        new Projectile(this.game, firstLocation, xyDir, this, "red", 20);
+      }
+      return Boss1.__super__.calculateNextStep.call(this);
+    };
+
+    return Boss1;
+
+  })(window.Gridbug);
 
   window.ElvenArcher = (function(_super) {
     __extends(ElvenArcher, _super);

@@ -6,6 +6,7 @@
     };
 
     function Game() {
+      var ploc;
       this.height = 60;
       this.width = 140;
       this.map = new Map(this, this.width, this.height);
@@ -18,9 +19,10 @@
       });
       document.body.appendChild(this.display.getContainer());
       this.drawWholeMap();
-      this.player = new Player(this, this.map.randomLocation());
+      ploc = this.map.randomLocation();
+      this.player = new Player(this, new Location(this, [70, 30]));
       this.spawner = new Spawner(this);
-      this.spawner.spawn();
+      this.spawner.spawn(1000);
       this.drawScore();
     }
 
@@ -41,7 +43,7 @@
     };
 
     Game.prototype.drawScore = function() {
-      return this.display.drawText(5, 0, "Score: " + this.player.score);
+      return this.display.drawText(5, 0, "Score: " + this.player.score + " " + (this.spawner.level().constructor.name));
     };
 
     Game.prototype.enters = function(entity) {

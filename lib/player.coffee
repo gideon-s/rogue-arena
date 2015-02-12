@@ -6,20 +6,10 @@ class window.Player extends window.Actor
         @score = 0
         @shotsFired = 0
         @lastCode = {}
-        @allowedKeys = {}
-        @allowedKeys[ROT.VK_W] = 1
-        @allowedKeys[ROT.VK_A] = 1
-        @allowedKeys[ROT.VK_S] = 1
-        @allowedKeys[ROT.VK_D] = 1
-        @allowedKeys[ROT.VK_I] = 1
-        @allowedKeys[ROT.VK_J] = 1
-        @allowedKeys[ROT.VK_K] = 1
-        @allowedKeys[ROT.VK_L] = 1
         window.addEventListener "keydown", this
         window.addEventListener "keyup", this
 
     handleEvent: (e) ->
-        return unless @allowedKeys[e.keyCode] == 1
         if e.type == "keydown"
             @lastCode[e.keyCode] = 1
         else if e.type == "keyup"
@@ -32,16 +22,16 @@ class window.Player extends window.Actor
         @location = nextLocation
 
     fire: (dirIndex) ->
-        if @lastFired? and Util.millisSince(@lastFired) < 101
+        if @lastFired? and Util.millisSince(@lastFired) < 200
             return
-        dir = ROT.DIRS[8][dirIndex]
-        nextLocation = @location.addDir(dir)
-        new Projectile(@game, nextLocation, dir, this, "yellow", 20)
+        xyDir = Util.xyDir(dirIndex)
+        nextLocation = @location.addDir(xyDir)
+        new Projectile(@game, nextLocation, xyDir, this, "yellow", 20)
         @shotsFired++
         @lastFired = Util.millis()
 
-    addScore: () ->
-        @score++
+    addScore: (amount = 1) ->
+        @score += amount
         @game.drawScore()
 
     keysPressed: (keys...) ->
@@ -76,4 +66,7 @@ class window.Player extends window.Actor
             @moveDir(moveDirection)
         if fireDirection?
             @fire(fireDirection)
+        if @keysPressed(ROT.VK_U)
+            @addScore 10
+            @game.spawner.current = @game.spawner.current.next()
  

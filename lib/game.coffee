@@ -11,9 +11,10 @@ class window.Game
     @display = new ROT.Display width: @width,height: @height,spacing: 1.1,fontSize: 12
     document.body.appendChild @display.getContainer()
     @drawWholeMap()
-    @player = new Player(this,@map.randomLocation())
+    ploc = @map.randomLocation()
+    @player = new Player(this, new Location(this, [70, 30]))
     @spawner = new Spawner(this)
-    @spawner.spawn()
+    @spawner.spawn(1000)
     @drawScore() 
 
   drawWholeMap: ->
@@ -27,7 +28,7 @@ class window.Game
     location.drawOn @display, character, color
 
   drawScore: () ->
-    @display.drawText(5, 0, "Score: #{@player.score}")
+    @display.drawText(5, 0, "Score: #{@player.score} #{@spawner.level().constructor.name}")
 
   enters: (entity) ->
     _.each entity.location.otherActors(entity),(actor) =>
