@@ -72,7 +72,7 @@ class window.Level4 extends window.Chooser
                 @create(Gridbug)
             @create(Boss1)
     finished: () ->
-        @called > 10 and not _.find(@game.actors, (actor) => actor instanceof Boss1)
+        @called > 25 and not _.find(@game.actors, (actor) => actor instanceof Boss1)
     next: () -> new Level5(@game)
 
 class window.Level5 extends window.Chooser
