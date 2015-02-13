@@ -23,37 +23,76 @@
 
   })();
 
-  window.Pistol = (function(_super) {
-    __extends(Pistol, _super);
+  window.Dart = (function(_super) {
+    __extends(Dart, _super);
 
-    function Pistol(owner) {
-      Pistol.__super__.constructor.call(this, 150, owner);
+    function Dart(owner) {
+      Dart.__super__.constructor.call(this, 150, owner);
     }
 
-    Pistol.prototype.shoot = function(xyDir) {
+    Dart.prototype.shoot = function(xyDir) {
       var nextLocation;
       nextLocation = this.owner.location.addDir(xyDir);
       return new Projectile(this.owner.game, nextLocation, xyDir, this.owner, "yellow", 20);
     };
 
-    return Pistol;
+    return Dart;
 
   })(window.Weapon);
 
-  window.GrenadeLauncher = (function(_super) {
-    __extends(GrenadeLauncher, _super);
+  window.FireBall = (function(_super) {
+    __extends(FireBall, _super);
 
-    function GrenadeLauncher(owner) {
-      GrenadeLauncher.__super__.constructor.call(this, 500, owner);
+    function FireBall(owner) {
+      FireBall.__super__.constructor.call(this, 500, owner);
     }
 
-    GrenadeLauncher.prototype.shoot = function(xyDir) {
+    FireBall.prototype.shoot = function(xyDir) {
       var nextLocation;
       nextLocation = this.owner.location.addDir(xyDir);
-      return new Grenade(this.owner.game, nextLocation, xyDir, this.owner, "red", 20);
+      return new Ball(this.owner.game, nextLocation, xyDir, this.owner, "red", 20);
     };
 
-    return GrenadeLauncher;
+    return FireBall;
+
+  })(window.Weapon);
+
+  window.MagicMissile = (function(_super) {
+    __extends(MagicMissile, _super);
+
+    function MagicMissile(owner) {
+      MagicMissile.__super__.constructor.call(this, 1000, owner);
+    }
+
+    MagicMissile.prototype.shoot = function(xyDir) {
+      var nextLocation, projectile;
+      nextLocation = this.owner.location.addDir(xyDir);
+      projectile = new Projectile(this.owner.game, nextLocation, xyDir, this.owner, "white", 100);
+      projectile.speed = 2;
+      return projectile;
+    };
+
+    return MagicMissile;
+
+  })(window.Weapon);
+
+  window.SmokeTrail = (function(_super) {
+    __extends(SmokeTrail, _super);
+
+    function SmokeTrail(owner) {
+      SmokeTrail.__super__.constructor.call(this, 200, owner);
+    }
+
+    SmokeTrail.prototype.shoot = function(xyDir) {
+      var nextLocation, projectile, purples;
+      nextLocation = this.owner.location.addDir(xyDir);
+      purples = new Colorizor(["purple", "blue", "MediumAquamarine"]);
+      projectile = new Particle(this.owner.game, nextLocation, this.owner, this.maxLife = 30, "purple", purples);
+      projectile.speed = 500;
+      return projectile;
+    };
+
+    return SmokeTrail;
 
   })(window.Weapon);
 

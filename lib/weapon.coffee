@@ -8,14 +8,31 @@ class window.Weapon
         @shoot(xyDir)
         @lastFired = Util.millis()
 
-class window.Pistol extends window.Weapon
+class window.Dart extends window.Weapon
     constructor: (owner) -> super(150, owner)
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
         new Projectile(@owner.game, nextLocation, xyDir, @owner, "yellow", 20)
 
-class window.GrenadeLauncher extends window.Weapon
+class window.FireBall extends window.Weapon
     constructor: (owner) -> super(500, owner)
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
-        new Grenade(@owner.game, nextLocation, xyDir, @owner, "red", 20)
+        new Ball(@owner.game, nextLocation, xyDir, @owner, "red", 20)
+
+class window.MagicMissile extends window.Weapon
+    constructor: (owner) -> super(1000, owner)
+    shoot: (xyDir) ->
+        nextLocation = @owner.location.addDir(xyDir)
+        projectile = new Projectile(@owner.game, nextLocation, xyDir, @owner, "white", 100)
+        projectile.speed = 2
+        projectile
+
+class window.SmokeTrail extends window.Weapon
+    constructor: (owner) -> super(200, owner)
+    shoot: (xyDir) ->
+        nextLocation = @owner.location.addDir(xyDir)
+        purples = new Colorizor(["purple", "blue", "MediumAquamarine"])
+        projectile = new Particle(@owner.game, nextLocation, @owner, @maxLife = 30, "purple", purples)
+        projectile.speed = 500
+        projectile

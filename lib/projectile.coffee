@@ -21,7 +21,6 @@ class window.Particle extends window.Actor
         super(game, location, "#", color, 20)
 
     act: () ->
-        console.log @owner
         @color = @colorizor.color()
         nextLoc = @location.addDir Util.rand8Dir()
         @maxLife = @maxLife - 1
@@ -35,7 +34,7 @@ class window.Particle extends window.Actor
             return
         super(entity)
 
-class window.Grenade extends window.Projectile
+class window.Ball extends window.Projectile
     
     constructor: (game, location, direction, owner, color = "white", maxLife = 30) ->
         @colorizor = new Colorizor()
@@ -52,9 +51,9 @@ class window.Grenade extends window.Projectile
             @emit(firstLocation, xyDir)
 
     emit: (firstLocation, xyDir) ->
-        new GrenadeParticle(@game, firstLocation, xyDir, @owner, "red", 4)
+        new BallParticle(@game, firstLocation, xyDir, @owner, "red", 2)
 
-class window.GrenadeParticle extends window.Grenade 
+class window.BallParticle extends window.Ball 
     emit: (firstLocation, xyDir) ->
-        new Particle(@game, firstLocation, @owner, Util.rand(6))
+        new Particle(@game, firstLocation, @owner, Util.rand(20))
 

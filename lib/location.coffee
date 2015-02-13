@@ -15,6 +15,9 @@ class window.Location
 	addDir: (dir) ->
 		new Location @game, [@x+dir[0],@y+dir[1]]
 
+	subtractDir: (dir) ->
+		new Location @game, [@x-dir[0],@y-dir[1]]
+
 	pair: () ->
 		[@x,@y]
 

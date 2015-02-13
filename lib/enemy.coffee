@@ -13,21 +13,27 @@ class window.Enemy extends window.Actor
     died: () ->
         @game.player.addScore()
 
-    towardsPlayer: () ->
-        @location.addDir(@playerXYDirection(8))
+    towardsPlayer: () -> @location.addDir(@playerXYDirection(8))
+    awayFromPlayer: () -> @location.subtractDir(@playerXYDirection(8))
+    randomDirection: () -> @location.addDir(Util.rand8Dir())
+
+    playerDistance: () ->
+        Util.distance(@location, @game.player.location)
 
     playerXYDirection: (topology) ->
         xDiff = @game.player.location.x - @location.x
         yDiff = @game.player.location.y - @location.y
         absXDiff = Math.abs xDiff
         absYDiff = Math.abs yDiff
+        xDir = if absXDiff > 0 then xDiff / absXDiff else 0
+        yDir = if absYDiff > 0 then yDiff / absYDiff else 0
         if topology == 4
             if absXDiff > absYDiff
-                [xDiff / absXDiff, 0]
+                [xDir, 0]
             else
-                [0, yDiff / absYDiff]
+                [0, yDir]
         else
-            [xDiff / absXDiff, yDiff / absYDiff]
+            [xDir, yDir]
 
 class window.Gridbug extends window.Enemy
 
@@ -52,10 +58,13 @@ class window.Gridbug extends window.Enemy
         else
             @direction = @playerXYDirection(4)
             @stepsLeft = @steps
+    died: () ->
+        @game.player.addScore(2)
 
 class window.Boss1 extends window.Gridbug
     constructor: (game, location) ->
         super(game, location, 10, sigil = "X")
+        @hits = 10
 
     calculateNextStep: () ->
         for dir in [0..7] by 2
@@ -64,20 +73,53 @@ class window.Boss1 extends window.Gridbug
             new Projectile(@game, firstLocation, xyDir, this, "red", 20)
         super()
 
+    struckBy: (entity) ->
+        @hits -= 1
+        if (entity != @game.player && @hits > 0)
+            return
+        super(entity)
+    died: () ->
+        @game.player.addScore(20)
+
 class window.ElvenArcher extends window.Enemy
     constructor: (game, location) -> 
       super(game, location, "E", "blue", 200)
+      @hits = 4
+
+    fire: () ->
+        dir = @playerXYDirection(8)
+        firstLocation = @location.addDir(dir)
+        new Projectile(@game, firstLocation, dir, this, "cyan", 30)
+        @location
 
     nextLocation: () ->
-        if Util.oneIn(20)
-            @towardsPlayer()
-        else if Util.oneIn(4)
-            dir = @playerXYDirection(8)
-            firstLocation = @location.addDir(dir)
-            new Projectile(@game, firstLocation, dir, this, "cyan")
-            @location
+        if @playerDistance() > 20
+            if Util.oneIn(2)
+                @towardsPlayer()
+            else if Util.oneIn(3)
+                @fire()
+            else
+                @randomDirection()
+        else if @playerDistance() < 10
+            if Util.oneIn(2)
+                @awayFromPlayer()
+            else if Util.oneIn(5)
+                @randomDirection()
+            else 
+                @fire()
         else
-            @location
+            if Util.oneIn(5)
+                @fire()
+            else
+                @randomDirection()
+    died: () ->
+        @game.player.addScore(5)
+
+    struckBy: (entity) ->
+        @hits -= 1
+        if (entity != @game.player && @hits > 0)
+            return
+        super(entity)
 
 class window.MinorDemon extends window.Enemy
     constructor: (game, location) ->
@@ -85,8 +127,35 @@ class window.MinorDemon extends window.Enemy
 
     nextLocation: () ->
         if Util.oneIn(3)
-            @location.addDir(Util.rand8Dir())
+            @randomDirection()
         else
             @towardsPlayer()
+
+
+class window.Citizen extends window.Enemy
+    constructor: (game, location) ->
+        loop
+            loc = game.map.randomLocation()
+            break if Util.distance(loc, game.player.location) > 20
+        super(game, loc, "@", "cyan", 100)
+
+    nextLocation: () ->
+        if Util.oneIn(3)
+            @randomDirection()
+        else
+            @location
+    died: () ->
+        @game.player.addScore(10)
+
+    struckBy: (entity) ->
+        if (entity == @game.player)
+            @dead = true
+            return
+        console.log "citizen struck by a #{entity.constructor.name}"
+        if (entity instanceof Projectile || entity instanceof Particle)
+            if (entity.owner == @game.player)
+                @game.player.destroy()
+                @game.player.destroyedBy = this.constructor.name
+
 
 

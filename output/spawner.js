@@ -52,9 +52,37 @@
       return this.game.player.score;
     };
 
+    Chooser.prototype.next = function() {
+      return this;
+    };
+
     return Chooser;
 
   })();
+
+  window.One = (function(_super) {
+    __extends(One, _super);
+
+    function One(game, type) {
+      this.game = game;
+      this.type = type;
+    }
+
+    One.prototype.finished = function() {
+      return false;
+    };
+
+    One.prototype.spawn = function() {
+      if (this.called != null) {
+        return;
+      }
+      this.create(this.type);
+      return this.called = true;
+    };
+
+    return One;
+
+  })(window.Chooser);
 
   window.Level1 = (function(_super) {
     __extends(Level1, _super);
@@ -64,11 +92,15 @@
     }
 
     Level1.prototype.monsterType = function() {
-      return MinorDemon;
+      if (Util.oneIn(3)) {
+        return Citizen;
+      } else {
+        return MinorDemon;
+      }
     };
 
     Level1.prototype.finished = function() {
-      return this.score() > 10;
+      return this.score() > 20;
     };
 
     Level1.prototype.next = function() {
@@ -87,16 +119,17 @@
     }
 
     Level2.prototype.monsterType = function() {
-      var type;
       if (Util.oneIn(2)) {
-        return type = MinorDemon;
+        return MinorDemon;
+      } else if (Util.oneIn(3)) {
+        return Citizen;
       } else {
-        return type = Gridbug;
+        return Gridbug;
       }
     };
 
     Level2.prototype.finished = function() {
-      return this.score() > 20;
+      return this.score() > 50;
     };
 
     Level2.prototype.next = function() {
@@ -115,18 +148,19 @@
     }
 
     Level3.prototype.monsterType = function() {
-      var type;
       if (Util.oneIn(10)) {
-        return type = ElvenArcher;
+        return ElvenArcher;
       } else if (Util.oneIn(3)) {
-        return type = Gridbug;
+        return Gridbug;
+      } else if (Util.oneIn(5)) {
+        return Citizen;
       } else {
-        return type = MinorDemon;
+        return MinorDemon;
       }
     };
 
     Level3.prototype.finished = function() {
-      return this.score() > 30;
+      return this.score() > 100;
     };
 
     Level3.prototype.next = function() {
@@ -184,6 +218,8 @@
     Level5.prototype.monsterType = function() {
       if (Util.oneIn(3)) {
         return ElvenArcher;
+      } else if (Util.oneIn(5)) {
+        return Citizen;
       }
     };
 

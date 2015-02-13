@@ -9,6 +9,7 @@
 
     function Player(game, location) {
       Player.__super__.constructor.call(this, game, location, "@", "white", 100);
+      this.weapons = [window.Dart, window.FireBall, window.MagicMissile, window.SmokeTrail];
       this.changeWeapon();
       this.score = 0;
       this.shotsFired = 0;
@@ -16,6 +17,14 @@
       window.addEventListener("keydown", this);
       window.addEventListener("keyup", this);
     }
+
+    Player.prototype.struckBy = function(entity) {
+      if (entity instanceof Citizen) {
+        return entity.struckBy(this);
+      } else {
+        return Player.__super__.struckBy.call(this, entity);
+      }
+    };
 
     Player.prototype.handleEvent = function(e) {
       if (e.type === "keydown") {
@@ -44,11 +53,9 @@
     };
 
     Player.prototype.changeWeapon = function() {
-      if (this.weapon instanceof Pistol) {
-        this.weapon = new GrenadeLauncher(this);
-      } else {
-        this.weapon = new Pistol(this);
-      }
+      var type;
+      type = Util.rotate(this.weapons);
+      this.weapon = new type(this);
       return this.game.drawScore();
     };
 

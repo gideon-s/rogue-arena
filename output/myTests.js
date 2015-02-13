@@ -59,6 +59,17 @@
     return _results;
   });
 
+  test("Util.rotate works", function() {
+    var f;
+    f = [1, 2, 3];
+    equal(1, Util.rotate(f));
+    deepEqual(f, [2, 3, 1]);
+    equal(2, Util.rotate(f));
+    deepEqual(f, [3, 1, 2]);
+    equal(3, Util.rotate(f));
+    return deepEqual(f, [1, 2, 3]);
+  });
+
   test("pickRandom Returns items from list", function() {
     var index, listOfThings, result, t, thing, _i, _j, _len, _results;
     listOfThings = ['head', 'right arm', 'left arm', 'chest', 'groin', 'right leg', 'left leg'];

@@ -2,12 +2,19 @@ class window.Player extends window.Actor
 
     constructor: (game, location) ->
         super(game, location, "@", "white", 100)
+        @weapons = [window.Dart, window.FireBall, window.MagicMissile, window.SmokeTrail]
         @changeWeapon()
         @score = 0
         @shotsFired = 0
         @lastCode = {}
         window.addEventListener "keydown", this
         window.addEventListener "keyup", this
+
+    struckBy: (entity) ->
+        if entity instanceof Citizen
+            entity.struckBy this
+        else
+            super(entity)
 
     handleEvent: (e) ->
         if e.type == "keydown"
@@ -28,10 +35,8 @@ class window.Player extends window.Actor
         @weapon.fire(dirIndex)
 
     changeWeapon: () ->
-        if @weapon instanceof Pistol
-            @weapon = new GrenadeLauncher(this)
-        else
-            @weapon = new Pistol(this)
+        type = Util.rotate(@weapons)
+        @weapon = new type(this)
         @game.drawScore()
         
     addScore: (amount = 1) ->

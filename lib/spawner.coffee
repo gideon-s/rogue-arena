@@ -1,6 +1,7 @@
 class window.Spawner 
   
   constructor: (@game) ->
+    #@current = new One(@game, Citizen)
     @current = new Level1(@game)
 
   spawn: () ->
@@ -20,30 +21,45 @@ class window.Chooser
             @game.actors.push new type(@game, @game.map.randomEdgeLocation())
     spawn: () -> @create(@monsterType())
     score: () -> @game.player.score
+    next: () -> this
+
+class window.One extends window.Chooser # for testing purposes
+    constructor: (@game, @type) ->
+    finished: () -> false
+    spawn:() ->
+        if @called? 
+            return 
+        @create @type
+        @called = true
 
 class window.Level1 extends window.Chooser
-  monsterType: () -> MinorDemon
-  finished: () -> @score() > 10
+  monsterType: () -> 
+    if Util.oneIn(3) then Citizen else MinorDemon
+  finished: () -> @score() > 20
   next: () -> new Level2(@game)
 
 class window.Level2 extends window.Chooser
   monsterType: () ->
     if Util.oneIn(2)
-      type = MinorDemon
+      MinorDemon
+    else if Util.oneIn(3)
+      Citizen
     else
-      type = Gridbug
-  finished: () -> @score() > 20
+      Gridbug
+  finished: () -> @score() > 50
   next: () -> new Level3(@game)
 
 class window.Level3 extends window.Chooser
   monsterType: () ->
     if Util.oneIn(10)
-      type = ElvenArcher
+      ElvenArcher
     else if Util.oneIn(3)
-      type = Gridbug
+      Gridbug
+    else if Util.oneIn(5)
+      Citizen
     else 
-      type = MinorDemon
-  finished: () -> @score() > 30
+      MinorDemon
+  finished: () -> @score() > 100
   next: () -> new Level4(@game)
 
 class window.Level4 extends window.Chooser
@@ -63,6 +79,8 @@ class window.Level5 extends window.Chooser
     monsterType: () ->
         if Util.oneIn(3)
             ElvenArcher
+        else if Util.oneIn(5)
+            Citizen
     finished: () -> false
     next: () -> new Level5(@game)
 

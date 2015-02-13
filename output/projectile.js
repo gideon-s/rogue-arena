@@ -53,7 +53,6 @@
 
     Particle.prototype.act = function() {
       var nextLoc;
-      console.log(this.owner);
       this.color = this.colorizor.color();
       nextLoc = this.location.addDir(Util.rand8Dir());
       this.maxLife = this.maxLife - 1;
@@ -75,10 +74,10 @@
 
   })(window.Actor);
 
-  window.Grenade = (function(_super) {
-    __extends(Grenade, _super);
+  window.Ball = (function(_super) {
+    __extends(Ball, _super);
 
-    function Grenade(game, location, direction, owner, color, maxLife) {
+    function Ball(game, location, direction, owner, color, maxLife) {
       if (color == null) {
         color = "white";
       }
@@ -86,15 +85,15 @@
         maxLife = 30;
       }
       this.colorizor = new Colorizor();
-      Grenade.__super__.constructor.call(this, game, location, direction, owner, color, maxLife);
+      Ball.__super__.constructor.call(this, game, location, direction, owner, color, maxLife);
     }
 
-    Grenade.prototype.act = function() {
+    Ball.prototype.act = function() {
       this.color = this.colorizor.color();
-      return Grenade.__super__.act.call(this);
+      return Ball.__super__.act.call(this);
     };
 
-    Grenade.prototype.died = function() {
+    Ball.prototype.died = function() {
       var dir, firstLocation, xyDir, _i, _results;
       _results = [];
       for (dir = _i = 0; _i <= 7; dir = ++_i) {
@@ -105,27 +104,27 @@
       return _results;
     };
 
-    Grenade.prototype.emit = function(firstLocation, xyDir) {
-      return new GrenadeParticle(this.game, firstLocation, xyDir, this.owner, "red", 4);
+    Ball.prototype.emit = function(firstLocation, xyDir) {
+      return new BallParticle(this.game, firstLocation, xyDir, this.owner, "red", 2);
     };
 
-    return Grenade;
+    return Ball;
 
   })(window.Projectile);
 
-  window.GrenadeParticle = (function(_super) {
-    __extends(GrenadeParticle, _super);
+  window.BallParticle = (function(_super) {
+    __extends(BallParticle, _super);
 
-    function GrenadeParticle() {
-      return GrenadeParticle.__super__.constructor.apply(this, arguments);
+    function BallParticle() {
+      return BallParticle.__super__.constructor.apply(this, arguments);
     }
 
-    GrenadeParticle.prototype.emit = function(firstLocation, xyDir) {
-      return new Particle(this.game, firstLocation, this.owner, Util.rand(6));
+    BallParticle.prototype.emit = function(firstLocation, xyDir) {
+      return new Particle(this.game, firstLocation, this.owner, Util.rand(20));
     };
 
-    return GrenadeParticle;
+    return BallParticle;
 
-  })(window.Grenade);
+  })(window.Ball);
 
 }).call(this);

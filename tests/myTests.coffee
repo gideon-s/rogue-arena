@@ -31,6 +31,15 @@ test "Random Returns integer", () ->
         actual = if parseFloat(number) is parseInt(number) then true else false
         equal actual, true
 
+test "Util.rotate works", () ->
+    f = [1, 2, 3]
+    equal 1, Util.rotate(f)
+    deepEqual f, [2, 3, 1]
+    equal 2, Util.rotate(f)
+    deepEqual f, [3, 1, 2]
+    equal 3, Util.rotate(f)
+    deepEqual f, [1, 2, 3]
+
 
 test "pickRandom Returns items from list", ()  ->
     listOfThings = ['head','right arm','left arm','chest','groin','right leg', 'left leg']

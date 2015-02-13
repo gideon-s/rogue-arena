@@ -1,4 +1,10 @@
 class window.Util
+
+    @rotate: (a) ->
+        newLast = a.shift()
+        a.push newLast
+        newLast
+
     @rand: (highNumber) -> 
         return Math.floor(ROT.RNG.getUniform() * highNumber)
 
@@ -22,3 +28,8 @@ class window.Util
 
     @xyDir: (dirIndex, topology = 8) ->
         ROT.DIRS[topology][dirIndex]
+
+    @distance: (l1, l2) ->
+        xDiff = l1.x - l2.x
+        yDiff = l1.y - l2.y
+        Math.floor Math.sqrt((xDiff * xDiff) + (yDiff * yDiff))

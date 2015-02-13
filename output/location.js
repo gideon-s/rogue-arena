@@ -23,6 +23,10 @@
       return new Location(this.game, [this.x + dir[0], this.y + dir[1]]);
     };
 
+    Location.prototype.subtractDir = function(dir) {
+      return new Location(this.game, [this.x - dir[0], this.y - dir[1]]);
+    };
+
     Location.prototype.pair = function() {
       return [this.x, this.y];
     };

@@ -3,6 +3,13 @@
   window.Util = (function() {
     function Util() {}
 
+    Util.rotate = function(a) {
+      var newLast;
+      newLast = a.shift();
+      a.push(newLast);
+      return newLast;
+    };
+
     Util.rand = function(highNumber) {
       return Math.floor(ROT.RNG.getUniform() * highNumber);
     };
@@ -36,6 +43,13 @@
         topology = 8;
       }
       return ROT.DIRS[topology][dirIndex];
+    };
+
+    Util.distance = function(l1, l2) {
+      var xDiff, yDiff;
+      xDiff = l1.x - l2.x;
+      yDiff = l1.y - l2.y;
+      return Math.floor(Math.sqrt((xDiff * xDiff) + (yDiff * yDiff)));
     };
 
     return Util;
