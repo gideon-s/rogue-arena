@@ -188,12 +188,13 @@
         for (dir = _i = 0; _i <= 15; dir = ++_i) {
           this.create(Gridbug);
         }
-        return this.create(Boss1);
+        this.create(Boss1);
+        return this.bossSpawned = 1;
       }
     };
 
     Level4.prototype.finished = function() {
-      return this.called > 10 && !_.find(this.game.actors, (function(_this) {
+      return (this.bossSpawned != null) && !_.find(this.game.actors, (function(_this) {
         return function(actor) {
           return actor instanceof Boss1;
         };

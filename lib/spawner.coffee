@@ -71,8 +71,9 @@ class window.Level4 extends window.Chooser
             for dir in [0..15]
                 @create(Gridbug)
             @create(Boss1)
+            @bossSpawned = 1
     finished: () ->
-        @called > 25 and not _.find(@game.actors, (actor) => actor instanceof Boss1)
+        @bossSpawned? and not _.find(@game.actors, (actor) => actor instanceof Boss1)
     next: () -> new Level5(@game)
 
 class window.Level5 extends window.Chooser
