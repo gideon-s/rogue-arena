@@ -158,4 +158,46 @@ class window.Citizen extends window.Enemy
                 @game.player.destroyedBy = this.constructor.name
 
 
+class window.Firebat extends window.Enemy
+    constructor: (game, location) ->
+        @moves = []
+        super(game, location, "w", "orange", 150)
+        
+    nextLocation: () ->
+        if @moves.length != 0  
+            @nextFlap()
+        else
+            if Util.oneIn(2)
+                @fire()
+            else if Util.oneIn(4)
+                @towardsPlayer()
+            else if Util.oneIn(6)
+                @startFlapAround()
+            else
+                @randomDirection()
 
+    startFlapAround:() ->
+        @moves = [1,1,3,3,5,5,7,7]
+        if Util.oneIn(2)
+            @moves.reverse()
+        @nextFlap()
+
+    nextFlap:() ->
+        dir = @moves.shift()
+        @location.addDir(Util.xyDir(dir))
+            
+    fire: () ->
+        firstLocation = @randomDirection()
+        smoke = new Particle(@game, firstLocation, this, Util.rand(5))
+        smoke.speed = 300
+        @location
+
+class window.OrcCharger extends window.Enemy
+    constructor: (game, location) ->
+        super(game, location, "o", "white", 100)
+
+    nextLocation: () ->
+        if @playerDistance() < 20
+            @towardsPlayer()
+        else
+            @randomDirection()

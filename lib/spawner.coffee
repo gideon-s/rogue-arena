@@ -1,7 +1,7 @@
 class window.Spawner 
   
   constructor: (@game) ->
-    #@current = new One(@game, Citizen)
+    #@current = new One(@game, Firebat)
     @current = new Level1(@game)
 
   spawn: () ->
@@ -45,15 +45,15 @@ class window.Level2 extends window.Chooser
     else if Util.oneIn(3)
       Citizen
     else
-      Gridbug
+      OrcCharger
   finished: () -> @score() > 50
   next: () -> new Level3(@game)
 
 class window.Level3 extends window.Chooser
   monsterType: () ->
-    if Util.oneIn(10)
-      ElvenArcher
-    else if Util.oneIn(3)
+    if Util.oneIn(3)
+      Firebat
+    else if Util.oneIn(4)
       Gridbug
     else if Util.oneIn(5)
       Citizen
@@ -67,8 +67,8 @@ class window.Level4 extends window.Chooser
         if not @called?
             @called = 0
         @called = @called + 1
-        if @called == 10
-            for dir in [0..20]
+        if @called == 20
+            for dir in [0..15]
                 @create(Gridbug)
             @create(Boss1)
     finished: () ->
