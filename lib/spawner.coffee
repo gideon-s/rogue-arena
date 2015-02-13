@@ -34,7 +34,12 @@ class window.One extends window.Chooser # for testing purposes
 
 class window.Level1 extends window.Chooser
   monsterType: () -> 
-    if Util.oneIn(3) then Citizen else MinorDemon
+    if Util.oneIn(3) 
+      Citizen 
+    else if Util.oneIn(3) 
+      Firebat
+    else 
+      MinorDemon
   finished: () -> @score() > 20
   next: () -> new Level2(@game)
 

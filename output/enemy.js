@@ -273,7 +273,7 @@
 
     function Firebat(game, location) {
       this.moves = [];
-      Firebat.__super__.constructor.call(this, game, location, "w", "orange", 150);
+      Firebat.__super__.constructor.call(this, game, location, "w", "orange", 50);
     }
 
     Firebat.prototype.nextLocation = function() {

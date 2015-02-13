@@ -94,6 +94,8 @@
     Level1.prototype.monsterType = function() {
       if (Util.oneIn(3)) {
         return Citizen;
+      } else if (Util.oneIn(3)) {
+        return Firebat;
       } else {
         return MinorDemon;
       }

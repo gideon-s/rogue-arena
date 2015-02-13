@@ -161,7 +161,7 @@ class window.Citizen extends window.Enemy
 class window.Firebat extends window.Enemy
     constructor: (game, location) ->
         @moves = []
-        super(game, location, "w", "orange", 150)
+        super(game, location, "w", "orange", 50)
         
     nextLocation: () ->
         if @moves.length != 0  
