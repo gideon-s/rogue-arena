@@ -113,7 +113,7 @@ class window.ElvenArcher extends window.Enemy
             else
                 @randomDirection()
     died: () ->
-        @game.player.addScore(5)
+        @game.player.addScore(10)
 
     struckBy: (entity) ->
         @hits -= 1
@@ -191,6 +191,8 @@ class window.Firebat extends window.Enemy
         smoke = new Particle(@game, firstLocation, this, Util.rand(5))
         smoke.speed = 300
         @location
+    died: () ->
+        @game.player.addScore(5)
 
 class window.OrcCharger extends window.Enemy
     constructor: (game, location) ->
@@ -201,3 +203,5 @@ class window.OrcCharger extends window.Enemy
             @towardsPlayer()
         else
             @randomDirection()
+    died: () ->
+        @game.player.addScore(3)
