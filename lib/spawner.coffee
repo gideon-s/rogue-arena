@@ -1,8 +1,8 @@
 class window.Spawner 
   
   constructor: (@game) ->
-    #@current = new One(@game, Firebat)
-    @current = new Level1(@game)
+    @current = new One(@game, Firebat)
+    #@current = new Level1(@game)
 
   spawn: () ->
     @level().spawn()

@@ -2,7 +2,7 @@ class window.Player extends window.Actor
 
     constructor: (game, location) ->
         super(game, location, "@", "white", 100)
-        @weapons = [window.Dart, window.FireBall, window.SmokeTrail, window.MagicMissile]
+        @weapons = [window.Dart, window.FireBall, window.SmokeTrail, window.MagicMissile, window.KnifeWall]
         @changeWeapon()
         @changeShiftWeapon()
         @score = 0

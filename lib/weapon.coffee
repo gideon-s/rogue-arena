@@ -36,3 +36,11 @@ class window.SmokeTrail extends window.Weapon
         projectile = new Particle(@owner.game, nextLocation, @owner, @maxLife = 15, "purple", purples)
         projectile.speed = 1000
         projectile
+
+
+class window.KnifeWall extends window.Weapon
+    constructor: (owner) -> super(150, owner)
+    shoot: (xyDir) ->
+            nextLocation = @owner.location.addDir(xyDir)
+            for dir in [0..7] 
+                new Projectile(@owner.game, nextLocation, Util.xyDir(dir), @owner, "red", 3)
