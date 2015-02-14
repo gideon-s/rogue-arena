@@ -120,7 +120,7 @@
     }
 
     BallParticle.prototype.emit = function(firstLocation, xyDir) {
-      return new Particle(this.game, firstLocation, this.owner, Util.rand(20));
+      return new Particle(this.game, firstLocation, this.owner, Util.rand(5));
     };
 
     return BallParticle;

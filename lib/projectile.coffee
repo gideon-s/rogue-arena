@@ -55,5 +55,5 @@ class window.Ball extends window.Projectile
 
 class window.BallParticle extends window.Ball 
     emit: (firstLocation, xyDir) ->
-        new Particle(@game, firstLocation, @owner, Util.rand(20))
+        new Particle(@game, firstLocation, @owner, Util.rand(5))
 

@@ -190,7 +190,7 @@
         for (dir = _i = 0; _i <= 15; dir = ++_i) {
           this.create(Gridbug);
         }
-        this.create(Boss1);
+        this.create(GridBoss);
         return this.bossSpawned = 1;
       }
     };
@@ -198,7 +198,7 @@
     Level4.prototype.finished = function() {
       return (this.bossSpawned != null) && !_.find(this.game.actors, (function(_this) {
         return function(actor) {
-          return actor instanceof Boss1;
+          return actor instanceof GridBoss;
         };
       })(this));
     };
@@ -227,14 +227,52 @@
     };
 
     Level5.prototype.finished = function() {
-      return false;
+      return this.score() > 400;
     };
 
     Level5.prototype.next = function() {
-      return new Level5(this.game);
+      return new Level6(this.game);
     };
 
     return Level5;
+
+  })(window.Chooser);
+
+  window.Level6 = (function(_super) {
+    __extends(Level6, _super);
+
+    function Level6() {
+      return Level6.__super__.constructor.apply(this, arguments);
+    }
+
+    Level6.prototype.spawn = function() {
+      var dir, _i;
+      if (this.called == null) {
+        this.called = 0;
+      }
+      this.called = this.called + 1;
+      if (this.called === 2) {
+        for (dir = _i = 0; _i <= 30; dir = ++_i) {
+          this.create(OrcCharger);
+        }
+        this.create(OrcBoss);
+        return this.bossSpawned = 1;
+      }
+    };
+
+    Level6.prototype.finished = function() {
+      return (this.bossSpawned != null) && !_.find(this.game.actors, (function(_this) {
+        return function(actor) {
+          return actor instanceof OrcBoss;
+        };
+      })(this));
+    };
+
+    Level6.prototype.next = function() {
+      return new Level6(this.game);
+    };
+
+    return Level6;
 
   })(window.Chooser);
 

@@ -56,10 +56,18 @@
     };
 
     Actor.prototype.struckBy = function(entity) {
-      this.dead = true;
-      this.destroyedBy = entity.constructor.name;
-      entity.destroy();
-      return entity.destroyedBy = this.constructor.name;
+      if ((this.hits != null) && this.hits > 0) {
+        this.hits -= 1;
+      } else {
+        this.dead = true;
+        this.destroyedBy = entity.constructor.name;
+      }
+      if ((entity.hits != null) && entity.hits > 0) {
+        return entity.hits -= 1;
+      } else {
+        entity.destroy();
+        return entity.destroyedBy = this.constructor.name;
+      }
     };
 
     return Actor;

@@ -61,7 +61,7 @@ class window.Gridbug extends window.Enemy
     died: () ->
         @game.player.addScore(2)
 
-class window.Boss1 extends window.Gridbug
+class window.GridBoss extends window.Gridbug
     constructor: (game, location) ->
         super(game, location, 10, sigil = "X")
         @hits = 10
@@ -151,7 +151,6 @@ class window.Citizen extends window.Enemy
         if (entity == @game.player)
             @dead = true
             return
-        console.log "citizen struck by a #{entity.constructor.name}"
         if (entity instanceof Projectile || entity instanceof Particle)
             if (entity.owner == @game.player)
                 @game.player.destroy()
@@ -205,3 +204,18 @@ class window.OrcCharger extends window.Enemy
             @randomDirection()
     died: () ->
         @game.player.addScore(3)
+
+class window.OrcBoss extends window.OrcCharger
+    constructor: (game, location) ->
+        @hits = 30
+        super(game, location)
+        @color = "cyan"
+        @sigil = "O"
+    died: () ->
+        @game.player.addScore(50)
+
+    struckBy: (entity) ->
+        @hits -= 1
+        if (entity != @game.player && @hits > 0)
+            return
+        super(entity)

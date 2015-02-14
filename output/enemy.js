@@ -112,38 +112,38 @@
 
   })(window.Enemy);
 
-  window.Boss1 = (function(_super) {
-    __extends(Boss1, _super);
+  window.GridBoss = (function(_super) {
+    __extends(GridBoss, _super);
 
-    function Boss1(game, location) {
+    function GridBoss(game, location) {
       var sigil;
-      Boss1.__super__.constructor.call(this, game, location, 10, sigil = "X");
+      GridBoss.__super__.constructor.call(this, game, location, 10, sigil = "X");
       this.hits = 10;
     }
 
-    Boss1.prototype.calculateNextStep = function() {
+    GridBoss.prototype.calculateNextStep = function() {
       var dir, firstLocation, xyDir, _i;
       for (dir = _i = 0; _i <= 7; dir = _i += 2) {
         xyDir = Util.xyDir(dir);
         firstLocation = this.location.addDir(xyDir);
         new Projectile(this.game, firstLocation, xyDir, this, "red", 20);
       }
-      return Boss1.__super__.calculateNextStep.call(this);
+      return GridBoss.__super__.calculateNextStep.call(this);
     };
 
-    Boss1.prototype.struckBy = function(entity) {
+    GridBoss.prototype.struckBy = function(entity) {
       this.hits -= 1;
       if (entity !== this.game.player && this.hits > 0) {
         return;
       }
-      return Boss1.__super__.struckBy.call(this, entity);
+      return GridBoss.__super__.struckBy.call(this, entity);
     };
 
-    Boss1.prototype.died = function() {
+    GridBoss.prototype.died = function() {
       return this.game.player.addScore(20);
     };
 
-    return Boss1;
+    return GridBoss;
 
   })(window.Gridbug);
 
@@ -255,7 +255,6 @@
         this.dead = true;
         return;
       }
-      console.log("citizen struck by a " + entity.constructor.name);
       if (entity instanceof Projectile || entity instanceof Particle) {
         if (entity.owner === this.game.player) {
           this.game.player.destroy();
@@ -344,5 +343,31 @@
     return OrcCharger;
 
   })(window.Enemy);
+
+  window.OrcBoss = (function(_super) {
+    __extends(OrcBoss, _super);
+
+    function OrcBoss(game, location) {
+      this.hits = 30;
+      OrcBoss.__super__.constructor.call(this, game, location);
+      this.color = "cyan";
+      this.sigil = "O";
+    }
+
+    OrcBoss.prototype.died = function() {
+      return this.game.player.addScore(50);
+    };
+
+    OrcBoss.prototype.struckBy = function(entity) {
+      this.hits -= 1;
+      if (entity !== this.game.player && this.hits > 0) {
+        return;
+      }
+      return OrcBoss.__super__.struckBy.call(this, entity);
+    };
+
+    return OrcBoss;
+
+  })(window.OrcCharger);
 
 }).call(this);

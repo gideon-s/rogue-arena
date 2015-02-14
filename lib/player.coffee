@@ -2,8 +2,9 @@ class window.Player extends window.Actor
 
     constructor: (game, location) ->
         super(game, location, "@", "white", 100)
-        @weapons = [window.Dart, window.FireBall, window.MagicMissile, window.SmokeTrail]
+        @weapons = [window.Dart, window.FireBall, window.SmokeTrail, window.MagicMissile]
         @changeWeapon()
+        @changeShiftWeapon()
         @score = 0
         @shotsFired = 0
         @lastCode = {}
@@ -17,8 +18,14 @@ class window.Player extends window.Actor
             super(entity)
 
     handleEvent: (e) ->
+        if e.shiftKey
+            @lastCode["shift"] = 1
+        else
+            @lastCode["shift"] = 0
         if e.type == "keydown"
-            if e.keyCode == ROT.VK_U
+            if e.keyCode == ROT.VK_U && e.shiftKey
+                @changeShiftWeapon()
+            else if e.keyCode == ROT.VK_U
                 @changeWeapon()
             else
                 @lastCode[e.keyCode] = 1
@@ -31,12 +38,20 @@ class window.Player extends window.Actor
         return  unless @game.map.isOpen(nextLocation)
         @location = nextLocation
 
-    fire: (dirIndex) ->
-        @weapon.fire(dirIndex)
+    fire: (dirIndex, shiftPressed) ->
+        if shiftPressed
+            @shiftWeapon.fire(dirIndex)
+        else
+            @weapon.fire(dirIndex)
 
     changeWeapon: () ->
         type = Util.rotate(@weapons)
         @weapon = new type(this)
+        @game.drawScore()
+
+    changeShiftWeapon: () ->
+        type = Util.rotate(@weapons)
+        @shiftWeapon = new type(this)
         @game.drawScore()
         
     addScore: (amount = 1) ->
@@ -74,7 +89,7 @@ class window.Player extends window.Actor
         if moveDirection?
             @moveDir(moveDirection)
         if fireDirection?
-            @fire(fireDirection)
+            @fire(fireDirection, @keysPressed("shift"))
         if @keysPressed(ROT.VK_P)
             @addScore 10
             @game.spawner.current = @game.spawner.current.next()

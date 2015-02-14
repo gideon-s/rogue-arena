@@ -61,7 +61,7 @@
     __extends(MagicMissile, _super);
 
     function MagicMissile(owner) {
-      MagicMissile.__super__.constructor.call(this, 1000, owner);
+      MagicMissile.__super__.constructor.call(this, 400, owner);
     }
 
     MagicMissile.prototype.shoot = function(xyDir) {
@@ -87,8 +87,8 @@
       var nextLocation, projectile, purples;
       nextLocation = this.owner.location.addDir(xyDir);
       purples = new Colorizor(["purple", "blue", "MediumAquamarine"]);
-      projectile = new Particle(this.owner.game, nextLocation, this.owner, this.maxLife = 30, "purple", purples);
-      projectile.speed = 500;
+      projectile = new Particle(this.owner.game, nextLocation, this.owner, this.maxLife = 15, "purple", purples);
+      projectile.speed = 1000;
       return projectile;
     };
 

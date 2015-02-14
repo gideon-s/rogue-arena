@@ -21,7 +21,7 @@ class window.FireBall extends window.Weapon
         new Ball(@owner.game, nextLocation, xyDir, @owner, "red", 20)
 
 class window.MagicMissile extends window.Weapon
-    constructor: (owner) -> super(1000, owner)
+    constructor: (owner) -> super(400, owner)
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
         projectile = new Projectile(@owner.game, nextLocation, xyDir, @owner, "white", 100)
@@ -33,6 +33,6 @@ class window.SmokeTrail extends window.Weapon
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
         purples = new Colorizor(["purple", "blue", "MediumAquamarine"])
-        projectile = new Particle(@owner.game, nextLocation, @owner, @maxLife = 30, "purple", purples)
-        projectile.speed = 500
+        projectile = new Particle(@owner.game, nextLocation, @owner, @maxLife = 15, "purple", purples)
+        projectile.speed = 1000
         projectile

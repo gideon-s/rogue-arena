@@ -39,10 +39,16 @@ class window.Actor
 		@dead = true
 
 	struckBy: (entity) ->
-		@dead = true
-		@destroyedBy = entity.constructor.name
-		entity.destroy()
-		entity.destroyedBy = this.constructor.name
+		if @hits? && @hits > 0
+			@hits -= 1
+		else
+			@dead = true
+			@destroyedBy = entity.constructor.name
+		if entity.hits? && entity.hits > 0
+			entity.hits -= 1
+		else
+			entity.destroy()
+			entity.destroyedBy = this.constructor.name
 
 
 class window.Colorizor 

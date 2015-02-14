@@ -75,10 +75,10 @@ class window.Level4 extends window.Chooser
         if @called == 20
             for dir in [0..15]
                 @create(Gridbug)
-            @create(Boss1)
+            @create(GridBoss)
             @bossSpawned = 1
     finished: () ->
-        @bossSpawned? and not _.find(@game.actors, (actor) => actor instanceof Boss1)
+        @bossSpawned? and not _.find(@game.actors, (actor) => actor instanceof GridBoss)
     next: () -> new Level5(@game)
 
 class window.Level5 extends window.Chooser
@@ -87,8 +87,22 @@ class window.Level5 extends window.Chooser
             ElvenArcher
         else if Util.oneIn(5)
             Citizen
-    finished: () -> false
-    next: () -> new Level5(@game)
+    finished: () -> @score() > 400
+    next: () -> new Level6(@game)
+
+class window.Level6 extends window.Chooser
+    spawn: () ->
+        if not @called?
+            @called = 0
+        @called = @called + 1
+        if @called == 2
+            for dir in [0..30]
+                @create(OrcCharger)
+            @create(OrcBoss)
+            @bossSpawned = 1
+    finished: () ->
+        @bossSpawned? and not _.find(@game.actors, (actor) => actor instanceof OrcBoss)
+    next: () -> new Level6(@game)
 
     
 

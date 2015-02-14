@@ -42,7 +42,7 @@
 
     Game.prototype.drawScore = function() {
       if (this.player != null) {
-        return this.display.drawText(5, 0, "Score: " + this.player.score + " " + (this.spawner.level().constructor.name) + " Weapon: " + this.player.weapon.constructor.name + "............................");
+        return this.display.drawText(5, 0, "Score: " + this.player.score + " " + (this.spawner.level().constructor.name) + " Weapon: " + this.player.weapon.constructor.name + " ShiftWeapon: " + this.player.shiftWeapon.constructor.name + " ............................");
       }
     };
 
