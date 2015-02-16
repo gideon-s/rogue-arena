@@ -9,7 +9,7 @@
 
     function Player(game, location) {
       Player.__super__.constructor.call(this, game, location, "@", "white", 100);
-      this.weapons = [window.Dart, window.FireBall, window.FireWall, window.SmokeTrail, window.MagicMissile, window.KnifeWall];
+      this.weapons = [window.Dart, window.ControlledBlink, window.FireBall, window.FireWall, window.SmokeTrail, window.MagicMissile, window.KnifeWall];
       this.changeWeapon();
       this.changeShiftWeapon();
       this.score = 0;

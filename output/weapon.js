@@ -23,6 +23,34 @@
 
   })();
 
+  window.ControlledBlink = (function(_super) {
+    __extends(ControlledBlink, _super);
+
+    function ControlledBlink(owner) {
+      ControlledBlink.__super__.constructor.call(this, 500, owner);
+    }
+
+    ControlledBlink.prototype.shoot = function(xyDir) {
+      var destination;
+      destination = this.owner.location;
+      _.times(8, (function(_this) {
+        return function(n) {
+          return destination = destination.addDir(xyDir);
+        };
+      })(this));
+      console.log("blink from " + this.owner.location + " to " + destination);
+      if (!this.owner.game.map.isOpen(destination)) {
+        return;
+      }
+      this.owner.location = destination;
+      this.owner.game.enters(this.owner);
+      return this.owner.draw();
+    };
+
+    return ControlledBlink;
+
+  })(window.Weapon);
+
   window.Dart = (function(_super) {
     __extends(Dart, _super);
 

@@ -8,6 +8,18 @@ class window.Weapon
         @shoot(xyDir)
         @lastFired = Util.millis()
 
+class window.ControlledBlink extends window.Weapon
+    constructor:(owner) -> super(500, owner)
+    shoot: (xyDir) ->
+        destination = @owner.location
+        _.times 8, (n) =>
+            destination = destination.addDir xyDir
+        console.log "blink from #{@owner.location} to #{destination}"
+        return  unless @owner.game.map.isOpen(destination)
+        @owner.location = destination
+        @owner.game.enters @owner
+        @owner.draw() 
+
 class window.Dart extends window.Weapon
     constructor: (owner) -> super(150, owner)
     shoot: (xyDir) ->
