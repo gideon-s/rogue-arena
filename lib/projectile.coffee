@@ -34,6 +34,17 @@ class window.Particle extends window.Actor
             return
         super(entity)
 
+
+class window.UnmovingCloud extends window.Actor
+    constructor: (game,location, @maxLife = 20, @colorizor = new Colorizor()) ->
+        super(game, location, "#", @colorizor.color(), 1000)
+
+    act: () ->
+        @color = @colorizor.color()
+        @maxLife = @maxLife - 1
+        if @maxLife < 0
+            @dead = true
+
 class window.Ball extends window.Projectile
     
     constructor: (game, location, direction, owner, color = "white", maxLife = 30) ->

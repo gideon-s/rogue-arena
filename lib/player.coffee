@@ -2,7 +2,7 @@ class window.Player extends window.Actor
 
     constructor: (game, location) ->
         super(game, location, "@", "white", 100)
-        @weapons = [window.Dart, window.FireBall, window.SmokeTrail, window.MagicMissile, window.KnifeWall]
+        @weapons = [window.Dart, window.FireBall, window.FireWall, window.SmokeTrail, window.MagicMissile, window.KnifeWall]
         @changeWeapon()
         @changeShiftWeapon()
         @score = 0
@@ -31,7 +31,7 @@ class window.Player extends window.Actor
                 @lastCode[e.keyCode] = 1
         else if e.type == "keyup"
             @lastCode[e.keyCode] = 0
-
+        
     moveDir: (dirIndex) ->
         dir = ROT.DIRS[8][dirIndex]
         nextLocation = @location.addDir(dir)

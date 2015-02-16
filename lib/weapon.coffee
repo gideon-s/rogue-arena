@@ -20,6 +20,21 @@ class window.FireBall extends window.Weapon
         nextLocation = @owner.location.addDir(xyDir)
         new Ball(@owner.game, nextLocation, xyDir, @owner, "red", 20)
 
+class window.FireWall extends window.Weapon
+    constructor: (owner) -> super(2500, owner)
+    makeCloud: (loc) ->
+        new UnmovingCloud(@owner.game, loc)
+
+    shoot: (xyDir) ->
+        main = @owner.location
+        _.times 3, (n) => 
+            main = main.addDir(xyDir)
+        leftTurn = [xyDir[1], -xyDir[0]]
+        origin = main.addDir(leftTurn)
+        _.times 3, (n) =>
+            @makeCloud(origin)
+            origin = origin.subtractDir(leftTurn)
+
 class window.MagicMissile extends window.Weapon
     constructor: (owner) -> super(400, owner)
     shoot: (xyDir) ->
