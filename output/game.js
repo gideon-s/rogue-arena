@@ -41,8 +41,19 @@
     };
 
     Game.prototype.drawScore = function() {
+      var text;
       if (this.player != null) {
-        return this.display.drawText(5, 0, "Score: " + this.player.score + " " + (this.spawner.level().constructor.name) + " Weapon: " + this.player.weapon.constructor.name + " ShiftWeapon: " + this.player.shiftWeapon.constructor.name + " ............................");
+        text = "Score: " + this.player.score;
+        text += " " + (this.spawner.level().constructor.name);
+        text += " MainWeapon " + this.player.weapons['main'].constructor.name;
+        _.each(this.player.modKeys, (function(_this) {
+          return function(mod) {
+            var weapon;
+            weapon = _this.player.weapons[mod];
+            return text += " " + mod + "Weapon: " + (weapon != null ? weapon.constructor.name : 'none');
+          };
+        })(this));
+        return this.display.drawText(5, 0, text);
       }
     };
 

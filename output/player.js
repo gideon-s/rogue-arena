@@ -9,12 +9,13 @@
 
     function Player(game, location) {
       Player.__super__.constructor.call(this, game, location, "@", "white", 100);
-      this.weapons = [window.Dart, window.RescueRay, window.ControlledBlink, window.FireBall, window.FireWall, window.SmokeTrail, window.MagicMissile, window.KnifeWall];
+      this.lastCode = {};
+      this.allowedWeapons = [window.Dart, window.RescueRay, window.ControlledBlink, window.FireBall, window.FireWall, window.SmokeTrail, window.MagicMissile, window.KnifeWall];
+      this.weapons = {};
+      this.modKeys = ['shiftKey', 'altKey', 'ctrlKey', 'metaKey'];
       this.changeWeapon();
-      this.changeShiftWeapon();
       this.score = 0;
       this.shotsFired = 0;
-      this.lastCode = {};
       window.addEventListener("keydown", this);
       window.addEventListener("keyup", this);
     }
@@ -27,16 +28,21 @@
       }
     };
 
-    Player.prototype.handleEvent = function(e) {
-      if (e.shiftKey) {
-        this.lastCode["shift"] = 1;
+    Player.prototype.handleModifier = function(e, mod) {
+      if (e[mod]) {
+        return this.lastCode[mod] = 1;
       } else {
-        this.lastCode["shift"] = 0;
+        return this.lastCode[mod] = 0;
       }
+    };
+
+    Player.prototype.handleEvent = function(e) {
+      this.handleModifier(e, 'shiftKey');
+      this.handleModifier(e, 'ctrlKey');
+      this.handleModifier(e, 'altKey');
+      this.handleModifier(e, 'metaKey');
       if (e.type === "keydown") {
-        if (e.keyCode === ROT.VK_U && e.shiftKey) {
-          return this.changeShiftWeapon();
-        } else if (e.keyCode === ROT.VK_U) {
+        if (e.keyCode === ROT.VK_U) {
           return this.changeWeapon();
         } else {
           return this.lastCode[e.keyCode] = 1;
@@ -56,26 +62,53 @@
       return this.location = nextLocation;
     };
 
-    Player.prototype.fire = function(dirIndex, shiftPressed) {
-      if (shiftPressed) {
-        return this.shiftWeapon.fire(dirIndex);
-      } else {
-        return this.weapon.fire(dirIndex);
+    Player.prototype.fire = function(dirIndex) {
+      var fired;
+      fired = false;
+      _.each(this.modKeys, (function(_this) {
+        return function(mod) {
+          var weapon;
+          if (_this.keysPressed(mod)) {
+            weapon = _this.weapons[mod];
+            if (weapon != null) {
+              weapon.fire(dirIndex);
+              return fired = true;
+            }
+          }
+        };
+      })(this));
+      if (!fired) {
+        return this.weapons['main'].fire(dirIndex);
       }
     };
 
     Player.prototype.changeWeapon = function() {
-      var type;
-      type = Util.rotate(this.weapons);
-      this.weapon = new type(this);
-      return this.game.drawScore();
-    };
-
-    Player.prototype.changeShiftWeapon = function() {
-      var type;
-      type = Util.rotate(this.weapons);
-      this.shiftWeapon = new type(this);
-      return this.game.drawScore();
+      var changed, doChange;
+      changed = false;
+      doChange = (function(_this) {
+        return function(mod) {
+          var type;
+          console.log("doChange " + mod);
+          type = Util.rotate(_this.allowedWeapons);
+          _this.weapons[mod] = new type(_this);
+          console.log(_this.weapons);
+          _this.game.drawScore();
+          return changed = true;
+        };
+      })(this);
+      console.log(this.modKeys);
+      console.log(this.lastCode);
+      _.each(this.modKeys, (function(_this) {
+        return function(mod) {
+          console.log(mod);
+          if (_this.keysPressed(mod)) {
+            return doChange(mod);
+          }
+        };
+      })(this));
+      if (!changed) {
+        return doChange('main');
+      }
     };
 
     Player.prototype.addScore = function(amount) {
@@ -138,7 +171,7 @@
         this.moveDir(moveDirection);
       }
       if (fireDirection != null) {
-        this.fire(fireDirection, this.keysPressed("shift"));
+        this.fire(fireDirection);
       }
       if (this.keysPressed(ROT.VK_P)) {
         this.addScore(10);

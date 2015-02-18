@@ -118,7 +118,7 @@
     __extends(RescueRay, _super);
 
     function RescueRay(owner) {
-      RescueRay.__super__.constructor.call(this, 1000, owner);
+      RescueRay.__super__.constructor.call(this, 300, owner);
     }
 
     RescueRay.prototype.shoot = function(xyDir) {

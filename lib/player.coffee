@@ -2,12 +2,14 @@ class window.Player extends window.Actor
 
     constructor: (game, location) ->
         super(game, location, "@", "white", 100)
-        @weapons = [window.Dart, window.RescueRay, window.ControlledBlink, window.FireBall, window.FireWall, window.SmokeTrail, window.MagicMissile, window.KnifeWall]
+        @lastCode = {}
+        @allowedWeapons = [window.Dart, window.RescueRay, window.ControlledBlink, window.FireBall, window.FireWall, window.SmokeTrail, window.MagicMissile, window.KnifeWall]
+        @weapons = {}
+        @modKeys = ['shiftKey', 'altKey', 'ctrlKey', 'metaKey']
+
         @changeWeapon()
-        @changeShiftWeapon()
         @score = 0
         @shotsFired = 0
-        @lastCode = {}
         window.addEventListener "keydown", this
         window.addEventListener "keyup", this
 
@@ -17,15 +19,19 @@ class window.Player extends window.Actor
         else
             super(entity)
 
-    handleEvent: (e) ->
-        if e.shiftKey
-            @lastCode["shift"] = 1
+    handleModifier: (e, mod) ->
+        if e[mod]
+            @lastCode[mod] = 1
         else
-            @lastCode["shift"] = 0
+            @lastCode[mod] = 0
+
+    handleEvent: (e) ->
+        @handleModifier e, 'shiftKey'
+        @handleModifier e, 'ctrlKey'
+        @handleModifier e, 'altKey'
+        @handleModifier e, 'metaKey'
         if e.type == "keydown"
-            if e.keyCode == ROT.VK_U && e.shiftKey
-                @changeShiftWeapon()
-            else if e.keyCode == ROT.VK_U
+            if e.keyCode == ROT.VK_U
                 @changeWeapon()
             else
                 @lastCode[e.keyCode] = 1
@@ -38,21 +44,30 @@ class window.Player extends window.Actor
         return  unless @game.map.isOpen(nextLocation)
         @location = nextLocation
 
-    fire: (dirIndex, shiftPressed) ->
-        if shiftPressed
-            @shiftWeapon.fire(dirIndex)
-        else
-            @weapon.fire(dirIndex)
+    fire: (dirIndex) ->
+        fired = false
+        _.each @modKeys, (mod) =>
+            if @keysPressed(mod)
+                weapon = @weapons[mod]
+                if weapon? 
+                    weapon.fire(dirIndex)
+                    fired = true
+        unless fired
+            @weapons['main'].fire(dirIndex)
 
     changeWeapon: () ->
-        type = Util.rotate(@weapons)
-        @weapon = new type(this)
-        @game.drawScore()
+        changed = false
+        doChange = (mod) =>
+            type = Util.rotate(@allowedWeapons)
+            @weapons[mod] = new type(this)
+            @game.drawScore()
+            changed = true
+        _.each @modKeys, (mod) =>
+            if @keysPressed(mod)
+                doChange(mod)
 
-    changeShiftWeapon: () ->
-        type = Util.rotate(@weapons)
-        @shiftWeapon = new type(this)
-        @game.drawScore()
+        unless changed
+            doChange('main')
         
     addScore: (amount = 1) ->
         @score += amount
@@ -89,7 +104,7 @@ class window.Player extends window.Actor
         if moveDirection?
             @moveDir(moveDirection)
         if fireDirection?
-            @fire(fireDirection, @keysPressed("shift"))
+            @fire(fireDirection)
         if @keysPressed(ROT.VK_P)
             @addScore 10
             @game.spawner.current = @game.spawner.current.next()

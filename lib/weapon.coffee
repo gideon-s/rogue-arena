@@ -47,7 +47,7 @@ class window.FireWall extends window.Weapon
             spot = spot.subtractDir(leftTurn)
 
 class window.RescueRay extends window.Weapon
-    constructor: (owner) -> super(1000, owner)
+    constructor: (owner) -> super(300, owner)
 
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)

@@ -28,7 +28,13 @@ class window.Game
 
   drawScore: () ->
     if @player?
-      @display.drawText(5, 0, "Score: #{@player.score} #{@spawner.level().constructor.name} Weapon: #{@player.weapon.constructor.name} ShiftWeapon: #{@player.shiftWeapon.constructor.name} ............................")
+      text = "Score: #{@player.score}"
+      text += " #{@spawner.level().constructor.name}"
+      text += " MainWeapon #{@player.weapons['main'].constructor.name}"
+      _.each @player.modKeys, (mod) => 
+        weapon = @player.weapons[mod]
+        text += " #{mod}Weapon: #{if weapon? then weapon.constructor.name else 'none'}"
+      @display.drawText(5, 0, text)
 
   enters: (entity) ->
     _.each entity.location.otherActors(entity), (actor) =>
