@@ -70,7 +70,7 @@
     };
 
     Location.prototype.drawOn = function(display, character, color) {
-      return display.draw(this.x, this.y, character, color);
+      return display.draw(this.x, this.y + 1, character, color);
     };
 
     Location.prototype.setOn = function(map, symbol) {

@@ -34,7 +34,7 @@ class window.Location
 	nextStepToDestination: (destination, map, topology=8) -> @pathToDestination(destination, map, topology)[0]
 		
 	drawOn: (display, character, color) ->
-		display.draw @x, @y, character, color
+		display.draw @x, @y + 1, character, color
 
 	setOn: (map, symbol) ->
 		if not Array.isArray(map)

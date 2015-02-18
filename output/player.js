@@ -88,19 +88,14 @@
       doChange = (function(_this) {
         return function(mod) {
           var type;
-          console.log("doChange " + mod);
           type = Util.rotate(_this.allowedWeapons);
           _this.weapons[mod] = new type(_this);
-          console.log(_this.weapons);
           _this.game.drawScore();
           return changed = true;
         };
       })(this);
-      console.log(this.modKeys);
-      console.log(this.lastCode);
       _.each(this.modKeys, (function(_this) {
         return function(mod) {
-          console.log(mod);
           if (_this.keysPressed(mod)) {
             return doChange(mod);
           }

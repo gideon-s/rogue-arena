@@ -8,7 +8,7 @@
     function Game() {
       this.height = 60;
       this.width = 140;
-      this.map = new Map(this, this.width, this.height);
+      this.map = new Map(this, this.width, this.height - 1);
       this.actors = [];
       this.display = new ROT.Display({
         width: this.width,
@@ -53,7 +53,7 @@
             return text += " " + mod + "Weapon: " + (weapon != null ? weapon.constructor.name : 'none');
           };
         })(this));
-        return this.display.drawText(5, 0, text);
+        return this.display.drawText(5, 0, text + ".........................", 1000);
       }
     };
 
