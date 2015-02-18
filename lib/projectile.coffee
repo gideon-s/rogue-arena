@@ -16,6 +16,8 @@ class window.Projectile extends window.Actor
             return
         super(entity)
 
+class window.RescueProjectile extends window.Projectile
+
 class window.Particle extends window.Actor
     constructor: (game,location, @owner, @maxLife = Util.rand(20), color = "yellow", @colorizor = new Colorizor()) ->
         super(game, location, "#", color, 20)
@@ -62,7 +64,7 @@ class window.Ball extends window.Projectile
             @emit(firstLocation, xyDir)
 
     emit: (firstLocation, xyDir) ->
-        new BallParticle(@game, firstLocation, xyDir, @owner, "red", 2)
+        new BallParticle(@game, firstLocation, xyDir, @owner, "red", Util.rand(3) + 1)
 
 class window.BallParticle extends window.Ball 
     emit: (firstLocation, xyDir) ->

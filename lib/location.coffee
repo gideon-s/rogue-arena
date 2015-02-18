@@ -12,11 +12,11 @@ class window.Location
 		@x=pair[0]
 		@y=pair[1]
 
-	addDir: (dir) ->
-		new Location @game, [@x+dir[0],@y+dir[1]]
+	addDir: (dir, amount = 1) ->
+		new Location @game, [@x + (amount * dir[0]), @y + (amount * dir[1])]
 
-	subtractDir: (dir) ->
-		new Location @game, [@x-dir[0],@y-dir[1]]
+	subtractDir: (dir, amount = 1) ->
+		@addDir(dir, amount * -1)
 
 	pair: () ->
 		[@x,@y]

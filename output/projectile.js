@@ -38,6 +38,17 @@
 
   })(window.Actor);
 
+  window.RescueProjectile = (function(_super) {
+    __extends(RescueProjectile, _super);
+
+    function RescueProjectile() {
+      return RescueProjectile.__super__.constructor.apply(this, arguments);
+    }
+
+    return RescueProjectile;
+
+  })(window.Projectile);
+
   window.Particle = (function(_super) {
     __extends(Particle, _super);
 
@@ -126,7 +137,7 @@
     };
 
     Ball.prototype.emit = function(firstLocation, xyDir) {
-      return new BallParticle(this.game, firstLocation, xyDir, this.owner, "red", 2);
+      return new BallParticle(this.game, firstLocation, xyDir, this.owner, "red", Util.rand(3) + 1);
     };
 
     return Ball;

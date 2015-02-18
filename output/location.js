@@ -19,12 +19,18 @@
       this.y = pair[1];
     }
 
-    Location.prototype.addDir = function(dir) {
-      return new Location(this.game, [this.x + dir[0], this.y + dir[1]]);
+    Location.prototype.addDir = function(dir, amount) {
+      if (amount == null) {
+        amount = 1;
+      }
+      return new Location(this.game, [this.x + (amount * dir[0]), this.y + (amount * dir[1])]);
     };
 
-    Location.prototype.subtractDir = function(dir) {
-      return new Location(this.game, [this.x - dir[0], this.y - dir[1]]);
+    Location.prototype.subtractDir = function(dir, amount) {
+      if (amount == null) {
+        amount = 1;
+      }
+      return this.addDir(dir, amount * -1);
     };
 
     Location.prototype.pair = function() {

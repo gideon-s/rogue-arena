@@ -151,6 +151,9 @@ class window.Citizen extends window.Enemy
         if (entity == @game.player)
             @dead = true
             return
+        if (entity instanceof RescueProjectile)
+            @dead = true
+            return
         if (entity instanceof Projectile || entity instanceof Particle)
             if (entity.owner == @game.player)
                 @game.player.destroy()

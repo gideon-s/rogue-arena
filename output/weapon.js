@@ -27,7 +27,7 @@
     __extends(ControlledBlink, _super);
 
     function ControlledBlink(owner) {
-      ControlledBlink.__super__.constructor.call(this, 500, owner);
+      ControlledBlink.__super__.constructor.call(this, 200, owner);
     }
 
     ControlledBlink.prototype.shoot = function(xyDir) {
@@ -97,24 +97,39 @@
     };
 
     FireWall.prototype.shoot = function(xyDir) {
-      var leftTurn, main, origin;
+      var leftTurn, main, spot;
       main = this.owner.location;
-      _.times(3, (function(_this) {
-        return function(n) {
-          return main = main.addDir(xyDir);
-        };
-      })(this));
+      main = main.addDir(xyDir, 5);
       leftTurn = [xyDir[1], -xyDir[0]];
-      origin = main.addDir(leftTurn);
-      return _.times(3, (function(_this) {
+      spot = main.addDir(leftTurn, 5);
+      return _.times(10, (function(_this) {
         return function(n) {
-          _this.makeCloud(origin);
-          return origin = origin.subtractDir(leftTurn);
+          _this.makeCloud(spot);
+          return spot = spot.subtractDir(leftTurn);
         };
       })(this));
     };
 
     return FireWall;
+
+  })(window.Weapon);
+
+  window.RescueRay = (function(_super) {
+    __extends(RescueRay, _super);
+
+    function RescueRay(owner) {
+      RescueRay.__super__.constructor.call(this, 1000, owner);
+    }
+
+    RescueRay.prototype.shoot = function(xyDir) {
+      var nextLocation, projectile;
+      nextLocation = this.owner.location.addDir(xyDir);
+      projectile = new RescueProjectile(this.owner.game, nextLocation, xyDir, this.owner, "white", 100);
+      projectile.speed = 2;
+      return projectile;
+    };
+
+    return RescueRay;
 
   })(window.Weapon);
 

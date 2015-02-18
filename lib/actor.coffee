@@ -39,6 +39,8 @@ class window.Actor
 		@dead = true
 
 	struckBy: (entity) ->
+		if entity instanceof RescueProjectile
+			return
 		if @hits? && @hits > 0
 			@hits -= 1
 		else
@@ -49,7 +51,6 @@ class window.Actor
 		else
 			entity.destroy()
 			entity.destroyedBy = this.constructor.name
-
 
 class window.Colorizor 
     constructor: (@colors = ["yellow", "red", "orange"]) ->

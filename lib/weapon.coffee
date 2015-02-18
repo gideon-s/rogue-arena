@@ -9,7 +9,7 @@ class window.Weapon
         @lastFired = Util.millis()
 
 class window.ControlledBlink extends window.Weapon
-    constructor:(owner) -> super(500, owner)
+    constructor:(owner) -> super(200, owner)
     shoot: (xyDir) ->
         destination = @owner.location
         _.times 8, (n) =>
@@ -39,13 +39,22 @@ class window.FireWall extends window.Weapon
 
     shoot: (xyDir) ->
         main = @owner.location
-        _.times 3, (n) => 
-            main = main.addDir(xyDir)
+        main = main.addDir(xyDir, 5)
         leftTurn = [xyDir[1], -xyDir[0]]
-        origin = main.addDir(leftTurn)
-        _.times 3, (n) =>
-            @makeCloud(origin)
-            origin = origin.subtractDir(leftTurn)
+        spot = main.addDir(leftTurn, 5)
+        _.times 10, (n) =>
+            @makeCloud(spot)
+            spot = spot.subtractDir(leftTurn)
+
+class window.RescueRay extends window.Weapon
+    constructor: (owner) -> super(1000, owner)
+
+    shoot: (xyDir) ->
+        nextLocation = @owner.location.addDir(xyDir)
+        projectile = new RescueProjectile(@owner.game, nextLocation, xyDir, @owner, "white", 100)
+        projectile.speed = 2
+        projectile
+
 
 class window.MagicMissile extends window.Weapon
     constructor: (owner) -> super(400, owner)

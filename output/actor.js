@@ -56,6 +56,9 @@
     };
 
     Actor.prototype.struckBy = function(entity) {
+      if (entity instanceof RescueProjectile) {
+        return;
+      }
       if ((this.hits != null) && this.hits > 0) {
         this.hits -= 1;
       } else {

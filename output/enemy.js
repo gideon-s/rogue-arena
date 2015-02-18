@@ -255,6 +255,10 @@
         this.dead = true;
         return;
       }
+      if (entity instanceof RescueProjectile) {
+        this.dead = true;
+        return;
+      }
       if (entity instanceof Projectile || entity instanceof Particle) {
         if (entity.owner === this.game.player) {
           this.game.player.destroy();
