@@ -76,9 +76,7 @@
     };
 
     Game.prototype.handleEvent = function(e) {
-      var code;
-      code = e.keyCode;
-      if (code === 27) {
+      if (e.keyCode === ROT.VK_ESCAPE) {
         location.reload();
       }
     };

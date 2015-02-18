@@ -6,9 +6,9 @@ class window.Game
   constructor: ->
     @height = 60
     @width = 140
-    @map = new Map(this,@width,@height - 1)
+    @map = new Map(this, @width, @height - 1)
     @actors = []
-    @display = new ROT.Display width: @width,height: @height,spacing: 1.1,fontSize: 12
+    @display = new ROT.Display width: @width, height: @height, spacing: 1.1, fontSize: 12
     document.body.appendChild @display.getContainer()
     @drawWholeMap()
     @player = new Player(this, new Location(this, [70, 30]))
@@ -41,7 +41,7 @@ class window.Game
         actor.struckBy(entity)
 
   died: (entity) ->
-    @actors = _.without @actors,entity
+    @actors = _.without @actors, entity
     entity.died()
 
   gameOver:() ->
@@ -49,9 +49,7 @@ class window.Game
     window.addEventListener "keydown", this 
       
   handleEvent: (e) ->
-    code = e.keyCode
-    # 27=escape
-    if code is 27
+    if e.keyCode is ROT.VK_ESCAPE
       location.reload()
       return
 

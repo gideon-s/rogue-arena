@@ -31,31 +31,31 @@ class window.Location
 		path.shift()
 		return path
 
-	nextStepToDestination: (destination, map, topology=8) -> @pathToDestination(destination, map, topology)[0]
+	nextStepToDestination: (destination, map, topology = 8) -> @pathToDestination(destination, map, topology)[0]
 		
 	drawOn: (display, character, color) ->
-		display.draw @x, @y + 1, character, color
+		display.draw @x, @y + 1, character, color # the plus one allows the score status line to stay pristine
 
 	setOn: (map, symbol) ->
-		if not Array.isArray(map)
+		unless Array.isArray(map)
 			throw new Error("Map is not an array")
 		map[@x][@y] = symbol
 
 	on: (map) ->
-		if not Array.isArray(map)
+		unless Array.isArray(map)
 			throw new Error("Map is not an array")
-		if not map[@x]?
+		unless map[@x]?
 			return undefined
 		map[@x][@y]
 
 	otherActors: (entity) ->
-		_.filter(@game.actors, (actor)=>(actor != entity) && (_.isEqual actor.location, this))
+		_.filter(@game.actors, (actor) => (actor != entity) && (_.isEqual actor.location, this))
 
 	hasOtherActor: (theActor, other) ->
-		_.find @otherActors(theActor),(actor) => actor == other
+		_.find @otherActors(theActor), (actor) => actor == other
 
 	hasOtherActorType: (theActor, type) ->
-		_.find @otherActors(theActor),(actor) => actor instanceof type
+		_.find @otherActors(theActor), (actor) => actor instanceof type
 
 	toString: ->
 		"[ #{@x}, #{@y} ]"

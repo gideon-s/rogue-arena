@@ -45,7 +45,7 @@ class window.Gridbug extends window.Enemy
     nextLocation: () ->
         if @stepsLeft == 0
             @calculateNextStep()
-        @stepsLeft = @stepsLeft - 1
+        @stepsLeft -= 1
         if @direction?
             @location.addDir(@direction)
         else

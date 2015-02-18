@@ -16,7 +16,7 @@ class window.Projectile extends window.Actor
             return
         super(entity)
 
-class window.RescueProjectile extends window.Projectile
+class window.RescueProjectile extends window.Projectile # needed for other things to identify these
 
 class window.Particle extends window.Actor
     constructor: (game,location, @owner, @maxLife = Util.rand(20), color = "yellow", @colorizor = new Colorizor()) ->

@@ -86,7 +86,7 @@
       if (this.stepsLeft === 0) {
         this.calculateNextStep();
       }
-      this.stepsLeft = this.stepsLeft - 1;
+      this.stepsLeft -= 1;
       if (this.direction != null) {
         return this.location.addDir(this.direction);
       } else {

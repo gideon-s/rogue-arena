@@ -38,11 +38,11 @@ class window.Map
     edgeLocations: () ->
         result = []
         for x in [0...@width]
-            @addIfOpen(result,[x, 0])  
-            @addIfOpen(result,[x, (@height - 1)])   
-        for y in [1...(@height-1)]
-            @addIfOpen(result,[0, y])  
-            @addIfOpen(result,[(@width - 1), y])  
+            @addIfOpen(result, [x, 0])  
+            @addIfOpen(result, [x, (@height - 1)])   
+        for y in [1...(@height - 1)]
+            @addIfOpen(result, [0, y])  
+            @addIfOpen(result, [(@width - 1), y])  
         result     
 
 
