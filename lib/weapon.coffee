@@ -11,11 +11,8 @@ class window.Weapon
 class window.ControlledBlink extends window.Weapon
     constructor:(owner) -> super(200, owner)
     shoot: (xyDir) ->
-        destination = @owner.location
-        _.times 8, (n) =>
-            destination = destination.addDir xyDir
-        console.log "blink from #{@owner.location} to #{destination}"
-        return  unless @owner.game.map.isOpen(destination)
+        destination = @owner.location.addDir xyDir, 8
+        return unless @owner.game.map.isOpen(destination)
         @owner.location = destination
         @owner.game.enters @owner
         @owner.draw() 
@@ -51,9 +48,7 @@ class window.RescueRay extends window.Weapon
 
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
-        projectile = new RescueProjectile(@owner.game, nextLocation, xyDir, @owner, "white", 100)
-        projectile.speed = 2
-        projectile
+        new RescueProjectile(@owner.game, nextLocation, xyDir, @owner, "white", 7)
 
 
 class window.MagicMissile extends window.Weapon

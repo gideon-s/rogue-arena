@@ -32,13 +32,7 @@
 
     ControlledBlink.prototype.shoot = function(xyDir) {
       var destination;
-      destination = this.owner.location;
-      _.times(8, (function(_this) {
-        return function(n) {
-          return destination = destination.addDir(xyDir);
-        };
-      })(this));
-      console.log("blink from " + this.owner.location + " to " + destination);
+      destination = this.owner.location.addDir(xyDir, 8);
       if (!this.owner.game.map.isOpen(destination)) {
         return;
       }
@@ -122,11 +116,9 @@
     }
 
     RescueRay.prototype.shoot = function(xyDir) {
-      var nextLocation, projectile;
+      var nextLocation;
       nextLocation = this.owner.location.addDir(xyDir);
-      projectile = new RescueProjectile(this.owner.game, nextLocation, xyDir, this.owner, "white", 100);
-      projectile.speed = 2;
-      return projectile;
+      return new RescueProjectile(this.owner.game, nextLocation, xyDir, this.owner, "white", 7);
     };
 
     return RescueRay;
