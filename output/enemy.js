@@ -6,20 +6,16 @@
   window.Enemy = (function(_super) {
     __extends(Enemy, _super);
 
-    function Enemy() {
-      return Enemy.__super__.constructor.apply(this, arguments);
+    function Enemy(game, location, sigil, color, speed) {
+      Enemy.__super__.constructor.call(this, game, location, sigil, color, speed);
     }
 
     Enemy.prototype.act = function() {
       var next;
       next = this.nextLocation();
-      if (!this.game.map.isOpen(next)) {
-        return;
+      if ((next != null) && !next.hasOtherActorType(this, Enemy)) {
+        return this.moveTo(next);
       }
-      if (next.hasOtherActorType(this, Enemy)) {
-        return;
-      }
-      return this.location = next;
     };
 
     Enemy.prototype.nextLocation = function() {
@@ -27,7 +23,10 @@
     };
 
     Enemy.prototype.died = function() {
-      return this.game.player.addScore();
+      Enemy.__super__.died.apply(this, arguments);
+      if (!this.game.player.dead) {
+        return this.game.player.addScore();
+      }
     };
 
     Enemy.prototype.towardsPlayer = function() {
@@ -89,8 +88,6 @@
       this.stepsLeft -= 1;
       if (this.direction != null) {
         return this.location.addDir(this.direction);
-      } else {
-        return this.location;
       }
     };
 
@@ -105,6 +102,7 @@
     };
 
     Gridbug.prototype.died = function() {
+      Gridbug.__super__.died.apply(this, arguments);
       return this.game.player.addScore(2);
     };
 
@@ -142,6 +140,7 @@
     };
 
     GridBoss.prototype.died = function() {
+      GridBoss.__super__.died.apply(this, arguments);
       return this.game.player.addScore(20);
     };
 
@@ -162,9 +161,8 @@
       dir = this.playerXYDirection(8);
       firstLocation = this.location.addDir(dir);
       if (firstLocation.isOpen()) {
-        new Projectile(this.game, firstLocation, dir, this, "cyan", 30);
+        return new Projectile(this.game, firstLocation, dir, this, "cyan", 30);
       }
-      return this.location;
     };
 
     ElvenArcher.prototype.nextLocation = function() {
@@ -194,6 +192,7 @@
     };
 
     ElvenArcher.prototype.died = function() {
+      ElvenArcher.__super__.died.apply(this, arguments);
       return this.game.player.addScore(10);
     };
 
@@ -245,12 +244,11 @@
     Citizen.prototype.nextLocation = function() {
       if (Util.oneIn(3)) {
         return this.randomDirection();
-      } else {
-        return this.location;
       }
     };
 
     Citizen.prototype.died = function() {
+      Citizen.__super__.died.apply(this, arguments);
       return this.game.player.addScore(10);
     };
 
@@ -320,10 +318,11 @@
         smoke = new Particle(this.game, smokeLocation, this, Util.rand(5));
         smoke.speed = 300;
       }
-      return this.location;
+      return void 0;
     };
 
     Firebat.prototype.died = function() {
+      Firebat.__super__.died.apply(this, arguments);
       return this.game.player.addScore(5);
     };
 
@@ -347,6 +346,7 @@
     };
 
     OrcCharger.prototype.died = function() {
+      OrcCharger.__super__.died.apply(this, arguments);
       return this.game.player.addScore(3);
     };
 
@@ -365,6 +365,7 @@
     }
 
     OrcBoss.prototype.died = function() {
+      OrcBoss.__super__.died.apply(this, arguments);
       return this.game.player.addScore(50);
     };
 

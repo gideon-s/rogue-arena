@@ -3,11 +3,11 @@ class window.Actor
 		@dead = false
 		@game.actors.push this
 		@age = 0
+		@location.arriving this
 		@action()
 
 	action: () ->
 		@age++
-		@game.drawMapLocation @location
 		if @game.player? && @game.player.dead
 			@game.gameOver()	
 		if @dead 
@@ -17,25 +17,12 @@ class window.Actor
 		if @dead 
 			@game.died(this)
 			return
-		if not @game.map.isOpen(@location)
-			@game.died(this)
-			@dead = true
-			return
-		@game.enters this
-		@draw()	
 		@game.nextAction (=> @action()), @speed
 		
 	
-	died:() ->
-		#no op
-
-	act:() ->
-		#no op
-
-	draw: () -> @game.draw @location, @sigil, @color
-
-	destroy: () ->
-		@dead = true
+	died:() -> @location.leaving(this)
+	act:() -> #no op
+	destroy: () -> @dead = true
 
 	struckBy: (entity) ->
 		if entity instanceof RescueProjectile
@@ -51,6 +38,15 @@ class window.Actor
 			entity.destroy()
 			entity.destroyedBy = this.constructor.name
 
+	moveTo: (newLocation) ->
+		unless newLocation? 
+			return
+		newLocation.struckBy(this)
+		if newLocation.isOpen()
+			@location.leaving this
+			@location = newLocation
+			@location.arriving this
+			
 class window.Colorizor 
     constructor: (@colors = ["yellow", "red", "orange"]) ->
     color: () ->

@@ -11,8 +11,9 @@ class window.Location
             throw new Error("Second in pair is not a number: #{pair[1]}")
         @x=pair[0]
         @y=pair[1]
+        @contents = []
 
-    isOpen: () -> true
+    isOpen: () -> @contents.length == 0
     pair: () -> [@x,@y]
 
     subtractDir: (dir, amount = 1) -> @addDir(dir, amount * -1)
@@ -31,11 +32,18 @@ class window.Location
 
     nextStepToDestination: (destination, map, topology = 8) -> @pathToDestination(destination, map, topology)[0]
         
-    drawOn: (display, character, color) ->
+    drawOn: (display) ->
+        if @contents.length == 0
+            character = " "
+            color = "black"
+        else
+            top = _.last(@contents)
+            character = top.sigil
+            color = top.color
         display.draw @x, @y + 1, character, color # the plus one allows the score status line to stay pristine
 
     otherActors: (entity) ->
-        _.filter(@game.actors, (actor) => (actor != entity) && (_.isEqual actor.location, this))
+        _.filter(@contents, (actor) => (actor != entity))
 
     hasOtherActor: (theActor, other) ->
         _.find @otherActors(theActor), (actor) => actor == other
@@ -43,11 +51,25 @@ class window.Location
     hasOtherActorType: (theActor, type) ->
         _.find @otherActors(theActor), (actor) => actor instanceof type
 
+    leaving: (entity) -> 
+        Util.removeFromArray(@contents, entity)
+        @game.draw(this)
+
+    arriving:(entity) -> 
+        @contents.push entity
+        @game.draw(this)
+
+    struckBy: (entity) ->
+        _.each @otherActors(entity), (actor) -> actor.struckBy(entity)
+
     toString: ->
         "[ #{@x}, #{@y} ]"
+
+
 
 class window.NoLocation 
     isOpen: () -> false
     hasOtherActor: (unused...) -> false
     hasOtherActorType: (unused...) -> false
+    struckBy: (unused...) -> 
 

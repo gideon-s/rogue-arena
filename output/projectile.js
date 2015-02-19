@@ -24,7 +24,7 @@
         this.dead = true;
         return;
       }
-      return this.location = nextLoc;
+      return this.moveTo(nextLoc);
     };
 
     Projectile.prototype.struckBy = function(entity) {
@@ -71,7 +71,7 @@
         this.dead = true;
         return;
       }
-      return this.location = nextLoc;
+      return this.moveTo(nextLoc);
     };
 
     Particle.prototype.struckBy = function(entity) {

@@ -52,6 +52,15 @@
       return Math.floor(Math.sqrt((xDiff * xDiff) + (yDiff * yDiff)));
     };
 
+    Util.removeFromArray = function(array, o) {
+      var index;
+      index = array.indexOf(o);
+      if (index < 0) {
+        throw new Error("" + o + " not found in array: " + array);
+      }
+      return array.splice(index, 1);
+    };
+
     return Util;
 
   })();

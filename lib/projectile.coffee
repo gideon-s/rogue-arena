@@ -9,7 +9,7 @@ class window.Projectile extends window.Actor
         if (nextLoc.hasOtherActor(this, @owner) or @maxLife < 0)
             @dead = true
             return
-        @location = nextLoc
+        @moveTo(nextLoc)
             
     struckBy: (entity) ->
         if entity == @owner 
@@ -29,7 +29,7 @@ class window.Particle extends window.Actor
         if (nextLoc.hasOtherActorType(this, Particle) or @maxLife < 0 or nextLoc.hasOtherActor(this, @owner))
             @dead = true
             return
-        @location = nextLoc
+        @moveTo(nextLoc)
             
     struckBy: (entity) ->
         if (entity instanceof Particle) or (entity == @owner)

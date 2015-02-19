@@ -33,3 +33,9 @@ class window.Util
         xDiff = l1.x - l2.x
         yDiff = l1.y - l2.y
         Math.floor Math.sqrt((xDiff * xDiff) + (yDiff * yDiff))
+
+    @removeFromArray: (array, o) ->
+        index = array.indexOf o
+        if index < 0
+            throw new Error("#{o} not found in array: #{array}")
+        array.splice(index, 1)

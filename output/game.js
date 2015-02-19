@@ -27,20 +27,16 @@
     Game.prototype.drawWholeMap = function() {
       return _.each(this.map.locations(), (function(_this) {
         return function(location) {
-          return _this.drawMapLocation(location);
+          return _this.draw(location);
         };
       })(this));
     };
 
-    Game.prototype.drawMapLocation = function(location) {
-      return this.draw(location, " ");
-    };
-
-    Game.prototype.draw = function(location, character, color) {
+    Game.prototype.draw = function(location) {
       if (location instanceof NoLocation) {
         throw new Error("not a real location?");
       }
-      return location.drawOn(this.display, character, color);
+      return location.drawOn(this.display);
     };
 
     Game.prototype.drawScore = function() {
@@ -61,14 +57,6 @@
           return this.display.drawText(this.height / 2, 5, "You have died.  Game Over. Score: " + this.player.score + " Killed By A: " + this.player.destroyedBy + " Press [ESC] to restart");
         }
       }
-    };
-
-    Game.prototype.enters = function(entity) {
-      return _.each(entity.location.otherActors(entity), (function(_this) {
-        return function(actor) {
-          return actor.struckBy(entity);
-        };
-      })(this));
     };
 
     Game.prototype.died = function(entity) {

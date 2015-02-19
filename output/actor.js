@@ -10,12 +10,12 @@
       this.dead = false;
       this.game.actors.push(this);
       this.age = 0;
+      this.location.arriving(this);
       this.action();
     }
 
     Actor.prototype.action = function() {
       this.age++;
-      this.game.drawMapLocation(this.location);
       if ((this.game.player != null) && this.game.player.dead) {
         this.game.gameOver();
       }
@@ -28,13 +28,6 @@
         this.game.died(this);
         return;
       }
-      if (!this.game.map.isOpen(this.location)) {
-        this.game.died(this);
-        this.dead = true;
-        return;
-      }
-      this.game.enters(this);
-      this.draw();
       return this.game.nextAction(((function(_this) {
         return function() {
           return _this.action();
@@ -42,13 +35,11 @@
       })(this)), this.speed);
     };
 
-    Actor.prototype.died = function() {};
+    Actor.prototype.died = function() {
+      return this.location.leaving(this);
+    };
 
     Actor.prototype.act = function() {};
-
-    Actor.prototype.draw = function() {
-      return this.game.draw(this.location, this.sigil, this.color);
-    };
 
     Actor.prototype.destroy = function() {
       return this.dead = true;
@@ -69,6 +60,18 @@
       } else {
         entity.destroy();
         return entity.destroyedBy = this.constructor.name;
+      }
+    };
+
+    Actor.prototype.moveTo = function(newLocation) {
+      if (newLocation == null) {
+        return;
+      }
+      newLocation.struckBy(this);
+      if (newLocation.isOpen()) {
+        this.location.leaving(this);
+        this.location = newLocation;
+        return this.location.arriving(this);
       }
     };
 

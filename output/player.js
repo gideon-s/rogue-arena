@@ -56,10 +56,7 @@
       var dir, nextLocation;
       dir = ROT.DIRS[8][dirIndex];
       nextLocation = this.location.addDir(dir);
-      if (!this.game.map.isOpen(nextLocation)) {
-        return;
-      }
-      return this.location = nextLocation;
+      return this.moveTo(nextLocation);
     };
 
     Player.prototype.fire = function(dirIndex) {

@@ -149,3 +149,18 @@ class window.TestClass
 test "Test class factory method works within a class", () ->
     TestClass.init()
     equal 7, TestClass.instance().number
+
+test "removeFromArray removes object from array", () ->
+    testArray = ["stuff", "things", "whatnot", "crap", "value"]
+    console.log testArray
+    Util.removeFromArray(testArray, "whatnot")
+    console.log testArray
+    resultArray = ["stuff", "things", "crap", "value"]
+    deepEqual resultArray, testArray
+    Util.removeFromArray(testArray, "stuff")
+    resultArray = ["things", "crap", "value"]
+    deepEqual resultArray, testArray
+    Util.removeFromArray(testArray, "value")
+    resultArray = ["things", "crap"]
+    deepEqual resultArray, testArray
+    

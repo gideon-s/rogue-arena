@@ -224,4 +224,20 @@
     return equal(7, TestClass.instance().number);
   });
 
+  test("removeFromArray removes object from array", function() {
+    var resultArray, testArray;
+    testArray = ["stuff", "things", "whatnot", "crap", "value"];
+    console.log(testArray);
+    Util.removeFromArray(testArray, "whatnot");
+    console.log(testArray);
+    resultArray = ["stuff", "things", "crap", "value"];
+    deepEqual(resultArray, testArray);
+    Util.removeFromArray(testArray, "stuff");
+    resultArray = ["things", "crap", "value"];
+    deepEqual(resultArray, testArray);
+    Util.removeFromArray(testArray, "value");
+    resultArray = ["things", "crap"];
+    return deepEqual(resultArray, testArray);
+  });
+
 }).call(this);

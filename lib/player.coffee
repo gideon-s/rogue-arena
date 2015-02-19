@@ -41,8 +41,7 @@ class window.Player extends window.Actor
     moveDir: (dirIndex) ->
         dir = ROT.DIRS[8][dirIndex]
         nextLocation = @location.addDir(dir)
-        return  unless @game.map.isOpen(nextLocation)
-        @location = nextLocation
+        @moveTo(nextLocation)
 
     fire: (dirIndex) ->
         fired = false

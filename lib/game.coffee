@@ -18,15 +18,12 @@ class window.Game
 
   drawWholeMap: ->
     _.each @map.locations(), (location) =>  
-      @drawMapLocation(location)
+      @draw(location)
 
-  drawMapLocation: (location) ->
-    @draw location, " "
-
-  draw: (location, character, color)  ->
+  draw: (location)  ->
     if location instanceof NoLocation
       throw new Error("not a real location?")
-    location.drawOn @display, character, color
+    location.drawOn @display
 
   drawScore: () ->
     if @player?
@@ -39,11 +36,6 @@ class window.Game
       @display.drawText(5, 0, text + ".........................", 1000)
       if @player.dead
             @display.drawText(@height/2, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");
-
-
-  enters: (entity) ->
-    _.each entity.location.otherActors(entity), (actor) =>
-        actor.struckBy(entity)
 
   died: (entity) ->
     @actors = _.without @actors, entity

@@ -20,10 +20,11 @@
       }
       this.x = pair[0];
       this.y = pair[1];
+      this.contents = [];
     }
 
     Location.prototype.isOpen = function() {
-      return true;
+      return this.contents.length === 0;
     };
 
     Location.prototype.pair = function() {
@@ -76,14 +77,23 @@
       return this.pathToDestination(destination, map, topology)[0];
     };
 
-    Location.prototype.drawOn = function(display, character, color) {
+    Location.prototype.drawOn = function(display) {
+      var character, color, top;
+      if (this.contents.length === 0) {
+        character = " ";
+        color = "black";
+      } else {
+        top = _.last(this.contents);
+        character = top.sigil;
+        color = top.color;
+      }
       return display.draw(this.x, this.y + 1, character, color);
     };
 
     Location.prototype.otherActors = function(entity) {
-      return _.filter(this.game.actors, (function(_this) {
+      return _.filter(this.contents, (function(_this) {
         return function(actor) {
-          return (actor !== entity) && (_.isEqual(actor.location, _this));
+          return actor !== entity;
         };
       })(this));
     };
@@ -102,6 +112,22 @@
           return actor instanceof type;
         };
       })(this));
+    };
+
+    Location.prototype.leaving = function(entity) {
+      Util.removeFromArray(this.contents, entity);
+      return this.game.draw(this);
+    };
+
+    Location.prototype.arriving = function(entity) {
+      this.contents.push(entity);
+      return this.game.draw(this);
+    };
+
+    Location.prototype.struckBy = function(entity) {
+      return _.each(this.otherActors(entity), function(actor) {
+        return actor.struckBy(entity);
+      });
     };
 
     Location.prototype.toString = function() {
@@ -129,6 +155,11 @@
       var unused;
       unused = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       return false;
+    };
+
+    NoLocation.prototype.struckBy = function() {
+      var unused;
+      unused = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     };
 
     return NoLocation;
