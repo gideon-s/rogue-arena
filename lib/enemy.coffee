@@ -2,23 +2,17 @@ class window.Enemy extends window.Actor
 
     act: () ->
         next = @nextLocation()
-        return  unless @game.map.isOpen(next)
+        return unless @game.map.isOpen(next)
         if next.hasOtherActorType(this, Enemy)
             return
         @location = next
 
-    nextLocation: () ->
-        @location
-
-    died: () ->
-        @game.player.addScore()
-
+    nextLocation: () -> @location
+    died: () -> @game.player.addScore()
     towardsPlayer: () -> @location.addDir(@playerXYDirection(8))
     awayFromPlayer: () -> @location.subtractDir(@playerXYDirection(8))
     randomDirection: () -> @location.addDir(Util.rand8Dir())
-
-    playerDistance: () ->
-        Util.distance(@location, @game.player.location)
+    playerDistance: () -> Util.distance(@location, @game.player.location)
 
     playerXYDirection: (topology) ->
         xDiff = @game.player.location.x - @location.x
@@ -70,7 +64,8 @@ class window.GridBoss extends window.Gridbug
         for dir in [0..7] by 2
             xyDir = Util.xyDir(dir)
             firstLocation = @location.addDir(xyDir)
-            new Projectile(@game, firstLocation, xyDir, this, "red", 20)
+            if firstLocation.isOpen()
+                new Projectile(@game, firstLocation, xyDir, this, "red", 20)
         super()
 
     struckBy: (entity) ->
@@ -89,7 +84,8 @@ class window.ElvenArcher extends window.Enemy
     fire: () ->
         dir = @playerXYDirection(8)
         firstLocation = @location.addDir(dir)
-        new Projectile(@game, firstLocation, dir, this, "cyan", 30)
+        if firstLocation.isOpen()
+            new Projectile(@game, firstLocation, dir, this, "cyan", 30)
         @location
 
     nextLocation: () ->
@@ -189,9 +185,10 @@ class window.Firebat extends window.Enemy
         @location.addDir(Util.xyDir(dir))
             
     fire: () ->
-        firstLocation = @randomDirection()
-        smoke = new Particle(@game, firstLocation, this, Util.rand(5))
-        smoke.speed = 300
+        smokeLocation = @randomDirection()
+        if smokeLocation.isOpen()
+            smoke = new Particle(@game, smokeLocation, this, Util.rand(5))
+            smoke.speed = 300
         @location
     died: () ->
         @game.player.addScore(5)

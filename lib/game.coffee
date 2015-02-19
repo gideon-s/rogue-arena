@@ -11,7 +11,7 @@ class window.Game
     @display = new ROT.Display width: @width, height: @height, spacing: 1.1, fontSize: 12
     document.body.appendChild @display.getContainer()
     @drawWholeMap()
-    @player = new Player(this, new Location(this, [70, 30]))
+    @player = new Player(this, @map.lookupLocation([70, 30]))
     @spawner = new Spawner(this)
     @spawner.spawn(1000)
     @drawScore() 
@@ -21,9 +21,11 @@ class window.Game
       @drawMapLocation(location)
 
   drawMapLocation: (location) ->
-    @draw location, @map.at(location)
+    @draw location, " "
 
   draw: (location, character, color)  ->
+    if location instanceof NoLocation
+      throw new Error("not a real location?")
     location.drawOn @display, character, color
 
   drawScore: () ->

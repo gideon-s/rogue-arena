@@ -1,32 +1,32 @@
 class window.Map
 
-    constructor: (@game, @width, @height) ->
-        @map = new Array(@width)
-        @map = for x in [0...@width]
+    constructor: (@game, @width, @height) -> 
+        @map = []
+        for x in [0...@width]
             @map[x] = new Array(@height)
         for x in [0...@width]
             for y in [0...@height]
-                @setLocation(new Location(@game, [x,y]), " ")
+                @map[x][y] = new Location(@game, this, [x,y])
+        @noLocation = new NoLocation()
       
-    at: (location) ->
-        location.on(@map)
-
-    setLocation: (location, symbol) ->
-        location.setOn(@map, symbol)
-        
     isOpen: (location) ->
-        @at(location)?
+        location.isOpen()
 
-    addIfOpen: (result, pair) ->
-        location = new Location(@game, pair)
-        if @isOpen(location)
-            result.push location
+    lookupLocation: (pair) ->
+        xRow = @map[pair[0]]
+        unless xRow? 
+            return @noLocation
+        result = xRow[pair[1]]
+        if result?
+            result
+        else
+            @noLocation
 
     locations: () ->
         result = []
         for x in [0...@width]
             for y in [0...@height]
-                @addIfOpen(result, [x, y])
+                result.push @lookupLocation([x, y])
         result
 
     randomLocation: () ->
@@ -38,16 +38,9 @@ class window.Map
     edgeLocations: () ->
         result = []
         for x in [0...@width]
-            @addIfOpen(result, [x, 0])  
-            @addIfOpen(result, [x, (@height - 1)])   
+            result.push @lookupLocation([x, 0])
+            result.push @lookupLocation([x, (@height - 1)])
         for y in [1...(@height - 1)]
-            @addIfOpen(result, [0, y])  
-            @addIfOpen(result, [(@width - 1), y])  
+            result.push @lookupLocation([0, y])
+            result.push @lookupLocation([(@width - 1), y])
         result     
-
-
-
-
-
-        
-   
