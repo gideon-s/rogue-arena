@@ -7,7 +7,7 @@ class window.Projectile extends window.Actor
         nextLoc = @location.addDir @direction
         @maxLife = @maxLife - 1
         if (nextLoc.hasOtherActor(this, @owner) or @maxLife < 0)
-            @dead = true
+            @died()
             return
         @moveTo(nextLoc)
             
@@ -18,6 +18,7 @@ class window.Projectile extends window.Actor
 
 class window.RescueProjectile extends window.Projectile # needed for other things to identify these
 
+
 class window.Particle extends window.Actor
     constructor: (game,location, @owner, @maxLife = Util.rand(20), color = "yellow", @colorizor = new Colorizor()) ->
         super(game, location, "#", color, 20)
@@ -27,7 +28,7 @@ class window.Particle extends window.Actor
         nextLoc = @location.addDir Util.rand8Dir()
         @maxLife = @maxLife - 1
         if (nextLoc.hasOtherActorType(this, Particle) or @maxLife < 0 or nextLoc.hasOtherActor(this, @owner))
-            @dead = true
+            @died()
             return
         @moveTo(nextLoc)
             
@@ -45,7 +46,7 @@ class window.UnmovingCloud extends window.Actor
         @color = @colorizor.color()
         @maxLife = @maxLife - 1
         if @maxLife < 0
-            @dead = true
+            @died()
 
 class window.Ball extends window.Projectile
     
@@ -58,6 +59,7 @@ class window.Ball extends window.Projectile
         super()
 
     died: () ->
+        super
         for dir in [0..7]
             xyDir = Util.xyDir(dir)
             firstLocation = @location.addDir(xyDir)

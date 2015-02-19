@@ -33,12 +33,7 @@
     ControlledBlink.prototype.shoot = function(xyDir) {
       var destination;
       destination = this.owner.location.addDir(xyDir, 8);
-      if (!this.owner.game.map.isOpen(destination)) {
-        return;
-      }
-      this.owner.location = destination;
-      this.owner.game.enters(this.owner);
-      return this.owner.draw();
+      return this.owner.moveTo(destination);
     };
 
     return ControlledBlink;

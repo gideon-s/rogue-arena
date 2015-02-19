@@ -56,6 +56,8 @@
       var index;
       index = array.indexOf(o);
       if (index < 0) {
+        console.log(o);
+        console.log(array);
         throw new Error("" + o + " not found in array: " + array);
       }
       return array.splice(index, 1);

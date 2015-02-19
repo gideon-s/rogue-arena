@@ -38,8 +38,7 @@ class window.Game
             @display.drawText(@height/2, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");
 
   died: (entity) ->
-    @actors = _.without @actors, entity
-    entity.died()
+    Util.removeFromArray @actors, entity
 
   gameOver:() ->
     @display.drawText(@height/2, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");

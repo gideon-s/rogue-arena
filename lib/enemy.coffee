@@ -147,16 +147,20 @@ class window.Citizen extends window.Enemy
 
     struckBy: (entity) ->
         if (entity == @game.player)
-            @dead = true
+            @died()
             return
         if (entity instanceof RescueProjectile)
-            @dead = true
+            @died()
             return
         if (entity instanceof Projectile || entity instanceof Particle)
             if (entity.owner == @game.player)
-                @game.player.destroy()
+                @game.player.died()
                 @game.player.destroyedBy = this.constructor.name
-
+                @died()
+                @destroyedBy = "player"
+                entity.died()
+                entity.destroyedBy = "citizen"
+                
 
 class window.Firebat extends window.Enemy
     constructor: (game, location) ->

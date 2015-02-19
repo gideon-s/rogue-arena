@@ -1,8 +1,12 @@
 class window.Spawner 
   
   constructor: (@game) ->
-    #@current = new One(@game, Citizen)
-    @current = new Level1(@game)
+    if false
+      @current = new None(@game)
+    else if false
+      @current =new One(@game, Citizen)
+    else
+      @current = new Level1(@game)
 
   spawn: (rate) ->
     @level().spawn()
@@ -22,6 +26,11 @@ class window.Chooser
     spawn: () -> @create(@monsterType())
     score: () -> @game.player.score
     next: () -> this
+
+class window.None extends window.Chooser
+  constructor: (@game) ->
+  finished: () -> false
+  spawn: () ->
 
 class window.One extends window.Chooser # for testing purposes
     constructor: (@game, @type) ->

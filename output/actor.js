@@ -19,46 +19,40 @@
       if ((this.game.player != null) && this.game.player.dead) {
         this.game.gameOver();
       }
-      if (this.dead) {
-        this.game.died(this);
-        return;
+      if (!this.dead) {
+        this.act();
       }
-      this.act();
-      if (this.dead) {
-        this.game.died(this);
-        return;
+      if (!this.dead) {
+        return this.game.nextAction(((function(_this) {
+          return function() {
+            return _this.action();
+          };
+        })(this)), this.speed);
       }
-      return this.game.nextAction(((function(_this) {
-        return function() {
-          return _this.action();
-        };
-      })(this)), this.speed);
     };
 
     Actor.prototype.died = function() {
-      return this.location.leaving(this);
+      this.dead = true;
+      this.location.leaving(this);
+      return this.game.died(this);
     };
 
     Actor.prototype.act = function() {};
 
-    Actor.prototype.destroy = function() {
-      return this.dead = true;
-    };
-
     Actor.prototype.struckBy = function(entity) {
-      if (entity instanceof RescueProjectile) {
+      if (this instanceof RescueProjectile || entity instanceof RescueProjectile) {
         return;
       }
       if ((this.hits != null) && this.hits > 0) {
         this.hits -= 1;
       } else {
-        this.dead = true;
+        this.died();
         this.destroyedBy = entity.constructor.name;
       }
       if ((entity.hits != null) && entity.hits > 0) {
         return entity.hits -= 1;
       } else {
-        entity.destroy();
+        entity.died();
         return entity.destroyedBy = this.constructor.name;
       }
     };
@@ -68,7 +62,7 @@
         return;
       }
       newLocation.struckBy(this);
-      if (newLocation.isOpen()) {
+      if (!this.dead && newLocation.isOpen()) {
         this.location.leaving(this);
         this.location = newLocation;
         return this.location.arriving(this);

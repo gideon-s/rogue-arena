@@ -12,10 +12,7 @@ class window.ControlledBlink extends window.Weapon
     constructor:(owner) -> super(200, owner)
     shoot: (xyDir) ->
         destination = @owner.location.addDir xyDir, 8
-        return unless @owner.game.map.isOpen(destination)
-        @owner.location = destination
-        @owner.game.enters @owner
-        @owner.draw() 
+        @owner.moveTo(destination)
 
 class window.Dart extends window.Weapon
     constructor: (owner) -> super(150, owner)

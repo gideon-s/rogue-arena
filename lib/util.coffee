@@ -37,5 +37,7 @@ class window.Util
     @removeFromArray: (array, o) ->
         index = array.indexOf o
         if index < 0
+            console.log o
+            console.log array
             throw new Error("#{o} not found in array: #{array}")
         array.splice(index, 1)

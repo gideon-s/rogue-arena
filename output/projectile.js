@@ -21,7 +21,7 @@
       nextLoc = this.location.addDir(this.direction);
       this.maxLife = this.maxLife - 1;
       if (nextLoc.hasOtherActor(this, this.owner) || this.maxLife < 0) {
-        this.dead = true;
+        this.died();
         return;
       }
       return this.moveTo(nextLoc);
@@ -68,7 +68,7 @@
       nextLoc = this.location.addDir(Util.rand8Dir());
       this.maxLife = this.maxLife - 1;
       if (nextLoc.hasOtherActorType(this, Particle) || this.maxLife < 0 || nextLoc.hasOtherActor(this, this.owner)) {
-        this.dead = true;
+        this.died();
         return;
       }
       return this.moveTo(nextLoc);
@@ -98,7 +98,7 @@
       this.color = this.colorizor.color();
       this.maxLife = this.maxLife - 1;
       if (this.maxLife < 0) {
-        return this.dead = true;
+        return this.died();
       }
     };
 
@@ -127,6 +127,7 @@
 
     Ball.prototype.died = function() {
       var dir, firstLocation, xyDir, _i, _results;
+      Ball.__super__.died.apply(this, arguments);
       _results = [];
       for (dir = _i = 0; _i <= 7; dir = ++_i) {
         xyDir = Util.xyDir(dir);

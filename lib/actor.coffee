@@ -10,39 +10,38 @@ class window.Actor
 		@age++
 		if @game.player? && @game.player.dead
 			@game.gameOver()	
-		if @dead 
-			@game.died(this)
-			return
-		@act()
-		if @dead 
-			@game.died(this)
-			return
-		@game.nextAction (=> @action()), @speed
+			#return # stop everything if player is dead
+		unless @dead
+			@act()
+		unless @dead
+			@game.nextAction (=> @action()), @speed
 		
-	
-	died:() -> @location.leaving(this)
+	died:() ->
+		@dead = true
+		@location.leaving(this)
+		@game.died(this)
+
 	act:() -> #no op
-	destroy: () -> @dead = true
 
 	struckBy: (entity) ->
-		if entity instanceof RescueProjectile
+		if this instanceof RescueProjectile or entity instanceof RescueProjectile
 			return
 		if @hits? && @hits > 0
 			@hits -= 1
 		else
-			@dead = true
+			@died()
 			@destroyedBy = entity.constructor.name
 		if entity.hits? && entity.hits > 0
 			entity.hits -= 1
 		else
-			entity.destroy()
+			entity.died()
 			entity.destroyedBy = this.constructor.name
 
 	moveTo: (newLocation) ->
 		unless newLocation? 
 			return
 		newLocation.struckBy(this)
-		if newLocation.isOpen()
+		if not @dead and newLocation.isOpen()
 			@location.leaving this
 			@location = newLocation
 			@location.arriving this

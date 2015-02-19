@@ -6,7 +6,13 @@
   window.Spawner = (function() {
     function Spawner(game) {
       this.game = game;
-      this.current = new Level1(this.game);
+      if (false) {
+        this.current = new None(this.game);
+      } else if (false) {
+        this.current = new One(this.game, Citizen);
+      } else {
+        this.current = new Level1(this.game);
+      }
     }
 
     Spawner.prototype.spawn = function(rate) {
@@ -59,6 +65,23 @@
     return Chooser;
 
   })();
+
+  window.None = (function(_super) {
+    __extends(None, _super);
+
+    function None(game) {
+      this.game = game;
+    }
+
+    None.prototype.finished = function() {
+      return false;
+    };
+
+    None.prototype.spawn = function() {};
+
+    return None;
+
+  })(window.Chooser);
 
   window.One = (function(_super) {
     __extends(One, _super);

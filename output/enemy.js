@@ -252,17 +252,21 @@
 
     Citizen.prototype.struckBy = function(entity) {
       if (entity === this.game.player) {
-        this.dead = true;
+        this.died();
         return;
       }
       if (entity instanceof RescueProjectile) {
-        this.dead = true;
+        this.died();
         return;
       }
       if (entity instanceof Projectile || entity instanceof Particle) {
         if (entity.owner === this.game.player) {
-          this.game.player.destroy();
-          return this.game.player.destroyedBy = this.constructor.name;
+          this.game.player.died();
+          this.game.player.destroyedBy = this.constructor.name;
+          this.died();
+          this.destroyedBy = "player";
+          entity.died();
+          return entity.destroyedBy = "citizen";
         }
       }
     };

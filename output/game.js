@@ -60,8 +60,7 @@
     };
 
     Game.prototype.died = function(entity) {
-      this.actors = _.without(this.actors, entity);
-      return entity.died();
+      return Util.removeFromArray(this.actors, entity);
     };
 
     Game.prototype.gameOver = function() {
