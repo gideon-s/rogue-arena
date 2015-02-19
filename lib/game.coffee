@@ -37,6 +37,9 @@ class window.Game
         weapon = @player.weapons[mod]
         text += " #{mod}Weapon: #{if weapon? then weapon.constructor.name else 'none'}"
       @display.drawText(5, 0, text + ".........................", 1000)
+      if @player.dead
+            @display.drawText(@height/2, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");
+
 
   enters: (entity) ->
     _.each entity.location.otherActors(entity), (actor) =>

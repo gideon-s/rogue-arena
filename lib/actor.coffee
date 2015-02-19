@@ -10,7 +10,6 @@ class window.Actor
 		@game.drawMapLocation @location
 		if @game.player? && @game.player.dead
 			@game.gameOver()	
-			return
 		if @dead 
 			@game.died(this)
 			return

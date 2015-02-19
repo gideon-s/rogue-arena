@@ -18,7 +18,6 @@
       this.game.drawMapLocation(this.location);
       if ((this.game.player != null) && this.game.player.dead) {
         this.game.gameOver();
-        return;
       }
       if (this.dead) {
         this.game.died(this);
