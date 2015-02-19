@@ -217,7 +217,7 @@ class window.OrcBoss extends window.OrcCharger
     constructor: (game, location) ->
         @hits = 30
         super(game, location)
-        @color = "cyan"
+        @color = "white"
         @sigil = "O"
     died: () -> 
         super

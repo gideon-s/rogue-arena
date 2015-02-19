@@ -169,8 +169,9 @@
       }
       if (this.keysPressed(ROT.VK_P)) {
         this.addScore(10);
-        return this.game.spawner.current = this.game.spawner.current.next();
+        this.game.spawner.current = this.game.spawner.current.next();
       }
+      return this.game.drawScore();
     };
 
     return Player;

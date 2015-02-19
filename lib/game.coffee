@@ -38,7 +38,13 @@ class window.Game
             @display.drawText(@height/2, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");
 
   died: (entity) ->
+    if entity instanceof OrcBoss
+      console.log entity
+      console.log "removed #{entity.constructor.name}"
+      console.log @actors.length
     Util.removeFromArray @actors, entity
+    if entity instanceof OrcBoss
+      console.log @actors.length
 
   gameOver:() ->
     @display.drawText(@height/2, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");

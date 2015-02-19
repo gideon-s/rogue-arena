@@ -362,7 +362,7 @@
     function OrcBoss(game, location) {
       this.hits = 30;
       OrcBoss.__super__.constructor.call(this, game, location);
-      this.color = "cyan";
+      this.color = "white";
       this.sigil = "O";
     }
 

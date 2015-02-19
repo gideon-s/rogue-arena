@@ -60,7 +60,15 @@
     };
 
     Game.prototype.died = function(entity) {
-      return Util.removeFromArray(this.actors, entity);
+      if (entity instanceof OrcBoss) {
+        console.log(entity);
+        console.log("removed " + entity.constructor.name);
+        console.log(this.actors.length);
+      }
+      Util.removeFromArray(this.actors, entity);
+      if (entity instanceof OrcBoss) {
+        return console.log(this.actors.length);
+      }
     };
 
     Game.prototype.gameOver = function() {

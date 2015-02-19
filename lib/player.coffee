@@ -108,4 +108,5 @@ class window.Player extends window.Actor
         if @keysPressed(ROT.VK_P)
             @addScore 10
             @game.spawner.current = @game.spawner.current.next()
+        @game.drawScore()
  

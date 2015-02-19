@@ -11,7 +11,7 @@
       } else if (false) {
         this.current = new One(this.game, Citizen);
       } else {
-        this.current = new Level1(this.game);
+        this.current = new Level6(this.game);
       }
     }
 
@@ -46,7 +46,7 @@
 
     Chooser.prototype.create = function(type) {
       if (type != null) {
-        return this.game.actors.push(new type(this.game, this.game.map.randomEdgeLocation()));
+        return new type(this.game, this.game.map.randomEdgeLocation());
       }
     };
 
@@ -284,6 +284,12 @@
     };
 
     Level6.prototype.finished = function() {
+      console.log(this.bossSpawned != null);
+      console.log(_.find(this.game.actors, (function(_this) {
+        return function(actor) {
+          return actor instanceof OrcBoss;
+        };
+      })(this)));
       return (this.bossSpawned != null) && !_.find(this.game.actors, (function(_this) {
         return function(actor) {
           return actor instanceof OrcBoss;
