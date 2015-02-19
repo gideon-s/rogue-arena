@@ -107,7 +107,9 @@
       if (amount == null) {
         amount = 1;
       }
-      this.score += amount;
+      if (!this.dead) {
+        this.score += amount;
+      }
       return this.game.drawScore();
     };
 

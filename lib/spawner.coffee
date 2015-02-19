@@ -4,9 +4,9 @@ class window.Spawner
     #@current = new One(@game, Citizen)
     @current = new Level1(@game)
 
-  spawn: () ->
+  spawn: (rate) ->
     @level().spawn()
-    window.setTimeout (=> @spawn()), 1000 
+    window.setTimeout (=> @spawn(rate)), rate 
 
   level: () ->
     if @current.finished()

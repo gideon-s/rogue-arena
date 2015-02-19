@@ -24,9 +24,7 @@
 
     Enemy.prototype.died = function() {
       Enemy.__super__.died.apply(this, arguments);
-      if (!this.game.player.dead) {
-        return this.game.player.addScore();
-      }
+      return this.game.player.addScore();
     };
 
     Enemy.prototype.towardsPlayer = function() {

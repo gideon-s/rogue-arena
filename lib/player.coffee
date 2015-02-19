@@ -69,7 +69,8 @@ class window.Player extends window.Actor
             doChange('main')
         
     addScore: (amount = 1) ->
-        @score += amount
+        unless @dead
+            @score += amount
         @game.drawScore()
 
     keysPressed: (keys...) ->

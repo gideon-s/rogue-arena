@@ -52,7 +52,7 @@
             return text += " " + mod + "Weapon: " + (weapon != null ? weapon.constructor.name : 'none');
           };
         })(this));
-        this.display.drawText(5, 0, text + ".........................", 1000);
+        this.display.drawText(5, 0, text + (" " + this.actors.length + " ........................."), 1000);
         if (this.player.dead) {
           return this.display.drawText(this.height / 2, 5, "You have died.  Game Over. Score: " + this.player.score + " Killed By A: " + this.player.destroyedBy + " Press [ESC] to restart");
         }

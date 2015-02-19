@@ -9,13 +9,13 @@
       this.current = new Level1(this.game);
     }
 
-    Spawner.prototype.spawn = function() {
+    Spawner.prototype.spawn = function(rate) {
       this.level().spawn();
       return window.setTimeout(((function(_this) {
         return function() {
-          return _this.spawn();
+          return _this.spawn(rate);
         };
-      })(this)), 1000);
+      })(this)), rate);
     };
 
     Spawner.prototype.level = function() {

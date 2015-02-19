@@ -11,8 +11,7 @@ class window.Enemy extends window.Actor
     nextLocation: () -> @location
     died: () -> 
         super
-        unless @game.player.dead
-            @game.player.addScore()
+        @game.player.addScore()
     towardsPlayer: () -> @location.addDir(@playerXYDirection(8))
     awayFromPlayer: () -> @location.subtractDir(@playerXYDirection(8))
     randomDirection: () -> @location.addDir(Util.rand8Dir())
