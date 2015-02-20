@@ -13,6 +13,9 @@
     Enemy.prototype.act = function() {
       var next;
       next = this.nextLocation();
+      if ((next != null) && !((next instanceof Location) || (next instanceof NoLocation))) {
+        throw new Error("nextLocation returned " + next.constructor.name + " instead of location!");
+      }
       if ((next != null) && !next.hasOtherActorType(this, Enemy)) {
         return this.moveTo(next);
       }
@@ -40,26 +43,11 @@
     };
 
     Enemy.prototype.playerDistance = function() {
-      return Util.distance(this.location, this.game.player.location);
+      return this.locationDistance(this.game.player.location);
     };
 
     Enemy.prototype.playerXYDirection = function(topology) {
-      var absXDiff, absYDiff, xDiff, xDir, yDiff, yDir;
-      xDiff = this.game.player.location.x - this.location.x;
-      yDiff = this.game.player.location.y - this.location.y;
-      absXDiff = Math.abs(xDiff);
-      absYDiff = Math.abs(yDiff);
-      xDir = absXDiff > 0 ? xDiff / absXDiff : 0;
-      yDir = absYDiff > 0 ? yDiff / absYDiff : 0;
-      if (topology === 4) {
-        if (absXDiff > absYDiff) {
-          return [xDir, 0];
-        } else {
-          return [0, yDir];
-        }
-      } else {
-        return [xDir, yDir];
-      }
+      return this.actorXYDirection(topology, this.game.player);
     };
 
     return Enemy;
@@ -159,8 +147,9 @@
       dir = this.playerXYDirection(8);
       firstLocation = this.location.addDir(dir);
       if (firstLocation.isOpen()) {
-        return new Projectile(this.game, firstLocation, dir, this, "cyan", 30);
+        new Projectile(this.game, firstLocation, dir, this, "cyan", 30);
       }
+      return void 0;
     };
 
     ElvenArcher.prototype.nextLocation = function() {
@@ -209,8 +198,14 @@
   window.MinorDemon = (function(_super) {
     __extends(MinorDemon, _super);
 
-    function MinorDemon(game, location) {
-      MinorDemon.__super__.constructor.call(this, game, location, "&", "red", 400);
+    function MinorDemon(game, location, color, speed) {
+      if (color == null) {
+        color = "red";
+      }
+      if (speed == null) {
+        speed = 400;
+      }
+      MinorDemon.__super__.constructor.call(this, game, location, "&", color, speed);
     }
 
     MinorDemon.prototype.nextLocation = function() {
@@ -224,6 +219,25 @@
     return MinorDemon;
 
   })(window.Enemy);
+
+  window.MajorDemon = (function(_super) {
+    __extends(MajorDemon, _super);
+
+    function MajorDemon(game, location) {
+      MajorDemon.__super__.constructor.call(this, game, location, "Lime", 50);
+    }
+
+    MajorDemon.prototype.nextLocation = function() {
+      if (Util.oneIn(3)) {
+        return this.randomDirection();
+      } else {
+        return this.towardsPlayer();
+      }
+    };
+
+    return MajorDemon;
+
+  })(window.MinorDemon);
 
   window.Citizen = (function(_super) {
     __extends(Citizen, _super);

@@ -1,20 +1,56 @@
 class window.Projectile extends window.Actor
 
-    constructor: (game,location,@direction, @owner, color = "yellow", @maxLife = 1000) ->
-        super(game, location, "+", color, 20)
+    constructor: (game,location,@direction, @owner, color = "yellow", @maxLife = 1000, speed = 20) ->
+        super(game, location, "+", color, speed)
 
     act: () ->
-        nextLoc = @location.addDir @direction
         @maxLife = @maxLife - 1
+        @moveDirection @direction
+
+    moveDirection: (direction) ->
+        nextLoc = @location.addDir direction
         if (nextLoc.hasOtherActor(this, @owner) or @maxLife < 0)
             @died()
             return
         @moveTo(nextLoc)
+
             
     struckBy: (entity) ->
         if entity == @owner 
             return
         super(entity)
+
+class window.HomingProjectile extends window.Projectile
+    constructor: (game, location, xyDir, owner, color, maxLife) ->
+        super(game, location, xyDir, owner, color, maxLife, 50)
+        @sigil = "*"
+
+    nearestMonster: () ->
+        closest = undefined
+        for dir in [0..7] 
+            for i in [1..4]
+                look = @location.addDir Util.xyDir(dir), i
+                monster = _.find(look.otherActors(this), (a) => a instanceof Enemy and not (a instanceof Citizen))
+                if monster?
+                    if closest?
+                        currentClosestDistance = Util.distance closest, @location
+                        monsterDistance = Util.distance closest, monster.location
+                        if monsterDistance < currentClosestDistance
+                            closest = monster
+                    else
+                        closest = monster
+        closest
+
+    act: () ->
+        @maxLife = @maxLife - 1
+       # unless @target? 
+        @target = @nearestMonster()
+        if @target?
+            dir = @actorXYDirection(8, @target)
+        else
+            dir = @direction
+        @moveDirection dir
+
 
 class window.RescueProjectile extends window.Projectile # needed for other things to identify these
 

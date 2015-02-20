@@ -52,13 +52,11 @@ class window.RescueRay extends window.Weapon
 
 
 class window.MagicMissile extends window.Weapon
-    constructor: (owner) -> super(400, owner)
+    constructor: (owner) -> super(500, owner)
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
-        projectile = new Projectile(@owner.game, nextLocation, xyDir, @owner, "white", 100)
-        projectile.speed = 2
-        projectile
-
+        new HomingProjectile(@owner.game, nextLocation, xyDir, @owner, "cyan", 50)
+        
 class window.SmokeTrail extends window.Weapon
     constructor: (owner) -> super(200, owner)
     shoot: (xyDir) ->

@@ -5,6 +5,8 @@ class window.Enemy extends window.Actor
 
     act: () ->
         next = @nextLocation()
+        if next? and not ((next instanceof Location) or (next instanceof NoLocation))
+        	throw new Error("nextLocation returned #{next.constructor.name} instead of location!")
         if next? and not next.hasOtherActorType(this, Enemy)
             @moveTo(next)
 
@@ -15,22 +17,8 @@ class window.Enemy extends window.Actor
     towardsPlayer: () -> @location.addDir(@playerXYDirection(8))
     awayFromPlayer: () -> @location.subtractDir(@playerXYDirection(8))
     randomDirection: () -> @location.addDir(Util.rand8Dir())
-    playerDistance: () -> Util.distance(@location, @game.player.location)
-
-    playerXYDirection: (topology) ->
-        xDiff = @game.player.location.x - @location.x
-        yDiff = @game.player.location.y - @location.y
-        absXDiff = Math.abs xDiff
-        absYDiff = Math.abs yDiff
-        xDir = if absXDiff > 0 then xDiff / absXDiff else 0
-        yDir = if absYDiff > 0 then yDiff / absYDiff else 0
-        if topology == 4
-            if absXDiff > absYDiff
-                [xDir, 0]
-            else
-                [0, yDir]
-        else
-            [xDir, yDir]
+    playerDistance: () -> @locationDistance @game.player.location
+    playerXYDirection: (topology) -> @actorXYDirection(topology, @game.player)
 
 class window.Gridbug extends window.Enemy
 
@@ -89,6 +77,7 @@ class window.ElvenArcher extends window.Enemy
         firstLocation = @location.addDir(dir)
         if firstLocation.isOpen()
             new Projectile(@game, firstLocation, dir, this, "cyan", 30)
+        return undefined
 
     nextLocation: () ->
         if @playerDistance() > 20
@@ -121,8 +110,19 @@ class window.ElvenArcher extends window.Enemy
         super(entity)
 
 class window.MinorDemon extends window.Enemy
+    constructor: (game, location, color = "red", speed = 400) ->
+        super(game, location, "&", color, speed)
+
+    nextLocation: () ->
+        if Util.oneIn(3)
+            @randomDirection()
+        else
+            @towardsPlayer()
+
+
+class window.MajorDemon extends window.MinorDemon
     constructor: (game, location) ->
-        super(game, location, "&", "red", 400)
+        super(game, location, "Lime", 50)
 
     nextLocation: () ->
         if Util.oneIn(3)

@@ -131,15 +131,13 @@
     __extends(MagicMissile, _super);
 
     function MagicMissile(owner) {
-      MagicMissile.__super__.constructor.call(this, 400, owner);
+      MagicMissile.__super__.constructor.call(this, 500, owner);
     }
 
     MagicMissile.prototype.shoot = function(xyDir) {
-      var nextLocation, projectile;
+      var nextLocation;
       nextLocation = this.owner.location.addDir(xyDir);
-      projectile = new Projectile(this.owner.game, nextLocation, xyDir, this.owner, "white", 100);
-      projectile.speed = 2;
-      return projectile;
+      return new HomingProjectile(this.owner.game, nextLocation, xyDir, this.owner, "cyan", 50);
     };
 
     return MagicMissile;

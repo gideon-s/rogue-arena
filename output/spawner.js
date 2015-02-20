@@ -11,7 +11,7 @@
       } else if (false) {
         this.current = new One(this.game, Citizen);
       } else {
-        this.current = new Level6(this.game);
+        this.current = new Level1(this.game);
       }
     }
 
@@ -179,6 +179,8 @@
         return Gridbug;
       } else if (Util.oneIn(5)) {
         return Citizen;
+      } else if (Util.oneIn(3)) {
+        return MajorDemon;
       } else {
         return MinorDemon;
       }
@@ -284,12 +286,6 @@
     };
 
     Level6.prototype.finished = function() {
-      console.log(this.bossSpawned != null);
-      console.log(_.find(this.game.actors, (function(_this) {
-        return function(actor) {
-          return actor instanceof OrcBoss;
-        };
-      })(this)));
       return (this.bossSpawned != null) && !_.find(this.game.actors, (function(_this) {
         return function(actor) {
           return actor instanceof OrcBoss;

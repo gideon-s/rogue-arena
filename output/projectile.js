@@ -6,20 +6,27 @@
   window.Projectile = (function(_super) {
     __extends(Projectile, _super);
 
-    function Projectile(game, location, direction, owner, color, maxLife) {
+    function Projectile(game, location, direction, owner, color, maxLife, speed) {
       this.direction = direction;
       this.owner = owner;
       if (color == null) {
         color = "yellow";
       }
       this.maxLife = maxLife != null ? maxLife : 1000;
-      Projectile.__super__.constructor.call(this, game, location, "+", color, 20);
+      if (speed == null) {
+        speed = 20;
+      }
+      Projectile.__super__.constructor.call(this, game, location, "+", color, speed);
     }
 
     Projectile.prototype.act = function() {
-      var nextLoc;
-      nextLoc = this.location.addDir(this.direction);
       this.maxLife = this.maxLife - 1;
+      return this.moveDirection(this.direction);
+    };
+
+    Projectile.prototype.moveDirection = function(direction) {
+      var nextLoc;
+      nextLoc = this.location.addDir(direction);
       if (nextLoc.hasOtherActor(this, this.owner) || this.maxLife < 0) {
         this.died();
         return;
@@ -37,6 +44,57 @@
     return Projectile;
 
   })(window.Actor);
+
+  window.HomingProjectile = (function(_super) {
+    __extends(HomingProjectile, _super);
+
+    function HomingProjectile(game, location, xyDir, owner, color, maxLife) {
+      HomingProjectile.__super__.constructor.call(this, game, location, xyDir, owner, color, maxLife, 50);
+      this.sigil = "*";
+    }
+
+    HomingProjectile.prototype.nearestMonster = function() {
+      var closest, currentClosestDistance, dir, i, look, monster, monsterDistance, _i, _j;
+      closest = void 0;
+      for (dir = _i = 0; _i <= 7; dir = ++_i) {
+        for (i = _j = 1; _j <= 4; i = ++_j) {
+          look = this.location.addDir(Util.xyDir(dir), i);
+          monster = _.find(look.otherActors(this), (function(_this) {
+            return function(a) {
+              return a instanceof Enemy && !(a instanceof Citizen);
+            };
+          })(this));
+          if (monster != null) {
+            if (closest != null) {
+              currentClosestDistance = Util.distance(closest, this.location);
+              monsterDistance = Util.distance(closest, monster.location);
+              if (monsterDistance < currentClosestDistance) {
+                closest = monster;
+              }
+            } else {
+              closest = monster;
+            }
+          }
+        }
+      }
+      return closest;
+    };
+
+    HomingProjectile.prototype.act = function() {
+      var dir;
+      this.maxLife = this.maxLife - 1;
+      this.target = this.nearestMonster();
+      if (this.target != null) {
+        dir = this.actorXYDirection(8, this.target);
+      } else {
+        dir = this.direction;
+      }
+      return this.moveDirection(dir);
+    };
+
+    return HomingProjectile;
+
+  })(window.Projectile);
 
   window.RescueProjectile = (function(_super) {
     __extends(RescueProjectile, _super);

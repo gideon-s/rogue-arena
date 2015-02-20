@@ -162,6 +162,12 @@
       unused = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     };
 
+    NoLocation.prototype.otherActors = function() {
+      var unused;
+      unused = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return [];
+    };
+
     return NoLocation;
 
   })();

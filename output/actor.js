@@ -69,6 +69,29 @@
       }
     };
 
+    Actor.prototype.locationDistance = function(location) {
+      return Util.distance(this.location, location);
+    };
+
+    Actor.prototype.actorXYDirection = function(topology, actor) {
+      var absXDiff, absYDiff, xDiff, xDir, yDiff, yDir;
+      xDiff = actor.location.x - this.location.x;
+      yDiff = actor.location.y - this.location.y;
+      absXDiff = Math.abs(xDiff);
+      absYDiff = Math.abs(yDiff);
+      xDir = absXDiff > 0 ? xDiff / absXDiff : 0;
+      yDir = absYDiff > 0 ? yDiff / absYDiff : 0;
+      if (topology === 4) {
+        if (absXDiff > absYDiff) {
+          return [xDir, 0];
+        } else {
+          return [0, yDir];
+        }
+      } else {
+        return [xDir, yDir];
+      }
+    };
+
     return Actor;
 
   })();

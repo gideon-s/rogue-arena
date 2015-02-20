@@ -71,6 +71,8 @@ class window.Level3 extends window.Chooser
       Gridbug
     else if Util.oneIn(5)
       Citizen
+    else if Util.oneIn(3)
+      MajorDemon
     else 
       MinorDemon
   finished: () -> @score() > 100

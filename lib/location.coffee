@@ -72,4 +72,4 @@ class window.NoLocation
     hasOtherActor: (unused...) -> false
     hasOtherActorType: (unused...) -> false
     struckBy: (unused...) -> 
-
+    otherActors: (unused...) -> []
