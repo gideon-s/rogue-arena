@@ -6,7 +6,7 @@ class window.Spawner
     else if false
       @current =new One(@game, Citizen)
     else
-      @current = new Level6(@game)
+      @current = new Level1(@game)
 
   spawn: (rate) ->
     @level().spawn()
@@ -110,8 +110,6 @@ class window.Level6 extends window.Chooser
             @create(OrcBoss)
             @bossSpawned = 1
     finished: () ->
-        console.log @bossSpawned?
-        console.log _.find(@game.actors, (actor) => actor instanceof OrcBoss)
         @bossSpawned? and not _.find(@game.actors, (actor) => actor instanceof OrcBoss)
     next: () -> new Level6(@game)
 

@@ -16,8 +16,11 @@ class window.ControlledBlink extends window.Weapon
 
 class window.Dart extends window.Weapon
     constructor: (owner) -> super(150, owner)
+    shootSound = new Howl(urls: ['./media/button.mp3'])
+
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
+        shootSound.play()
         new Projectile(@owner.game, nextLocation, xyDir, @owner, "yellow", 20)
 
 class window.FireBall extends window.Weapon

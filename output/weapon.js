@@ -41,15 +41,22 @@
   })(window.Weapon);
 
   window.Dart = (function(_super) {
+    var shootSound;
+
     __extends(Dart, _super);
 
     function Dart(owner) {
       Dart.__super__.constructor.call(this, 150, owner);
     }
 
+    shootSound = new Howl({
+      urls: ['./media/button.mp3']
+    });
+
     Dart.prototype.shoot = function(xyDir) {
       var nextLocation;
       nextLocation = this.owner.location.addDir(xyDir);
+      shootSound.play();
       return new Projectile(this.owner.game, nextLocation, xyDir, this.owner, "yellow", 20);
     };
 
