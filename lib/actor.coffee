@@ -1,41 +1,51 @@
 class window.Actor
+
     constructor: (@game, @location, @sigil, @color, @speed) ->
+        @id = @game.nextActorId()
         @dead = false
         @game.actors.push this
-        @age = 0
         @location.arriving this
         @action()
 
     action: () ->
-        @age++
+        if @colorizor? 
+            @color = @colorizor.color()
+            @game.draw(@location)       
         if @game.player? && @game.player.dead
             @game.gameOver()    
-            #return # stop everything if player is dead
         unless @dead
             @act()
+        if @game.halt? and @game.halt
+            return
         unless @dead
             @game.nextAction (=> @action()), @speed
         
-    died:() ->
+    died: (reason) ->
+        #console.log "#{this.constructor.name} #{this.id} killed by #{reason}"
         @dead = true
+        @destroyedBy = reason
         @location.leaving(this)
         @game.died(this)
 
     act:() -> #no op
 
-    struckBy: (entity) ->
-        if this instanceof RescueProjectile or entity instanceof RescueProjectile
+    hitBy: (entity, hitBack) -> # the actual hit
+        hitBack = if hitBack then " in hit back" else " in initial hit"
+        if entity instanceof RescueProjectile
+            return
+        if entity.owner? && this == entity.owner
+            return
+        if @owner? && @owner == entity
+            @died("struck owner#{hitBack}")
             return
         if @hits? && @hits > 0
             @hits -= 1
         else
-            @died()
-            @destroyedBy = entity.constructor.name
-        if entity.hits? && entity.hits > 0
-            entity.hits -= 1
-        else
-            entity.died()
-            entity.destroyedBy = this.constructor.name
+            @died(entity.constructor.name + hitBack)
+
+    struckBy: (entity) -> # when one actor moves into another
+        @hitBy(entity, false)
+        entity.hitBy(this, true)
 
     moveTo: (newLocation) ->
         unless newLocation? 

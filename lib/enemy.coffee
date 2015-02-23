@@ -1,6 +1,6 @@
 class window.Enemy extends window.Actor
  
-    constructor: (game, location, sigil, color, speed) ->
+    constructor: (game, location, sigil, color, speed, @score = 1) ->
         super(game, location, sigil, color, speed)
 
     act: () ->
@@ -11,9 +11,9 @@ class window.Enemy extends window.Actor
             @moveTo(next)
 
     nextLocation: () -> @location
-    died: () -> 
-        super
-        @game.player.addScore()
+    died: (reason) -> 
+        super(reason)
+        @game.player.addScore(@score)
     towardsPlayer: () -> @location.addDir(@playerXYDirection(8))
     awayFromPlayer: () -> @location.subtractDir(@playerXYDirection(8))
     randomDirection: () -> @location.addDir(Util.rand8Dir())
@@ -22,8 +22,8 @@ class window.Enemy extends window.Actor
 
 class window.Gridbug extends window.Enemy
 
-    constructor: (game, location, @steps = 5, sigil = "x") ->
-        super(game, location, sigil, "green", 50)
+    constructor: (game, location, @steps = 5, sigil = "x", score = 2) ->
+        super(game, location, sigil, "green", 50, score)
         @direction = null
         @stepsLeft = 0
         
@@ -41,13 +41,10 @@ class window.Gridbug extends window.Enemy
         else
             @direction = @playerXYDirection(4)
             @stepsLeft = @steps
-    died: () -> 
-        super
-        @game.player.addScore(2)
 
 class window.GridBoss extends window.Gridbug
     constructor: (game, location) ->
-        super(game, location, 10, sigil = "X")
+        super(game, location, 10, sigil = "X", score = 20)
         @hits = 10
 
     calculateNextStep: () ->
@@ -55,28 +52,19 @@ class window.GridBoss extends window.Gridbug
             xyDir = Util.xyDir(dir)
             firstLocation = @location.addDir(xyDir)
             if firstLocation.isOpen()
-                new Projectile(@game, firstLocation, xyDir, this, "red", 20)
+                new Projectile(@game, firstLocation, this, 20, "+", "red", 20, xyDir)
         super()
-
-    struckBy: (entity) ->
-        @hits -= 1
-        if (entity != @game.player && @hits > 0)
-            return
-        super(entity)
-    died: () -> 
-        super
-        @game.player.addScore(20)
 
 class window.ElvenArcher extends window.Enemy
     constructor: (game, location) -> 
-      super(game, location, "E", "blue", 200)
-      @hits = 4
+      super(game, location, "E", "blue", 200, score = 10)
+      @hits = 2
 
     fire: () ->
         dir = @playerXYDirection(8)
         firstLocation = @location.addDir(dir)
         if firstLocation.isOpen()
-            new Projectile(@game, firstLocation, dir, this, "cyan", 30)
+            new Projectile(@game, firstLocation, this, 30, "+", "cyan", 20, dir)
         return undefined
 
     nextLocation: () ->
@@ -99,19 +87,10 @@ class window.ElvenArcher extends window.Enemy
                 @fire()
             else
                 @randomDirection()
-    died: () -> 
-        super
-        @game.player.addScore(10)
-
-    struckBy: (entity) ->
-        @hits -= 1
-        if (entity != @game.player && @hits > 0)
-            return
-        super(entity)
 
 class window.MinorDemon extends window.Enemy
-    constructor: (game, location, color = "red", speed = 400) ->
-        super(game, location, "&", color, speed)
+    constructor: (game, location, color = "red", speed = 400, score = 1) ->
+        super(game, location, "&", color, speed, score)
 
     nextLocation: () ->
         if Util.oneIn(3)
@@ -122,7 +101,7 @@ class window.MinorDemon extends window.Enemy
 
 class window.MajorDemon extends window.MinorDemon
     constructor: (game, location) ->
-        super(game, location, "Lime", 50)
+        super(game, location, "Lime", 50, 5)
 
     nextLocation: () ->
         if Util.oneIn(3)
@@ -136,36 +115,29 @@ class window.Citizen extends window.Enemy
         loop
             loc = game.map.randomLocation()
             break if Util.distance(loc, game.player.location) > 20
-        super(game, loc, "@", "cyan", 100)
+        super(game, loc, "@", "cyan", 100, 10)
 
     nextLocation: () ->
         if Util.oneIn(3)
             @randomDirection()
-    died: () -> 
-        super
-        @game.player.addScore(10)
 
-    struckBy: (entity) ->
+    hitBy: (entity) ->
         if (entity == @game.player)
-            @died()
+            @died("Saved!")
             return
         if (entity instanceof RescueProjectile)
-            @died()
+            @died("Saved!")
             return
-        if (entity instanceof Projectile || entity instanceof Particle)
-            if (entity.owner == @game.player)
-                @game.player.died()
-                @game.player.destroyedBy = this.constructor.name
-                @died()
-                @destroyedBy = "player"
-                entity.died()
-                entity.destroyedBy = "citizen"
-                
+        if entity.owner? and entity.owner == @game.player
+            @game.player.died("shooting a townie! Don't shoot the populace!")
+            @died("player projectile!")
+            return
+        super(entity)                
 
 class window.Firebat extends window.Enemy
     constructor: (game, location) ->
         @moves = []
-        super(game, location, "w", "orange", 50)
+        super(game, location, "w", "orange", 50, 5)
         
     nextLocation: () ->
         if @moves.length != 0  
@@ -193,38 +165,31 @@ class window.Firebat extends window.Enemy
     fire: () ->
         smokeLocation = @randomDirection()
         if smokeLocation.isOpen()
-            smoke = new Particle(@game, smokeLocation, this, Util.rand(5))
-            smoke.speed = 300
+            new Particle(@game, smokeLocation, this, Util.rand(5) + 3, new Colorizor(), 200)
         return undefined
-    died: () -> 
-        super
-        @game.player.addScore(5)
 
 class window.OrcCharger extends window.Enemy
-    constructor: (game, location) ->
-        super(game, location, "o", "white", 100)
+    constructor: (game, location, score = 3) ->
+        super(game, location, "o", "white", 100, score)
 
     nextLocation: () ->
         if @playerDistance() < 20
             @towardsPlayer()
         else
             @randomDirection()
-    died: () -> 
-        super
-        @game.player.addScore(3)
 
 class window.OrcBoss extends window.OrcCharger
     constructor: (game, location) ->
-        @hits = 30
-        super(game, location)
+        @hits = 20
+        super(game, location, 50)
         @color = "white"
         @sigil = "O"
-    died: () -> 
-        super
-        @game.player.addScore(50)
+        @charging = false
 
-    struckBy: (entity) ->
-        @hits -= 1
-        if (entity != @game.player && @hits > 0)
-            return
-        super(entity)
+    nextLocation: () ->
+        if @hits < 18
+            @charging = true
+        if @playerDistance() < 20 || @charging
+            @towardsPlayer()
+        else
+            @randomDirection()

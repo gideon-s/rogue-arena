@@ -1,9 +1,11 @@
+
 class window.Game 
   
   @init: () ->
     @game = new Game()
 
   constructor: ->
+    @actorId = 0
     @height = 60
     @width = 140
     @map = new Map(this, @width, @height - 1)
@@ -15,6 +17,10 @@ class window.Game
     @spawner = new Spawner(this)
     @spawner.spawn(1000)
     @drawScore() 
+
+  nextActorId: () ->
+    @actorId += 1
+    @actorId
 
   drawWholeMap: ->
     _.each @map.locations(), (location) =>  
@@ -38,13 +44,7 @@ class window.Game
             @display.drawText(@height/2, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");
 
   died: (entity) ->
-    if entity instanceof OrcBoss
-      console.log entity
-      console.log "removed #{entity.constructor.name}"
-      console.log @actors.length
     Util.removeFromArray @actors, entity
-    if entity instanceof OrcBoss
-      console.log @actors.length
 
   gameOver:() ->
     @display.drawText(@height/2, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");

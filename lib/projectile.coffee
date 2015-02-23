@@ -1,29 +1,36 @@
-class window.Projectile extends window.Actor
 
-    constructor: (game,location,@direction, @owner, color = "yellow", @maxLife = 1000, speed = 20) ->
-        super(game, location, "+", color, speed)
+class window.AgingActor extends window.Actor
+    constructor: (game, location, sigil, color, speed, @maxLife) ->
+        super(game, location, sigil, color, speed)
 
-    act: () ->
-        @maxLife = @maxLife - 1
-        @moveDirection @direction
+    action: () ->
+        if @dead 
+            return
+        @maxLife -= 1
+        if @maxLife <= 0
+            @died("old age")
+            return
+        @youngAction()  
+        super      
+
+class window.OwnedActorWithLifespan extends window.AgingActor
+    constructor: (game, location, @owner, maxLife, sigil, color, speed) ->
+        super(game, location, sigil, color, speed, maxLife)
 
     moveDirection: (direction) ->
         nextLoc = @location.addDir direction
-        if (nextLoc.hasOtherActor(this, @owner) or @maxLife < 0)
-            @died()
-            return
         @moveTo(nextLoc)
 
-            
-    struckBy: (entity) ->
-        if entity == @owner 
-            return
-        super(entity)
+class window.Projectile extends window.OwnedActorWithLifespan
+
+    constructor: (game, location, owner, maxLife, sigil, color, speed, @direction) ->
+        super(game, location, owner, maxLife, sigil, color, speed)
+
+    youngAction: () -> @moveDirection @direction
 
 class window.HomingProjectile extends window.Projectile
-    constructor: (game, location, xyDir, owner, color, maxLife) ->
-        super(game, location, xyDir, owner, color, maxLife, 50)
-        @sigil = "*"
+    constructor: (game, location, owner, maxLife, color, xyDir) ->
+        super(game, location, owner, maxLife, "*", color, 50, xyDir)
 
     nearestMonster: () ->
         closest = undefined
@@ -41,9 +48,7 @@ class window.HomingProjectile extends window.Projectile
                         closest = monster
         closest
 
-    act: () ->
-        @maxLife = @maxLife - 1
-       # unless @target? 
+    youngAction: () ->
         @target = @nearestMonster()
         if @target?
             dir = @actorXYDirection(8, @target)
@@ -55,54 +60,34 @@ class window.HomingProjectile extends window.Projectile
 class window.RescueProjectile extends window.Projectile # needed for other things to identify these
 
 
-class window.Particle extends window.Actor
-    constructor: (game,location, @owner, @maxLife = Util.rand(20), color = "yellow", @colorizor = new Colorizor()) ->
-        super(game, location, "#", color, 20)
+class window.Particle extends window.OwnedActorWithLifespan
+    constructor: (game, location, owner, maxLife = Util.rand(20), @colorizor = new Colorizor(), speed = 20) ->
+        super(game, location, owner, maxLife, "#", @colorizor.color(), speed)
 
-    act: () ->
-        @color = @colorizor.color()
+    youngAction: () ->
         nextLoc = @location.addDir Util.rand8Dir()
-        @maxLife = @maxLife - 1
-        if (nextLoc.hasOtherActorType(this, Particle) or @maxLife < 0 or nextLoc.hasOtherActor(this, @owner))
-            @died()
-            return
         @moveTo(nextLoc)
-            
-    struckBy: (entity) ->
-        if (entity instanceof Particle) or (entity == @owner)
-            return
-        super(entity)
 
-
-class window.UnmovingCloud extends window.Actor
-    constructor: (game,location, @maxLife = 20, @colorizor = new Colorizor()) ->
-        super(game, location, "#", @colorizor.color(), 1000)
-
-    act: () ->
-        @color = @colorizor.color()
-        @maxLife = @maxLife - 1
-        if @maxLife < 0
-            @died()
+class window.UnmovingCloud extends window.AgingActor
+    constructor: (game, location, maxLife = Util.rand(100) + 100, @colorizor = new Colorizor()) ->
+        super(game, location, "#", @colorizor.color(), 100, maxLife)
+    youngAction: () ->
 
 class window.Ball extends window.Projectile
     
-    constructor: (game, location, direction, owner, color = "white", maxLife = 30) ->
+    constructor: (game, location, direction, owner, maxLife = 30) ->
         @colorizor = new Colorizor()
-        super(game, location, direction, owner, color, maxLife)
+        super(game, location, owner, maxLife, "+", @colorizor.color(), 20, direction)
 
-    act: () ->
-        @color = @colorizor.color()
-        super()
-
-    died: () ->
-        super
+    died: (reason) ->
+        super(reason)
         for dir in [0..7]
             xyDir = Util.xyDir(dir)
             firstLocation = @location.addDir(xyDir)
             @emit(firstLocation, xyDir)
 
     emit: (firstLocation, xyDir) ->
-        new BallParticle(@game, firstLocation, xyDir, @owner, "red", Util.rand(3) + 1)
+        new BallParticle(@game, firstLocation, xyDir, @owner, Util.rand(3) + 1)
 
 class window.BallParticle extends window.Ball 
     emit: (firstLocation, xyDir) ->

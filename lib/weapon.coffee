@@ -21,18 +21,17 @@ class window.Dart extends window.Weapon
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
         shootSound.play()
-        new Projectile(@owner.game, nextLocation, xyDir, @owner, "yellow", 20)
+        new Projectile(@owner.game, nextLocation, @owner, 20, "+", "yellow", 20, xyDir)
 
 class window.FireBall extends window.Weapon
     constructor: (owner) -> super(500, owner)
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
-        new Ball(@owner.game, nextLocation, xyDir, @owner, "red", 20)
+        new Ball(@owner.game, nextLocation, xyDir, @owner, 20)
 
 class window.FireWall extends window.Weapon
     constructor: (owner) -> super(2500, owner)
-    makeCloud: (loc) ->
-        new UnmovingCloud(@owner.game, loc)
+    makeCloud: (loc) -> new UnmovingCloud(@owner.game, loc)
 
     shoot: (xyDir) ->
         main = @owner.location
@@ -48,21 +47,20 @@ class window.RescueRay extends window.Weapon
 
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
-        new RescueProjectile(@owner.game, nextLocation, xyDir, @owner, "white", 7)
-
-
+        new RescueProjectile(@owner.game, nextLocation, @owner, 15, "+", "white", 20, xyDir)
+        
 class window.MagicMissile extends window.Weapon
     constructor: (owner) -> super(500, owner)
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
-        new HomingProjectile(@owner.game, nextLocation, xyDir, @owner, "cyan", 50)
+        new HomingProjectile(@owner.game, nextLocation, @owner, 50, "cyan", xyDir)
         
 class window.SmokeTrail extends window.Weapon
     constructor: (owner) -> super(200, owner)
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
         purples = new Colorizor(["purple", "blue", "MediumAquamarine"])
-        projectile = new Particle(@owner.game, nextLocation, @owner, @maxLife = 15, "purple", purples)
+        projectile = new Particle(@owner.game, nextLocation, @owner, @maxLife = 15, purples, 300)
         projectile.speed = 1000
         projectile
 
@@ -70,6 +68,6 @@ class window.SmokeTrail extends window.Weapon
 class window.KnifeWall extends window.Weapon
     constructor: (owner) -> super(150, owner)
     shoot: (xyDir) ->
-            nextLocation = @owner.location.addDir(xyDir)
-            for dir in [0..7] 
-                new Projectile(@owner.game, nextLocation, Util.xyDir(dir), @owner, "red", 3)
+        nextLocation = @owner.location.addDir(xyDir)
+        for dir in [0..7] 
+            new Projectile(@owner.game, nextLocation, @owner, 3, "+", "red", 20, Util.xyDir(dir))

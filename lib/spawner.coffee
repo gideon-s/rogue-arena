@@ -4,12 +4,16 @@ class window.Spawner
     if false
       @current = new None(@game)
     else if false
-      @current =new One(@game, Citizen)
+      @current = new One(@game, Citizen)
+    else if false
+      @current = new Only(@game, Citizen)
     else
       @current = new Level1(@game)
 
   spawn: (rate) ->
     @level().spawn()
+    if @game.halt? and @game.halt
+      return
     window.setTimeout (=> @spawn(rate)), rate 
 
   level: () ->
@@ -40,6 +44,11 @@ class window.One extends window.Chooser # for testing purposes
             return 
         @create @type
         @called = true
+
+class window.Only extends window.Chooser # for testing purposes
+    constructor: (@game, @type) ->
+    finished: () -> false
+    spawn:() -> @create @type
 
 class window.Level1 extends window.Chooser
   monsterType: () -> 

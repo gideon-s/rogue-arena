@@ -3,21 +3,24 @@ class window.Player extends window.Actor
     constructor: (game, location) ->
         super(game, location, "@", "white", 100)
         @lastCode = {}
-        @allowedWeapons = [window.Dart, window.RescueRay, window.ControlledBlink, window.FireBall, window.FireWall, window.SmokeTrail, window.MagicMissile, window.KnifeWall]
-        @weapons = {}
+        @allowedWeapons = [Dart, RescueRay, ControlledBlink, FireBall, FireWall, SmokeTrail, MagicMissile, KnifeWall]
+        @weapons = { 
+            main: new MagicMissile(this), 
+            shiftKey: new RescueRay(this), 
+            ctrlKey: new FireBall(this) 
+        }
         @modKeys = ['shiftKey', 'altKey', 'ctrlKey', 'metaKey']
 
-        @changeWeapon()
+        #@changeWeapon()
         @score = 0
         @shotsFired = 0
         window.addEventListener "keydown", this
         window.addEventListener "keyup", this
 
-    struckBy: (entity) ->
+    hitBy: (entity) ->
         if entity instanceof Citizen
-            entity.struckBy this
-        else
-            super(entity)
+            return
+        super(entity)
 
     handleModifier: (e, mod) ->
         if e[mod]
@@ -105,6 +108,8 @@ class window.Player extends window.Actor
             @moveDir(moveDirection)
         if fireDirection?
             @fire(fireDirection)
+        if @keysPressed(ROT.VK_1)
+            @game.halt = true
         if @keysPressed(ROT.VK_P)
             @addScore 10
             @game.spawner.current = @game.spawner.current.next()
