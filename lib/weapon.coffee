@@ -59,7 +59,7 @@ class window.SmokeTrail extends window.Weapon
     constructor: (owner) -> super(200, owner)
     shoot: (xyDir) ->
         nextLocation = @owner.location.addDir(xyDir)
-        purples = new Colorizor(["purple", "blue", "MediumAquamarine"])
+        purples = Colors.blues
         projectile = new Particle(@owner.game, nextLocation, @owner, @maxLife = 15, purples, 300)
         projectile.speed = 1000
         projectile

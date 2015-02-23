@@ -61,7 +61,7 @@ class window.RescueProjectile extends window.Projectile # needed for other thing
 
 
 class window.Particle extends window.OwnedActorWithLifespan
-    constructor: (game, location, owner, maxLife = Util.rand(20), @colorizor = new Colorizor(), speed = 20) ->
+    constructor: (game, location, owner, maxLife = Util.rand(20), @colorizor = Colors.fire, speed = 20) ->
         super(game, location, owner, maxLife, "#", @colorizor.color(), speed)
 
     youngAction: () ->
@@ -69,14 +69,14 @@ class window.Particle extends window.OwnedActorWithLifespan
         @moveTo(nextLoc)
 
 class window.UnmovingCloud extends window.AgingActor
-    constructor: (game, location, maxLife = Util.rand(100) + 100, @colorizor = new Colorizor()) ->
+    constructor: (game, location, maxLife = Util.rand(100) + 100, @colorizor = Colors.fire) ->
         super(game, location, "#", @colorizor.color(), 100, maxLife)
     youngAction: () ->
 
 class window.Ball extends window.Projectile
     
     constructor: (game, location, direction, owner, maxLife = 30) ->
-        @colorizor = new Colorizor()
+        @colorizor = Colors.fire
         super(game, location, owner, maxLife, "+", @colorizor.color(), 20, direction)
 
     died: (reason) ->

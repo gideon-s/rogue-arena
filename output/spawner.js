@@ -11,7 +11,7 @@
       } else if (false) {
         this.current = new One(this.game, Citizen);
       } else if (false) {
-        this.current = new Only(this.game, Citizen);
+        this.current = new Only(this.game, MajorDemon);
       } else {
         this.current = new Level1(this.game);
       }

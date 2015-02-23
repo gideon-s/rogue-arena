@@ -98,17 +98,15 @@ class window.MinorDemon extends window.Enemy
         else
             @towardsPlayer()
 
-
 class window.MajorDemon extends window.MinorDemon
     constructor: (game, location) ->
         super(game, location, "Lime", 50, 5)
 
     nextLocation: () ->
-        if Util.oneIn(3)
-            @randomDirection()
-        else
-            @towardsPlayer()
-
+        if Util.oneIn 3
+            smokeLocation = @awayFromPlayer()
+            new Particle(@game, smokeLocation, this, Util.rand(5) + 3, Colors.poison, 200)
+        super()
 
 class window.Citizen extends window.Enemy
     constructor: (game, location) ->
@@ -165,7 +163,7 @@ class window.Firebat extends window.Enemy
     fire: () ->
         smokeLocation = @randomDirection()
         if smokeLocation.isOpen()
-            new Particle(@game, smokeLocation, this, Util.rand(5) + 3, new Colorizor(), 200)
+            new Particle(@game, smokeLocation, this, Util.rand(5) + 3, Colors.fire, 200)
         return undefined
 
 class window.OrcCharger extends window.Enemy

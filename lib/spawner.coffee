@@ -6,7 +6,7 @@ class window.Spawner
     else if false
       @current = new One(@game, Citizen)
     else if false
-      @current = new Only(@game, Citizen)
+      @current = new Only(@game, MajorDemon)
     else
       @current = new Level1(@game)
 

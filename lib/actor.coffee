@@ -3,6 +3,8 @@ class window.Actor
     constructor: (@game, @location, @sigil, @color, @speed) ->
         @id = @game.nextActorId()
         @dead = false
+        if @location instanceof NoLocation
+            return
         @game.actors.push this
         @location.arriving this
         @action()
@@ -72,7 +74,3 @@ class window.Actor
         else
             [xDir, yDir]
 
-            
-class window.Colorizor 
-    constructor: (@colors = ["yellow", "red", "orange"]) ->
-    color: () -> Util.pickRandom(@colors)

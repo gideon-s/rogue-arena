@@ -154,7 +154,7 @@
     SmokeTrail.prototype.shoot = function(xyDir) {
       var nextLocation, projectile, purples;
       nextLocation = this.owner.location.addDir(xyDir);
-      purples = new Colorizor(["purple", "blue", "MediumAquamarine"]);
+      purples = Colors.blues;
       projectile = new Particle(this.owner.game, nextLocation, this.owner, this.maxLife = 15, purples, 300);
       projectile.speed = 1000;
       return projectile;

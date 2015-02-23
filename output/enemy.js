@@ -205,11 +205,12 @@
     }
 
     MajorDemon.prototype.nextLocation = function() {
+      var smokeLocation;
       if (Util.oneIn(3)) {
-        return this.randomDirection();
-      } else {
-        return this.towardsPlayer();
+        smokeLocation = this.awayFromPlayer();
+        new Particle(this.game, smokeLocation, this, Util.rand(5) + 3, Colors.poison, 200);
       }
+      return MajorDemon.__super__.nextLocation.call(this);
     };
 
     return MajorDemon;
@@ -299,7 +300,7 @@
       var smokeLocation;
       smokeLocation = this.randomDirection();
       if (smokeLocation.isOpen()) {
-        new Particle(this.game, smokeLocation, this, Util.rand(5) + 3, new Colorizor(), 200);
+        new Particle(this.game, smokeLocation, this, Util.rand(5) + 3, Colors.fire, 200);
       }
       return void 0;
     };

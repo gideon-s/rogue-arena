@@ -129,7 +129,7 @@
       if (maxLife == null) {
         maxLife = Util.rand(20);
       }
-      this.colorizor = colorizor != null ? colorizor : new Colorizor();
+      this.colorizor = colorizor != null ? colorizor : Colors.fire;
       if (speed == null) {
         speed = 20;
       }
@@ -153,7 +153,7 @@
       if (maxLife == null) {
         maxLife = Util.rand(100) + 100;
       }
-      this.colorizor = colorizor != null ? colorizor : new Colorizor();
+      this.colorizor = colorizor != null ? colorizor : Colors.fire;
       UnmovingCloud.__super__.constructor.call(this, game, location, "#", this.colorizor.color(), 100, maxLife);
     }
 
@@ -170,7 +170,7 @@
       if (maxLife == null) {
         maxLife = 30;
       }
-      this.colorizor = new Colorizor();
+      this.colorizor = Colors.fire;
       Ball.__super__.constructor.call(this, game, location, owner, maxLife, "+", this.colorizor.color(), 20, direction);
     }
 

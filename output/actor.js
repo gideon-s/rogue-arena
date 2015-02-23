@@ -9,6 +9,9 @@
       this.speed = speed;
       this.id = this.game.nextActorId();
       this.dead = false;
+      if (this.location instanceof NoLocation) {
+        return;
+      }
       this.game.actors.push(this);
       this.location.arriving(this);
       this.action();
@@ -106,19 +109,6 @@
     };
 
     return Actor;
-
-  })();
-
-  window.Colorizor = (function() {
-    function Colorizor(colors) {
-      this.colors = colors != null ? colors : ["yellow", "red", "orange"];
-    }
-
-    Colorizor.prototype.color = function() {
-      return Util.pickRandom(this.colors);
-    };
-
-    return Colorizor;
 
   })();
 
