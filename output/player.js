@@ -23,6 +23,11 @@
       window.addEventListener("keyup", this);
     }
 
+    Player.prototype.died = function(reason) {
+      Player.__super__.died.call(this, reason);
+      return new Ghost(this.game, this.location);
+    };
+
     Player.prototype.hitBy = function(entity) {
       if (entity instanceof Citizen) {
         return;

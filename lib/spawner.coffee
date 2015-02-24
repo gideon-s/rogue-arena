@@ -122,7 +122,22 @@ class window.Level6 extends window.Chooser
             @bossSpawned = 1
     finished: () ->
         @bossSpawned? and not _.find(@game.actors, (actor) => actor instanceof OrcBoss)
-    next: () -> new Level6(@game)
+    next: () -> new Level7(@game)
 
+class window.Level7 extends window.Chooser
+    spawn: () ->
+      if Util.oneIn(3)
+        @create MajorDemon
+      if Util.oneIn(3)
+        @create PufferDemon
+      if Util.oneIn(3)
+        @create MinorDemon
+    finished: () ->
+      @score() > 1000
+    next: () -> new Level8(@game)
+
+class window.Level8 extends window.Chooser
+    spawn: () ->
+    finished: () -> false
     
 

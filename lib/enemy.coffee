@@ -98,6 +98,13 @@ class window.MinorDemon extends window.Enemy
         else
             @towardsPlayer()
 
+class window.PufferDemon extends window.MinorDemon
+    constructor: (game, location) ->
+        super(game, location, "DarkRed", 200, score = 7)
+    died: (reason) ->
+        super(reason)
+        new Ball(@game, @location, [0, 0], this, 30)
+
 class window.MajorDemon extends window.MinorDemon
     constructor: (game, location) ->
         super(game, location, "Lime", 50, 5)
@@ -191,3 +198,13 @@ class window.OrcBoss extends window.OrcCharger
             @towardsPlayer()
         else
             @randomDirection()
+
+class window.Ghost extends window.Enemy
+    constructor: (game, location) ->
+        @hits = 100
+        super(game, location, "@", "DimGray", 500)
+    nextLocation: () ->
+        l = @randomDirection()
+        @game.player.location = l
+        l
+

@@ -197,6 +197,23 @@
 
   })(window.Enemy);
 
+  window.PufferDemon = (function(_super) {
+    __extends(PufferDemon, _super);
+
+    function PufferDemon(game, location) {
+      var score;
+      PufferDemon.__super__.constructor.call(this, game, location, "DarkRed", 200, score = 7);
+    }
+
+    PufferDemon.prototype.died = function(reason) {
+      PufferDemon.__super__.died.call(this, reason);
+      return new Ball(this.game, this.location, [0, 0], this, 30);
+    };
+
+    return PufferDemon;
+
+  })(window.MinorDemon);
+
   window.MajorDemon = (function(_super) {
     __extends(MajorDemon, _super);
 
@@ -356,5 +373,24 @@
     return OrcBoss;
 
   })(window.OrcCharger);
+
+  window.Ghost = (function(_super) {
+    __extends(Ghost, _super);
+
+    function Ghost(game, location) {
+      this.hits = 100;
+      Ghost.__super__.constructor.call(this, game, location, "@", "DimGray", 500);
+    }
+
+    Ghost.prototype.nextLocation = function() {
+      var l;
+      l = this.randomDirection();
+      this.game.player.location = l;
+      return l;
+    };
+
+    return Ghost;
+
+  })(window.Enemy);
 
 }).call(this);

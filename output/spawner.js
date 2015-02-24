@@ -319,10 +319,58 @@
     };
 
     Level6.prototype.next = function() {
-      return new Level6(this.game);
+      return new Level7(this.game);
     };
 
     return Level6;
+
+  })(window.Chooser);
+
+  window.Level7 = (function(_super) {
+    __extends(Level7, _super);
+
+    function Level7() {
+      return Level7.__super__.constructor.apply(this, arguments);
+    }
+
+    Level7.prototype.spawn = function() {
+      if (Util.oneIn(3)) {
+        this.create(MajorDemon);
+      }
+      if (Util.oneIn(3)) {
+        this.create(PufferDemon);
+      }
+      if (Util.oneIn(3)) {
+        return this.create(MinorDemon);
+      }
+    };
+
+    Level7.prototype.finished = function() {
+      return this.score() > 1000;
+    };
+
+    Level7.prototype.next = function() {
+      return new Level8(this.game);
+    };
+
+    return Level7;
+
+  })(window.Chooser);
+
+  window.Level8 = (function(_super) {
+    __extends(Level8, _super);
+
+    function Level8() {
+      return Level8.__super__.constructor.apply(this, arguments);
+    }
+
+    Level8.prototype.spawn = function() {};
+
+    Level8.prototype.finished = function() {
+      return false;
+    };
+
+    return Level8;
 
   })(window.Chooser);
 

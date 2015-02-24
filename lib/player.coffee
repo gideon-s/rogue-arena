@@ -17,6 +17,10 @@ class window.Player extends window.Actor
         window.addEventListener "keydown", this
         window.addEventListener "keyup", this
 
+    died: (reason) ->
+        super(reason)
+        new Ghost(@game, @location)
+
     hitBy: (entity) ->
         if entity instanceof Citizen
             return
