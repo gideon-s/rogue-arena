@@ -13,7 +13,7 @@ class window.Location
         @y=pair[1]
         @contents = []
 
-    isOpen: () -> @contents.length == 0
+    isOpen: () -> @otherActors(undefined).length == 0
     pair: () -> [@x,@y]
 
     subtractDir: (dir, amount = 1) -> @addDir(dir, amount * -1)
@@ -32,6 +32,16 @@ class window.Location
 
     nextStepToDestination: (destination, map, topology = 8) -> @pathToDestination(destination, map, topology)[0]
         
+    pickUp: () ->
+    	if @contents.length == 0
+    		return
+    	items = _.filter(@contents, (content) => content instanceof Item)
+    	if items.length == 0
+    		return
+    	item = _.last items
+    	@leaving(item)
+    	item.pickedUp()
+
     drawOn: (display) ->
         if @contents.length == 0
             character = " "
@@ -43,7 +53,7 @@ class window.Location
         display.draw @x, @y + 1, character, color # the plus one allows the score status line to stay pristine
 
     otherActors: (entity) ->
-        _.filter(@contents, (actor) => (actor != entity))
+        _.filter(@contents, (content) => content instanceof Actor && (content != entity))
 
     hasOtherActor: (theActor, other) ->
         _.find @otherActors(theActor), (actor) => actor == other

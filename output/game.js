@@ -13,7 +13,7 @@
       this.actors = [];
       this.display = new ROT.Display({
         width: this.width,
-        height: this.height,
+        height: this.height + 2,
         spacing: 1.1,
         fontSize: 12
       });
@@ -60,7 +60,7 @@
         })(this));
         this.display.drawText(5, 0, text + (" " + this.actors.length + " ........................."), 1000);
         if (this.player.dead) {
-          return this.display.drawText(this.height / 2, 5, "You have died.  Game Over. Score: " + this.player.score + " Killed By A: " + this.player.destroyedBy + " Press [ESC] to restart");
+          return this.display.drawText(30, 5, "You have died.  Game Over. Score: " + this.player.score + " Killed By A: " + this.player.destroyedBy + " Press [ESC] to restart");
         }
       }
     };
@@ -70,7 +70,7 @@
     };
 
     Game.prototype.gameOver = function() {
-      this.display.drawText(this.height / 2, 5, "You have died.  Game Over. Score: " + this.player.score + " Killed By A: " + this.player.destroyedBy + " Press [ESC] to restart");
+      this.display.drawText(30, 5, "You have died.  Game Over. Score: " + this.player.score + " Killed By A: " + this.player.destroyedBy + " Press [ESC] to restart");
       return window.addEventListener("keydown", this);
     };
 

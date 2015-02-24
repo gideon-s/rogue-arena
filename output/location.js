@@ -24,7 +24,7 @@
     }
 
     Location.prototype.isOpen = function() {
-      return this.contents.length === 0;
+      return this.otherActors(void 0).length === 0;
     };
 
     Location.prototype.pair = function() {
@@ -77,6 +77,24 @@
       return this.pathToDestination(destination, map, topology)[0];
     };
 
+    Location.prototype.pickUp = function() {
+      var item, items;
+      if (this.contents.length === 0) {
+        return;
+      }
+      items = _.filter(this.contents, (function(_this) {
+        return function(content) {
+          return content instanceof Item;
+        };
+      })(this));
+      if (items.length === 0) {
+        return;
+      }
+      item = _.last(items);
+      this.leaving(item);
+      return item.pickedUp();
+    };
+
     Location.prototype.drawOn = function(display) {
       var character, color, top;
       if (this.contents.length === 0) {
@@ -92,8 +110,8 @@
 
     Location.prototype.otherActors = function(entity) {
       return _.filter(this.contents, (function(_this) {
-        return function(actor) {
-          return actor !== entity;
+        return function(content) {
+          return content instanceof Actor && (content !== entity);
         };
       })(this));
     };

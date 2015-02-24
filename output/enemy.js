@@ -28,7 +28,10 @@
 
     Enemy.prototype.died = function(reason) {
       Enemy.__super__.died.call(this, reason);
-      return this.game.player.addScore(this.score);
+      this.game.player.addScore(this.score);
+      if (Util.oneIn(2)) {
+        return new Item(this.game, this.location);
+      }
     };
 
     Enemy.prototype.towardsPlayer = function() {

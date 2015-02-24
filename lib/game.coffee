@@ -10,7 +10,7 @@ class window.Game
     @width = 140
     @map = new Map(this, @width, @height - 1)
     @actors = []
-    @display = new ROT.Display width: @width, height: @height, spacing: 1.1, fontSize: 12
+    @display = new ROT.Display width: @width, height: @height + 2, spacing: 1.1, fontSize: 12
     document.body.appendChild @display.getContainer()
     @drawWholeMap()
     @player = new Player(this, @map.lookupLocation([70, 30]))
@@ -41,13 +41,13 @@ class window.Game
         text += " #{mod}Weapon: #{if weapon? then weapon.constructor.name else 'none'}"
       @display.drawText(5, 0, text + " #{@actors.length} .........................", 1000)
       if @player.dead
-            @display.drawText(@height/2, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");
+            @display.drawText(30, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");
 
   died: (entity) ->
     Util.removeFromArray @actors, entity
 
   gameOver:() ->
-    @display.drawText(@height/2, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");
+    @display.drawText(30, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");
     window.addEventListener "keydown", this 
       
   handleEvent: (e) ->
