@@ -29,7 +29,7 @@
     Enemy.prototype.died = function(reason) {
       Enemy.__super__.died.call(this, reason);
       this.game.player.addScore(this.score);
-      if (Util.oneIn(2)) {
+      if (Util.oneIn(20)) {
         return new Item(this.game, this.location);
       }
     };
@@ -390,6 +390,10 @@
       l = this.randomDirection();
       this.game.player.location = l;
       return l;
+    };
+
+    Ghost.prototype.died = function(reason) {
+      return this.game.halt = true;
     };
 
     return Ghost;

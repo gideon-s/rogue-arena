@@ -14,7 +14,7 @@ class window.Enemy extends window.Actor
     died: (reason) -> 
         super(reason)
         @game.player.addScore(@score)
-        if Util.oneIn 2
+        if Util.oneIn 20
             new Item @game, @location
     towardsPlayer: () -> @location.addDir(@playerXYDirection(8))
     awayFromPlayer: () -> @location.subtractDir(@playerXYDirection(8))
@@ -209,4 +209,6 @@ class window.Ghost extends window.Enemy
         l = @randomDirection()
         @game.player.location = l
         l
+    died: (reason) ->
+        @game.halt = true
 

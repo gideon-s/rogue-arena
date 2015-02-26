@@ -1,7 +1,7 @@
 class window.Item 
     constructor: (@game, @location) ->
         @sigil = "$"
-        @color = "white"
+        @color = "Yellow"
         @location.arriving this
 
     pickedUp: () ->

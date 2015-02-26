@@ -5,7 +5,7 @@
       this.game = game;
       this.location = location;
       this.sigil = "$";
-      this.color = "white";
+      this.color = "Yellow";
       this.location.arriving(this);
     }
 
