@@ -73,7 +73,8 @@ class window.Level1 extends window.Chooser
       "That citizen gave me a funny look right before he vanished - I hope I'm doing the right thing!",
       "Who put me here? And why?",
       "Maybe I should try using a different weapon? Heck, maybe I should try using a few at once!",
-      "The edges of this arena are notoriously dangerous - I should stay near the center!"
+      "The edges of this arena are notoriously dangerous - I should stay near the center!",
+      "Andrew was here."
     ]
 
 class window.Level2 extends window.Chooser
