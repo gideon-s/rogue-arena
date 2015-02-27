@@ -138,6 +138,9 @@
     };
 
     Location.prototype.arriving = function(entity) {
+      if (entity === this.game.player) {
+        this.pickUp();
+      }
       this.contents.push(entity);
       return this.game.draw(this);
     };

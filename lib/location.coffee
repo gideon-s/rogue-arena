@@ -33,14 +33,14 @@ class window.Location
     nextStepToDestination: (destination, map, topology = 8) -> @pathToDestination(destination, map, topology)[0]
         
     pickUp: () ->
-    	if @contents.length == 0
-    		return
-    	items = _.filter(@contents, (content) => content instanceof Item)
-    	if items.length == 0
-    		return
-    	item = _.last items
-    	@leaving(item)
-    	item.pickedUp()
+        if @contents.length == 0
+            return
+        items = _.filter(@contents, (content) => content instanceof Item)
+        if items.length == 0
+            return
+        item = _.last items
+        @leaving(item)
+        item.pickedUp()
 
     drawOn: (display) ->
         if @contents.length == 0
@@ -66,6 +66,8 @@ class window.Location
         @game.draw(this)
 
     arriving:(entity) -> 
+        if entity == @game.player
+            @pickUp()
         @contents.push entity
         @game.draw(this)
 

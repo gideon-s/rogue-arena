@@ -181,9 +181,6 @@
         this.addScore(10);
         this.game.spawner.current = this.game.spawner.current.next();
       }
-      if (this.keysPressed(ROT.VK_SPACE)) {
-        this.location.pickUp();
-      }
       return this.game.drawScore();
     };
 
