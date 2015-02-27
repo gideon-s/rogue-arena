@@ -117,6 +117,19 @@ class window.Level3 extends window.Chooser
       MinorDemon
   finished: () -> @score() > 100
   next: () -> new Level4(@game)
+  texts: () -> [
+      "Damn those gridbugs are fast!",
+      "gridbugs are the worst :p",
+      "*sigh* now the demons spew poison and run like hell. I suppose it only gets worse from here?",
+      "DODGE THIS.",
+      "Dammit, citizens, why must you dive into danger and run from me? Couldn't you do the opposite!?",
+      "There is no justice in this killing floor. I pile up the bodies and nothing changes.",
+      "I hope I never see a bigger grid bug. These ones are plenty bad enough.",
+      "My FireWall burned that citizen but the gods didn't care. Why are they so capricious?",
+      "Snatch this text from my hand, Grasshopper.",
+      "Shoot, I shouldn't have stopped to read this scroll.",
+      "This page almost unintentionally left almost blank."
+    ]
 
 class window.Level4 extends window.Chooser
     spawn: () ->
