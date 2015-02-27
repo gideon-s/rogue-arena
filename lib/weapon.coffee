@@ -30,17 +30,36 @@ class window.FireBall extends window.Weapon
         new Ball(@owner.game, nextLocation, xyDir, @owner, 20)
 
 class window.FireWall extends window.Weapon
-    constructor: (owner) -> super(2500, owner)
+    constructor: (owner) -> super(500, owner)
     makeCloud: (loc) -> new UnmovingCloud(@owner.game, loc)
 
     shoot: (xyDir) ->
         main = @owner.location
         main = main.addDir(xyDir, 5)
-        leftTurn = [xyDir[1], -xyDir[0]]
+        leftTurn = Util.leftTurn xyDir
         spot = main.addDir(leftTurn, 5)
         _.times 10, (n) =>
             @makeCloud(spot)
             spot = spot.subtractDir(leftTurn)
+
+class window.ConeOfCold extends window.Weapon
+    constructor: (owner) -> super(500, owner)
+    shoot: (xyDir) ->
+        loc = @owner.location
+        sides = -1
+        for i in [0...8] 
+            if i % 3 == 0
+                sides = sides + 1
+            loc = loc.addDir(xyDir)
+            new ColdCloud(@owner.game, loc, @owner)
+            leftLoc = loc
+            rightLoc = loc
+            _.times sides, =>
+                leftLoc = leftLoc.addDir(Util.leftTurn(xyDir))
+                new ColdCloud(@owner.game, leftLoc, @owner)
+                rightLoc = rightLoc.addDir(Util.rightTurn(xyDir))
+                new ColdCloud(@owner.game, rightLoc, @owner)
+
 
 class window.RescueRay extends window.Weapon
     constructor: (owner) -> super(300, owner)

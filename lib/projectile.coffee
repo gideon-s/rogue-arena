@@ -74,6 +74,11 @@ class window.UnmovingCloud extends window.AgingActor
         super(game, location, "#", @colorizor.color(), 100, maxLife)
     youngAction: () ->
 
+class window.ColdCloud extends window.UnmovingCloud
+    constructor: (game, location, @owner, maxLife = 10, @colorizor = Colors.cold) ->
+        super(game, location, maxLife, @colorizor)
+    youngAction: () ->
+
 class window.Ball extends window.Projectile
     
     constructor: (game, location, direction, owner, maxLife = 30) ->

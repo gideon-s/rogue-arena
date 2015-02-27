@@ -10,11 +10,11 @@
     function Player(game, location) {
       Player.__super__.constructor.call(this, game, location, "@", "white", 100);
       this.lastCode = {};
-      this.allowedWeapons = [Dart, RescueRay, ControlledBlink, FireBall, FireWall, SmokeTrail, MagicMissile, KnifeWall];
+      this.allowedWeapons = [Dart, RescueRay, ControlledBlink, FireBall, FireWall, SmokeTrail, MagicMissile, KnifeWall, ConeOfCold];
       this.weapons = {
         main: new MagicMissile(this),
         shiftKey: new RescueRay(this),
-        ctrlKey: new FireBall(this)
+        ctrlKey: new ConeOfCold(this)
       };
       this.modKeys = ['shiftKey', 'altKey', 'ctrlKey', 'metaKey'];
       this.score = 0;

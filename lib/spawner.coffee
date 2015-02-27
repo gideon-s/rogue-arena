@@ -121,7 +121,7 @@ class window.Level3 extends window.Chooser
   texts: () -> [
       "Damn those gridbugs are fast!",
       "gridbugs are the worst :p",
-      "*sigh* now the demons spew poison and run like hell. I suppose it only gets worse from here?",
+      "*sigh* now green demons spew poison and run like hell. I suppose it only gets worse from here?",
       "DODGE THIS.",
       "Dammit, citizens, why must you dive into danger and run from me? Couldn't you do the opposite!?",
       "There is no justice in this killing floor. I pile up the bodies and nothing changes.",

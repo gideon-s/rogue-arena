@@ -165,6 +165,24 @@
 
   })(window.AgingActor);
 
+  window.ColdCloud = (function(_super) {
+    __extends(ColdCloud, _super);
+
+    function ColdCloud(game, location, owner, maxLife, colorizor) {
+      this.owner = owner;
+      if (maxLife == null) {
+        maxLife = 10;
+      }
+      this.colorizor = colorizor != null ? colorizor : Colors.cold;
+      ColdCloud.__super__.constructor.call(this, game, location, maxLife, this.colorizor);
+    }
+
+    ColdCloud.prototype.youngAction = function() {};
+
+    return ColdCloud;
+
+  })(window.UnmovingCloud);
+
   window.Ball = (function(_super) {
     __extends(Ball, _super);
 

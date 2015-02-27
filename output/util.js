@@ -45,6 +45,14 @@
       return ROT.DIRS[topology][dirIndex];
     };
 
+    Util.leftTurn = function(xyDir) {
+      return [xyDir[1], -xyDir[0]];
+    };
+
+    Util.rightTurn = function(xyDir) {
+      return [-xyDir[1], xyDir[0]];
+    };
+
     Util.distance = function(l1, l2) {
       var xDiff, yDiff;
       xDiff = l1.x - l2.x;

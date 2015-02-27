@@ -3,11 +3,11 @@ class window.Player extends window.Actor
     constructor: (game, location) ->
         super(game, location, "@", "white", 100)
         @lastCode = {}
-        @allowedWeapons = [Dart, RescueRay, ControlledBlink, FireBall, FireWall, SmokeTrail, MagicMissile, KnifeWall]
+        @allowedWeapons = [Dart, RescueRay, ControlledBlink, FireBall, FireWall, SmokeTrail, MagicMissile, KnifeWall, ConeOfCold]
         @weapons = { 
             main: new MagicMissile(this), 
             shiftKey: new RescueRay(this), 
-            ctrlKey: new FireBall(this) 
+            ctrlKey: new ConeOfCold(this) 
         }
         @modKeys = ['shiftKey', 'altKey', 'ctrlKey', 'metaKey']
 

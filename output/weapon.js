@@ -85,7 +85,7 @@
     __extends(FireWall, _super);
 
     function FireWall(owner) {
-      FireWall.__super__.constructor.call(this, 2500, owner);
+      FireWall.__super__.constructor.call(this, 500, owner);
     }
 
     FireWall.prototype.makeCloud = function(loc) {
@@ -96,7 +96,7 @@
       var leftTurn, main, spot;
       main = this.owner.location;
       main = main.addDir(xyDir, 5);
-      leftTurn = [xyDir[1], -xyDir[0]];
+      leftTurn = Util.leftTurn(xyDir);
       spot = main.addDir(leftTurn, 5);
       return _.times(10, (function(_this) {
         return function(n) {
@@ -107,6 +107,42 @@
     };
 
     return FireWall;
+
+  })(window.Weapon);
+
+  window.ConeOfCold = (function(_super) {
+    __extends(ConeOfCold, _super);
+
+    function ConeOfCold(owner) {
+      ConeOfCold.__super__.constructor.call(this, 500, owner);
+    }
+
+    ConeOfCold.prototype.shoot = function(xyDir) {
+      var i, leftLoc, loc, rightLoc, sides, _i, _results;
+      loc = this.owner.location;
+      sides = -1;
+      _results = [];
+      for (i = _i = 0; _i < 8; i = ++_i) {
+        if (i % 3 === 0) {
+          sides = sides + 1;
+        }
+        loc = loc.addDir(xyDir);
+        new ColdCloud(this.owner.game, loc, this.owner);
+        leftLoc = loc;
+        rightLoc = loc;
+        _results.push(_.times(sides, (function(_this) {
+          return function() {
+            leftLoc = leftLoc.addDir(Util.leftTurn(xyDir));
+            new ColdCloud(_this.owner.game, leftLoc, _this.owner);
+            rightLoc = rightLoc.addDir(Util.rightTurn(xyDir));
+            return new ColdCloud(_this.owner.game, rightLoc, _this.owner);
+          };
+        })(this)));
+      }
+      return _results;
+    };
+
+    return ConeOfCold;
 
   })(window.Weapon);
 

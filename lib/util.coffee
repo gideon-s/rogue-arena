@@ -29,6 +29,12 @@ class window.Util
     @xyDir: (dirIndex, topology = 8) ->
         ROT.DIRS[topology][dirIndex]
 
+    @leftTurn: (xyDir) ->
+        [xyDir[1], -xyDir[0]]
+
+    @rightTurn: (xyDir) ->
+        [-xyDir[1], xyDir[0]]
+
     @distance: (l1, l2) ->
         xDiff = l1.x - l2.x
         yDiff = l1.y - l2.y

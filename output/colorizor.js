@@ -18,6 +18,8 @@
 
     Colors.fire = new Colorizor(["yellow", "red", "orange"]);
 
+    Colors.cold = new Colorizor(["blue", "MediumAquamarine", "cyan", "DarkBlue", "LightBlue"]);
+
     Colors.poison = new Colorizor(["blue", "green", "yellow"]);
 
     Colors.blues = new Colorizor(["purple", "blue", "MediumAquamarine"]);
