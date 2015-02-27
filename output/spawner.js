@@ -281,6 +281,10 @@
       return new Level5(this.game);
     };
 
+    Level4.prototype.texts = function() {
+      return ["AAAAGGH GIANT F***ING GRID BUG!", "SO MANY GRID BUGS!", "What is this life worth when I am surrounded by grid bugs?", "Whew, it finally slowed down - nothing seems to be arriving now...", "Have I reached the end of the line?", "Thank goodness for this MagicMissile. I don't know what I would do without it!"];
+    };
+
     return Level4;
 
   })(window.Chooser);
@@ -306,6 +310,10 @@
 
     Level5.prototype.next = function() {
       return new Level6(this.game);
+    };
+
+    Level5.prototype.texts = function() {
+      return ["These Elven Archers' aim is terrible!", "Why don't the archers die like I do when I shoot a citizen!? Those capricious gods agin.", "Now the archers are closing in!", "Thank goodness for this MagicMissile. I don't know what I would do without it!", "Suck FireBall, evil doer!", "I'm afraid if the archers hit me I will be having an existential crisis :(", "Am I halfway through this trial? Will I ever be through?"];
     };
 
     return Level5;

@@ -144,6 +144,14 @@ class window.Level4 extends window.Chooser
     finished: () ->
         @bossSpawned? and not _.find(@game.actors, (actor) => actor instanceof GridBoss)
     next: () -> new Level5(@game)
+    texts: () -> [
+        "AAAAGGH GIANT F***ING GRID BUG!",
+        "SO MANY GRID BUGS!",
+        "What is this life worth when I am surrounded by grid bugs?",
+        "Whew, it finally slowed down - nothing seems to be arriving now...",
+        "Have I reached the end of the line?", 
+        "Thank goodness for this MagicMissile. I don't know what I would do without it!"
+      ]
 
 class window.Level5 extends window.Chooser
     monsterType: () ->
@@ -153,6 +161,15 @@ class window.Level5 extends window.Chooser
             Citizen
     finished: () -> @score() > 400
     next: () -> new Level6(@game)
+    texts: () -> [
+        "These Elven Archers' aim is terrible!",
+        "Why don't the archers die like I do when I shoot a citizen!? Those capricious gods agin.",
+        "Now the archers are closing in!",
+        "Thank goodness for this MagicMissile. I don't know what I would do without it!",
+        "Suck FireBall, evil doer!",
+        "I'm afraid if the archers hit me I will be having an existential crisis :(",
+        "Am I halfway through this trial? Will I ever be through?"
+      ]
 
 class window.Level6 extends window.Chooser
     spawn: () ->
