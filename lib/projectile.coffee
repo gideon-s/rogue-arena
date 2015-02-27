@@ -49,7 +49,8 @@ class window.HomingProjectile extends window.Projectile
         closest
 
     youngAction: () ->
-        @target = @nearestMonster()
+        unless @target? 
+            @target = @nearestMonster()
         if @target?
             dir = @actorXYDirection(8, @target)
         else

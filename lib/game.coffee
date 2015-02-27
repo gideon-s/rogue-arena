@@ -6,14 +6,14 @@ class window.Game
 
   constructor: ->
     @actorId = 0
-    @height = 60
-    @width = 140
+    @height = Math.floor($(window).height() / 15) - 1 
+    @width = Math.floor($(window).width() / 9)
     @map = new Map(this, @width, @height - 1)
     @actors = []
     @display = new ROT.Display width: @width, height: @height + 2, spacing: 1.1, fontSize: 12
     document.body.appendChild @display.getContainer()
     @drawWholeMap()
-    @player = new Player(this, @map.lookupLocation([70, 30]))
+    @player = new Player(this, @map.lookupLocation([Math.floor(@width / 2), Math.floor(@height / 2)]))
     @spawner = new Spawner(this)
     @spawner.spawn(1000)
     @drawScore() 
@@ -35,10 +35,10 @@ class window.Game
     if @player?
       text = "Score: #{@player.score}"
       text += " #{@spawner.level().constructor.name}"
-      text += " MainWeapon #{@player.weapons['main'].constructor.name}"
+      text += " W: #{@player.weapons['main'].constructor.name}"
       _.each @player.modKeys, (mod) => 
         weapon = @player.weapons[mod]
-        text += " #{mod}Weapon: #{if weapon? then weapon.constructor.name else 'none'}"
+        text += " #{mod.substring(0, 4)}W: #{if weapon? then weapon.constructor.name else 'none'}"
       @display.drawText(5, 0, text + " #{@actors.length} .........................", 1000)
       if @player.dead
             @display.drawText(30, 5, "You have died.  Game Over. Score: #{@player.score} Killed By A: #{@player.destroyedBy} Press [ESC] to restart");
@@ -56,5 +56,9 @@ class window.Game
       return
 
   nextAction: (action, speed) ->
+    if not speed? 
+      throw new Error("can't set timeout immediately!")
+    if speed < 5 
+      throw new Error("speed too low!")
     window.setTimeout (-> action()), speed
     

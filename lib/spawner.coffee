@@ -67,6 +67,8 @@ class window.Level2 extends window.Chooser
       MinorDemon
     else if Util.oneIn(3)
       Citizen
+    else if Util.oneIn(3)
+      PufferDemon
     else
       OrcCharger
   finished: () -> @score() > 50
@@ -82,7 +84,9 @@ class window.Level3 extends window.Chooser
       Citizen
     else if Util.oneIn(3)
       MajorDemon
-    else 
+    else if Util.oneIn(3)
+      PufferDemon
+    else
       MinorDemon
   finished: () -> @score() > 100
   next: () -> new Level4(@game)

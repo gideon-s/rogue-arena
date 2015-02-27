@@ -98,7 +98,9 @@
 
     HomingProjectile.prototype.youngAction = function() {
       var dir;
-      this.target = this.nearestMonster();
+      if (this.target == null) {
+        this.target = this.nearestMonster();
+      }
       if (this.target != null) {
         dir = this.actorXYDirection(8, this.target);
       } else {

@@ -119,9 +119,11 @@ class window.MajorDemon extends window.MinorDemon
 
 class window.Citizen extends window.Enemy
     constructor: (game, location) ->
+        tries = 0
         loop
             loc = game.map.randomLocation()
-            break if Util.distance(loc, game.player.location) > 20
+            break if Util.distance(loc, game.player.location) > 20 or tries > 100
+            tries += 1
         super(game, loc, "@", "cyan", 100, 10)
 
     nextLocation: () ->

@@ -173,6 +173,8 @@
         return MinorDemon;
       } else if (Util.oneIn(3)) {
         return Citizen;
+      } else if (Util.oneIn(3)) {
+        return PufferDemon;
       } else {
         return OrcCharger;
       }
@@ -206,6 +208,8 @@
         return Citizen;
       } else if (Util.oneIn(3)) {
         return MajorDemon;
+      } else if (Util.oneIn(3)) {
+        return PufferDemon;
       } else {
         return MinorDemon;
       }

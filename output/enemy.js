@@ -241,12 +241,14 @@
     __extends(Citizen, _super);
 
     function Citizen(game, location) {
-      var loc;
+      var loc, tries;
+      tries = 0;
       while (true) {
         loc = game.map.randomLocation();
-        if (Util.distance(loc, game.player.location) > 20) {
+        if (Util.distance(loc, game.player.location) > 20 || tries > 100) {
           break;
         }
+        tries += 1;
       }
       Citizen.__super__.constructor.call(this, game, loc, "@", "cyan", 100, 10);
     }
