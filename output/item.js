@@ -7,10 +7,15 @@
       this.sigil = "$";
       this.color = "Yellow";
       this.location.arriving(this);
+      this.clearString = new Array(this.game.width).join(" ");
     }
 
     Item.prototype.pickedUp = function() {
-      return this.game.display.drawText(5, this.game.height, this.game.spawner.level().text());
+      var i, _i, _ref;
+      for (i = _i = 0, _ref = this.game.width; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+        this.game.display.draw(i, this.game.height, " ");
+      }
+      return this.game.display.drawText(5, this.game.height, this.game.spawner.level().text() + this.clearString, 1000);
     };
 
     return Item;
