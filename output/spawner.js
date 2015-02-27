@@ -67,6 +67,14 @@
       return this;
     };
 
+    Chooser.prototype.texts = function() {
+      return ["There is nothing written on this page."];
+    };
+
+    Chooser.prototype.text = function() {
+      return Util.pickRandom(this.texts());
+    };
+
     return Chooser;
 
   })();
@@ -155,6 +163,10 @@
 
     Level1.prototype.next = function() {
       return new Level2(this.game);
+    };
+
+    Level1.prototype.texts = function() {
+      return ["I have to rescue these citizens! When I touch them, they disappear - I hope they are going to a better place!", "The demons stalk me slowly but methodically; they grow closer all the time.", "The sulphur given off by these Fire Bats is obnoxious! Thankfully, they generally mind their own business.", "Is there any escape from this hellish place?", "I live; I die; I live again. Am I in a time loop? Am I dead? Will the people I've saved be there to greet me when I stop?", "Maybe I should take a break and let my hands uncramp...", "That citizen gave me a funny look right before he vanished - I hope I'm doing the right thing!", "Who put me here? And why?", "Maybe I should try using a different weapon? Heck, maybe I should try using a few at once!", "The edges of this arena are notoriously dangerous - I should near the center!"];
     };
 
     return Level1;

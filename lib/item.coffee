@@ -5,4 +5,4 @@ class window.Item
         @location.arriving this
 
     pickedUp: () ->
-        @game.display.drawText(5, @game.height, "Picked up a scroll!");
+        @game.display.drawText(5, @game.height, @game.spawner.level().text());

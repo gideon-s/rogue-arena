@@ -30,6 +30,8 @@ class window.Chooser
     spawn: () -> @create(@monsterType())
     score: () -> @game.player.score
     next: () -> this
+    texts: () -> ["There is nothing written on this page."]
+    text: () -> Util.pickRandom(@texts())
 
 class window.None extends window.Chooser
   constructor: (@game) ->
@@ -44,6 +46,7 @@ class window.One extends window.Chooser # for testing purposes
             return 
         @create @type
         @called = true
+
 
 class window.Only extends window.Chooser # for testing purposes
     constructor: (@game, @type) ->
@@ -60,6 +63,18 @@ class window.Level1 extends window.Chooser
       MinorDemon
   finished: () -> @score() > 20
   next: () -> new Level2(@game)
+  texts: () -> [
+      "I have to rescue these citizens! When I touch them, they disappear - I hope they are going to a better place!",
+      "The demons stalk me slowly but methodically; they grow closer all the time.",
+      "The sulphur given off by these Fire Bats is obnoxious! Thankfully, they generally mind their own business.",
+      "Is there any escape from this hellish place?",
+      "I live; I die; I live again. Am I in a time loop? Am I dead? Will the people I've saved be there to greet me when I stop?",
+      "Maybe I should take a break and let my hands uncramp...", 
+      "That citizen gave me a funny look right before he vanished - I hope I'm doing the right thing!",
+      "Who put me here? And why?",
+      "Maybe I should try using a different weapon? Heck, maybe I should try using a few at once!",
+      "The edges of this arena are notoriously dangerous - I should stay near the center!"
+    ]
 
 class window.Level2 extends window.Chooser
   monsterType: () ->
@@ -73,6 +88,18 @@ class window.Level2 extends window.Chooser
       OrcCharger
   finished: () -> @score() > 50
   next: () -> new Level3(@game)
+  texts: () -> [
+      "What is this I don't even",
+      "Those orcs in the distance look harmless. Maybe we can be friends!",
+      "The markings on that Demon look a little different. And it smells a bit like the Fire Bats!",
+      "Best keep on running and hoping I don't run out of luck!",
+      "If only I could move faster!",
+      "Sometimes I can feel the walls closing in; what mad gods keep putting me here?",
+      "WASD FOR LIFE! ijkl for fun.",
+      "U can change weapons if you want!",
+      "Albert and Wrenja were here.",
+      "Longshot was here."
+    ]
 
 class window.Level3 extends window.Chooser
   monsterType: () ->

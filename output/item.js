@@ -10,7 +10,7 @@
     }
 
     Item.prototype.pickedUp = function() {
-      return this.game.display.drawText(5, this.game.height, "Picked up a scroll!");
+      return this.game.display.drawText(5, this.game.height, this.game.spawner.level().text());
     };
 
     return Item;
