@@ -166,7 +166,7 @@
     };
 
     Level1.prototype.texts = function() {
-      return ["I have to rescue these citizens! When I touch them, they disappear - I hope they are going to a better place!", "The demons stalk me slowly but methodically; they grow closer all the time.", "The sulphur given off by these Fire Bats is obnoxious! Thankfully, they generally mind their own business.", "Is there any escape from this hellish place?", "I live; I die; I live again. Am I in a time loop? Am I dead? Will the people I've saved be there to greet me when I stop?", "Maybe I should take a break and let my hands uncramp...", "That citizen gave me a funny look right before he vanished - I hope I'm doing the right thing!", "Who put me here? And why?", "Maybe I should try using a different weapon? Heck, maybe I should try using a few at once!", "The edges of this arena are notoriously dangerous - I should near the center!"];
+      return ["I have to rescue these citizens! When I touch them, they disappear - I hope they are going to a better place!", "The demons stalk me slowly but methodically; they grow closer all the time.", "The sulphur given off by these Fire Bats is obnoxious! Thankfully, they generally mind their own business.", "Is there any escape from this hellish place?", "I live; I die; I live again. Am I in a time loop? Am I dead? Will the people I've saved be there to greet me when I stop?", "Maybe I should take a break and let my hands uncramp...", "That citizen gave me a funny look right before he vanished - I hope I'm doing the right thing!", "Who put me here? And why?", "Maybe I should try using a different weapon? Heck, maybe I should try using a few at once!", "The edges of this arena are notoriously dangerous - I should stay near the center!"];
     };
 
     return Level1;
@@ -198,6 +198,10 @@
 
     Level2.prototype.next = function() {
       return new Level3(this.game);
+    };
+
+    Level2.prototype.texts = function() {
+      return ["What is this I don't even", "Those orcs in the distance look harmless. Maybe we can be friends!", "The markings on that Demon look a little different. And it smells a bit like the Fire Bats!", "Best keep on running and hoping I don't run out of luck!", "If only I could move faster!", "Sometimes I can feel the walls closing in; what mad gods keep putting me here?", "WASD FOR LIFE! ijkl for fun.", "U can change weapons if you want!", "Albert and Wrenja were here.", "Longshot was here."];
     };
 
     return Level2;
@@ -233,6 +237,10 @@
 
     Level3.prototype.next = function() {
       return new Level4(this.game);
+    };
+
+    Level3.prototype.texts = function() {
+      return ["Damn those gridbugs are fast!", "gridbugs are the worst :p", "*sigh* now the demons spew poison and run like hell. I suppose it only gets worse from here?", "DODGE THIS.", "Dammit, citizens, why must you dive into danger and run from me? Couldn't you do the opposite!?", "There is no justice in this killing floor. I pile up the bodies and nothing changes.", "I hope I never see a bigger grid bug. These ones are plenty bad enough.", "My FireWall burned that citizen but the gods didn't care. Why are they so capricious?", "Snatch this text from my hand, Grasshopper.", "Shoot, I shouldn't have stopped to read this scroll.", "This page almost unintentionally left almost blank."];
     };
 
     return Level3;
