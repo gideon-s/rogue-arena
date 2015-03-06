@@ -85,3 +85,5 @@ class window.NoLocation
     hasOtherActorType: (unused...) -> false
     struckBy: (unused...) -> 
     otherActors: (unused...) -> []
+    addDir: (unused...) -> this
+    subtractDir: (unused...) -> this

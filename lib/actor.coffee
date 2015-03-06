@@ -71,6 +71,10 @@ class window.Actor
                 [xDir, 0]
             else
                 [0, yDir]
+        else if absXDiff > absYDiff * 2
+            [xDir, 0]
+        else if absYDiff > absXDiff * 2
+            [0, yDir]
         else
             [xDir, yDir]
 

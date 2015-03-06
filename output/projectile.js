@@ -39,7 +39,11 @@
     OwnedActorWithLifespan.prototype.moveDirection = function(direction) {
       var nextLoc;
       nextLoc = this.location.addDir(direction);
-      return this.moveTo(nextLoc);
+      if (nextLoc instanceof NoLocation) {
+        return this.died("going off the edge");
+      } else {
+        return this.moveTo(nextLoc);
+      }
     };
 
     return OwnedActorWithLifespan;
@@ -98,6 +102,9 @@
 
     HomingProjectile.prototype.youngAction = function() {
       var dir;
+      if ((this.target != null) && this.target.dead) {
+        this.target = void 0;
+      }
       if (this.target == null) {
         this.target = this.nearestMonster();
       }

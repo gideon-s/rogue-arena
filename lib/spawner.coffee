@@ -188,11 +188,10 @@ class window.Level6 extends window.Chooser
 
 class window.Level7 extends window.Chooser
     spawn: () ->
-      if Util.oneIn(3)
+      if Util.oneIn(2)
         @create MajorDemon
-      if Util.oneIn(3)
-        @create PufferDemon
-      if Util.oneIn(3)
+      @create PufferDemon
+      if Util.oneIn(2)
         @create MinorDemon
     finished: () ->
       @score() > 1000

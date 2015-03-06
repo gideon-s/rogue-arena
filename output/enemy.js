@@ -29,8 +29,10 @@
     Enemy.prototype.died = function(reason) {
       Enemy.__super__.died.call(this, reason);
       this.game.player.addScore(this.score);
-      if (Util.oneIn(20)) {
-        return new Item(this.game, this.location);
+      if (Util.oneIn(50)) {
+        return new OneUp(this.location);
+      } else if (Util.oneIn(20)) {
+        return new Scroll(this.location);
       }
     };
 

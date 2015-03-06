@@ -366,13 +366,11 @@
     }
 
     Level7.prototype.spawn = function() {
-      if (Util.oneIn(3)) {
+      if (Util.oneIn(2)) {
         this.create(MajorDemon);
       }
-      if (Util.oneIn(3)) {
-        this.create(PufferDemon);
-      }
-      if (Util.oneIn(3)) {
+      this.create(PufferDemon);
+      if (Util.oneIn(2)) {
         return this.create(MinorDemon);
       }
     };

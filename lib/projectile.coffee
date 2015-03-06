@@ -19,7 +19,10 @@ class window.OwnedActorWithLifespan extends window.AgingActor
 
     moveDirection: (direction) ->
         nextLoc = @location.addDir direction
-        @moveTo(nextLoc)
+        if nextLoc instanceof NoLocation
+            @died("going off the edge")
+        else
+            @moveTo(nextLoc)
 
 class window.Projectile extends window.OwnedActorWithLifespan
 
@@ -49,9 +52,11 @@ class window.HomingProjectile extends window.Projectile
         closest
 
     youngAction: () ->
+        if @target? and @target.dead
+            @target = undefined
         unless @target? 
             @target = @nearestMonster()
-        if @target?
+        if @target? 
             dir = @actorXYDirection(8, @target)
         else
             dir = @direction

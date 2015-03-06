@@ -11,7 +11,7 @@ class window.Game
     @map = new Map(this, @width, @height - 1)
     @actors = []
     @display = new ROT.Display width: @width, height: @height + 2, spacing: 1.1, fontSize: 12
-    document.body.appendChild @display.getContainer()
+    $('#game').append @display.getContainer()
     @drawWholeMap()
     @player = new Player(this, @map.lookupLocation([Math.floor(@width / 2), Math.floor(@height / 2)]))
     @spawner = new Spawner(this)
@@ -33,7 +33,10 @@ class window.Game
 
   drawScore: () ->
     if @player?
-      text = "Score: #{@player.score}"
+      text = ""
+      if @player.hits?
+        text += "Hits: #{@player.hits}"
+      text += " Score: #{@player.score}"
       text += " #{@spawner.level().constructor.name}"
       text += " W: #{@player.weapons['main'].constructor.name}"
       _.each @player.modKeys, (mod) => 

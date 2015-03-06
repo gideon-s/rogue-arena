@@ -17,7 +17,7 @@
         spacing: 1.1,
         fontSize: 12
       });
-      document.body.appendChild(this.display.getContainer());
+      $('#game').append(this.display.getContainer());
       this.drawWholeMap();
       this.player = new Player(this, this.map.lookupLocation([Math.floor(this.width / 2), Math.floor(this.height / 2)]));
       this.spawner = new Spawner(this);
@@ -48,7 +48,11 @@
     Game.prototype.drawScore = function() {
       var text;
       if (this.player != null) {
-        text = "Score: " + this.player.score;
+        text = "";
+        if (this.player.hits != null) {
+          text += "Hits: " + this.player.hits;
+        }
+        text += " Score: " + this.player.score;
         text += " " + (this.spawner.level().constructor.name);
         text += " W: " + this.player.weapons['main'].constructor.name;
         _.each(this.player.modKeys, (function(_this) {

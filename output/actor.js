@@ -103,6 +103,10 @@
         } else {
           return [0, yDir];
         }
+      } else if (absXDiff > absYDiff * 2) {
+        return [xDir, 0];
+      } else if (absYDiff > absXDiff * 2) {
+        return [0, yDir];
       } else {
         return [xDir, yDir];
       }
