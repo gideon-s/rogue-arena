@@ -74,6 +74,10 @@ class window.Player extends window.Actor
 
         unless changed
             doChange('main')
+        $.cookie.json = true
+        allKeys = _.union(@modKeys, ['main'])
+        weps = _.object allKeys, _.map(allKeys, (k) => if @weapons[k]? then @weapons[k].constructor.name else '')
+        $.cookie("weapons", weps)
         
     addScore: (amount = 1) ->
         unless @dead
